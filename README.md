@@ -2,7 +2,7 @@
 
 Clone repo
 
-https://github.com/Flowstate-WebDev.git
+https://github.com/Flowstate-WebDev/on-up.git
 
 and install ONLY npm package
 

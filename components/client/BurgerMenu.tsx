@@ -8,8 +8,8 @@ import { navpaths } from '@/data/navpaths';
 
 type Props = {}
 
-const menu = "icons/menu.svg"
-const close = "icons/close.svg"
+const menu = "icons/menu-icon.svg"
+const close = "icons/close-icon.svg"
 
 export default function BurgerMenu({}: Props) {
 
@@ -21,12 +21,14 @@ export default function BurgerMenu({}: Props) {
 
   return (
     <div className='relative inline-block lg:hidden'>
-      <button onClick={ToggleMenu} className='px-3 py-2 rounded cursor-pointer'><Image src={isOpen ? close : menu} alt={"menuIcon"} width={32} height={32}></Image></button>
+      <button onClick={ToggleMenu} className='px-3 py-2 cursor-pointer rounded-lg hover:bg-neutral-300/50 transition-colors duration-200 ease-in-out'>
+        <Image src={isOpen ? close : menu} alt={"menuIcon"} width={32} height={32}></Image>
+      </button>
       {isOpen && (
         <div className='absolute left-1/2 top-full transform -translate-x-[60%] mt-2 bg-gray-200 shadow-lg rounded-lg list-none z-50 cursor-pointer min-w-max'>
           {
             navpaths.map((item, idx) => (
-              <NavLink key={idx} href={item.redirect}>{item.name}</NavLink>
+              <NavLink key={idx} href={ item.redirect } icon={ item.hasIcon }>{ item.name }</NavLink>
             ))
           }
         </div>

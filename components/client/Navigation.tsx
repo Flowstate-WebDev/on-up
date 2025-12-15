@@ -1,37 +1,17 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
 import NavLink from './NavLink';
-import { redirect } from 'next/dist/server/api-utils';
 
-const navMap = [
-  {
-    name: "Konto",
-    redirect: "/konto"
-  },
-  {
-    name: "Rejestracja",
-    redirect: "/rejestracja"
-  },
-  {
-    
-    name: "Koszyk",
-    redirect: "/koszyk"
-  },
-  {
-    name: "Nauczyciel",
-    redirect: "/nauczyciel"
-  }
-]
+import { navpaths } from '@/data/navpaths';
 
 export default function Navigation() {
   return (
     <nav>
-      <ul className='h-full hidden lg:flex items-center'>
+      <ul className='h-full hidden lg:flex items-center gap-8'>
         {
-          navMap.map((item, idx) => (
-            <NavLink key={ idx } href={ item.redirect }>{ item.name }</NavLink>
+          navpaths.map((item, idx) => (
+            <NavLink key={ idx } href={ item.redirect } icon={ item.hasIcon }>{ item.name }</NavLink>
           ))
         }
       </ul>

@@ -3,29 +3,10 @@
 import React, { useState } from 'react'
 import NavLink from './NavLink';
 import Image from 'next/image';
-import { redirect } from 'next/dist/server/api-utils';
+
+import { navpaths } from '@/data/navpaths';
 
 type Props = {}
-
-const navMap = [
-  {
-    name: "Konto",
-    redirect: "/konto"
-  },
-  {
-    name: "Rejestracja",
-    redirect: "/rejestracja"
-  },
-  {
-    
-    name: "Koszyk",
-    redirect: "/koszyk"
-  },
-  {
-    name: "Nauczyciel",
-    redirect: "/nauczyciel"
-  }
-]
 
 const menu = "icons/menu.svg"
 const close = "icons/close.svg"
@@ -44,7 +25,7 @@ export default function BurgerMenu({}: Props) {
       {isOpen && (
         <div className='absolute left-1/2 top-full transform -translate-x-[60%] mt-2 bg-gray-200 shadow-lg rounded-lg list-none z-50 cursor-pointer min-w-max'>
           {
-            navMap.map((item, idx) => (
+            navpaths.map((item, idx) => (
               <NavLink key={idx} href={item.redirect}>{item.name}</NavLink>
             ))
           }

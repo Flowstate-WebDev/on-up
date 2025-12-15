@@ -1,3 +1,6 @@
+export type CategoryName = typeof categories[number]['name'];
+export type CategoryText = typeof categories[number]['text'];
+
 export const categories = [
   {
     name: "logistyk",
@@ -12,5 +15,3 @@ export const categories = [
     text: "Technik handlowiec (sprzedawca)"
   }
 ] as const
-
-export type CategoryName = typeof categories[number]['name'];

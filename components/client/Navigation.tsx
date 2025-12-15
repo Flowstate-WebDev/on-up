@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import NavLink from './NavLink';
+import { redirect } from 'next/dist/server/api-utils';
 
 const navMap = [
   {
@@ -18,7 +19,7 @@ const navMap = [
 export default function Navigation() {
   return (
     <nav>
-      <ul className='h-full flex gap-4 items-center'>
+      <ul className='h-full hidden md:flex gap-4 items-center'>
         {
           navMap.map((item, idx) => (
             <NavLink key={ idx } href={ item.redirect }>{ item.name }</NavLink>

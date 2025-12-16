@@ -1,7 +1,7 @@
 import React from 'react';
-import products from '@/public/products.json';
+import { products } from '@/data/products';
 import { categories, CategoryName } from '@/data/categories';
-import ProductDisplay from '@/components/client/ProductDisplay';
+import ProductDisplay from '@/components/server/Product/ProductCard';
 import CategoryHeading from './CategoryHeading';
 
 type Props = {

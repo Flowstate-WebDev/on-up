@@ -8,29 +8,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-type ProductsImages {
+type ProductImage {
   main   String
   others String[]
 }
 
 model products {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
-  category       String
-  description    String
-  images         ProductsImages
-  price          Int
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  title          String       @unique
+  slug           String       @unique
+  price          Float
+  image          ProductImage
+  category       String[]
   qualifications String[]
-  title          String
-  urlSlug        String
+  description    String
 }
 
 model users {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  username String @unique
-  email    String @unique
-  password String
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String         @unique
+  email         String         @unique
+  password      String
+  permissions   String         @default("USER")
+  createdAt     DateTime       @default(now())
+  billingAdress billingAdress?
 }
 
-model orders {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+model billingAdress {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String  @unique @db.ObjectId
+  user     users   @relation(fields: [userId], references: [id])
+  name     String
+  surname  String
+  street   String
+  building String
+  flat     String?
+  nip      String?
+  city     String
+  zip      String
+  country  String
 }

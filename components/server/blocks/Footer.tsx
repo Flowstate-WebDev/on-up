@@ -7,7 +7,7 @@ type Props = {}
 
 export default function Footer({}: Props) {
   return (
-    <div className='flex items-center justify-evenly bg-blue-950 text-gray-50 p-6'>
+    <div className='flex items-center justify-evenly bg-primary text-text-obj p-6'>
         <div className='flex'>
             <Image src={'/images/onup_logo.webp'} alt={'logo'} height={52} width={52} className='grayscale' />
             <div>
@@ -16,7 +16,7 @@ export default function Footer({}: Props) {
             </div>
         </div>
         <div>
-            <p><Link href={'mailto:onup.wydawnictwo@gmail.com'} className='hover:text-gray-300 transition-color duration-200 ease-in-out'>Kontakt Email</Link></p>
+            <p><Link href={'mailto:onup.wydawnictwo@gmail.com'} className='text-text-primary hover:text-text-primary-hover transition-color duration-200 ease-in-out'>Kontakt Email</Link></p>
             <Button type="default" title="JESTEM GEJEM"/>
         </div>
     </div>

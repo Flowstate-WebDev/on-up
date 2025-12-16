@@ -6,6 +6,6 @@ type Props = {
 
 export default function Tag({ children }: Props) {
   return (
-    <span className='text-white text-sm bg-blue-500 rounded-full px-2 border-blue-600 border-2'>{ children }</span>
+    <span className='text-text-obj text-sm bg-secondary rounded-full px-2 border-primary border-2'>{ children }</span>
   )
 }

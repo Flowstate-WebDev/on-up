@@ -15,7 +15,7 @@ export default function ProductCard({ data }: Props) {
       <div className="w-75 aspect-3/4 relative">
         <Image src={`/images/${ data.images.main }`} alt={`Podręcznik ${ data.title }`} fill className="object-contain" />
       </div>
-      <div className='bg-neutral-50 p-2'>
+      <div className='bg-bg-secondary p-2'>
         <h2 className='font-bold mb-2 leading-tight'>{ data.title }</h2>
         <div className='mb-4'>
           <h3 className='text-sm'>Kwalifikacje:</h3>

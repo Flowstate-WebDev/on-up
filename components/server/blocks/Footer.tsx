@@ -17,7 +17,7 @@ export default function Footer({}: Props) {
         </div>
         <div>
             <p><Link href={'mailto:onup.wydawnictwo@gmail.com'} className='hover:text-gray-300 transition-color duration-200 ease-in-out'>Kontakt Email</Link></p>
-            <Button title={'TEST'} cta={'default'}/>
+            <Button type="default" title="JESTEM GEJEM"/>
         </div>
     </div>
   )

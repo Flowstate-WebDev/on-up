@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Button from '@/components/client/Button'
 
 type Props = {}
 
@@ -16,6 +17,7 @@ export default function Footer({}: Props) {
         </div>
         <div>
             <p><Link href={'mailto:onup.wydawnictwo@gmail.com'} className='hover:text-gray-300 transition-color duration-200 ease-in-out'>Kontakt Email</Link></p>
+            <Button title={'TEST'} cta={'default'}/>
         </div>
     </div>
   )

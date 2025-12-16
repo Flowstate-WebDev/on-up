@@ -5,6 +5,7 @@ import { products } from '@/data/products';
 import ProductDescriptionBlock from '@/components/server/Product/ProductDescriptionBlock';
 import ProductImageGalery from '@/components/server/Product/ProductImageGalery';
 import ProductDetailsBlock from '@/components/server/Product/ProductDetailsBlock';
+// import { prisma } from '@/lib/database';
 
 type Params = {
   params: Promise<{
@@ -12,8 +13,11 @@ type Params = {
   }>
 }
 
+
 export default async function ProductPage({ params }: Params) {
   const { productId } = await params;
+
+  // const products = prisma.
 
   const product = products.find(p => p.urlSlug === productId)
   if (!product) return null;

@@ -4,23 +4,21 @@ import { tv } from 'tailwind-variants';
 
 type Props = {
     title: string,
-    cta: string
+    type: "default" | "outline"
 }
 
 const button = tv({
-    base: "",
+    base: "rounded-lg",
     variants: {
         type: {
-            cta: {
-                default: "bg-blue-500",
-                outline: "border-2 border-blue-500 text-blue-500"
-            }
+            default: "bg-red-500",
+            outline: "bg-green-500",
         }
     }
 })
 
-export default function Button({title, cta}: Props) {
+export default function Button({title, type}: Props) {
   return (
-    <button className={button({type: 'cta' })}>{title}</button>
+    <button className={button({ type })}>{title}</button>
   )
 }

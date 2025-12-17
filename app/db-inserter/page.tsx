@@ -1,4 +1,7 @@
 import React from 'react'
+import Button from '@/components/client/Button'
+import Input from '@/components/client/Input'
+import { inputStyle, buttonStyle } from '@/public/styles'
 
 type Props = {}
 
@@ -6,17 +9,17 @@ export default function DBInserterPage({ }: Props) {
 	return (
 		<div className='flex gap-2'>
 			<form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded items-start w-fit'>
-				<h1 className='text-xl font-bold'>Add Product</h1>
+				<h1 className='text-xl font-bold'>Dodaj produkt</h1>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Title
+					Tytuł
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Price
+					Cena
 					<input type="number" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Category
+					Kategoria
 					<select name="" id="" className='border border-neutral-200 rounded'>
 						<option value="logistyk">Logistyk</option>
 						<option value="eksploatacja">Eksploatacja</option>
@@ -24,15 +27,15 @@ export default function DBInserterPage({ }: Props) {
 					</select>
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Description
+					Opis
 					<textarea name="" id="" cols={30} rows={3} className='border border-neutral-200 rounded'></textarea>
 				</label>
-				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Send to Database</button>
+				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Wyślij do bazy danych</button>
 			</form>
 			<form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded items-start w-fit'>
-				<h1 className='text-xl font-bold'>Add User</h1>
+				<h1 className='text-xl font-bold'>Dodaj użytkownika</h1>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Name
+					Nazwa użytkownika
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
@@ -40,46 +43,50 @@ export default function DBInserterPage({ }: Props) {
 					<input type="email" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Password
+					Telefon
+					<input type="tel" className='border border-neutral-200 rounded' />
+				</label>
+				<label htmlFor="" className='flex flex-col gap-1'>
+					Hasło
 					<input type="password" className='border border-neutral-200 rounded' />
 				</label>
-				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Send to Database</button>
+				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Wyślij do bazy danych</button>
 			</form>
 			<form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded items-start w-fit'>
-				<h1 className='text-xl font-bold'>Add Billing</h1>
+				<h1 className='text-xl font-bold'>Dodaj adres rozliczeniowy</h1>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Name
+					Imię
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Surname
+					Nazwisko
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Street
+					Ulica
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Building
+					Numer budynku
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Flat
+					Numer mieszkania (opcjonalnie)
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Zip
+					Kod pocztowy
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					City
+					Miasto
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
 				<label htmlFor="" className='flex flex-col gap-1'>
-					Country
+					Kraj
 					<input type="text" className='border border-neutral-200 rounded' />
 				</label>
-				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Send to Database</button>
+				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Wyślij do bazy danych</button>
 			</form>
 		</div>
 	)

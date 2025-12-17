@@ -3,6 +3,7 @@ import Logo from './Logo';
 import Navigation from '../../client/Navigation';
 import SearchBar from '@/components/client/SearchBar';
 import BurgerMenu from '@/components/client/BurgerMenu';
+import Button from '@/components/client/Button';
 
 
 export default function Header() {

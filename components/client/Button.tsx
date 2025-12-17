@@ -4,7 +4,7 @@ import { buttonStyle } from '@/public/styles';
 
 type Props = {
     children: React.ReactNode,
-    style: "default" | "outline"
+    style: "default" | "outline" | "default_white"
     type: "button" | "submit" | "reset"
 }
 

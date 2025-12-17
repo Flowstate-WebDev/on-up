@@ -5,6 +5,7 @@ export const buttonStyle = tv({
     variants: {
         style: {
             default: "bg-primary text-text-obj hover:bg-secondary transition-colors duration-200 ease-in-out",
+            default_white: "bg-white text-text-primary hover:text-primary transition-colors duration-200 ease-in-out",
             outline: "bg-transparent text-primary border-primary border hover:text-text-primary hover:bg-quad transition-colors duration-200 ease-in-out",
         }
     }

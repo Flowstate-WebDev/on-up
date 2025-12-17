@@ -16,7 +16,7 @@ export default function Footer({}: Props) {
                   <p className='font-bold'>OnUp</p>
               </div>
           </div>
-          <Button style='default_white' type='button'><Link href={'/'}>Warunki i zasady</Link></Button>
+          <Button style='default_white' type='button'><Link href={'/polityka'}>Warunki i zasady</Link></Button>
         </div>
         <div className=''>
           <div className='mb-6'>

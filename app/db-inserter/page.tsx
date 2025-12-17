@@ -2,92 +2,48 @@ import React from 'react'
 import Button from '@/components/client/Button'
 import Input from '@/components/client/Input'
 import { inputStyle, buttonStyle } from '@/public/styles'
+import Select from '@/components/client/Select'
+import SelectOption from '@/components/client/SelectOption'
+import Link from 'next/link'
 
 type Props = {}
 
 export default function DBInserterPage({ }: Props) {
-	return (
-		<div className='flex gap-2'>
-			<form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded items-start w-fit'>
-				<h1 className='text-xl font-bold'>Dodaj produkt</h1>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Tytuł
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Cena
-					<input type="number" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Kategoria
-					<select name="" id="" className='border border-neutral-200 rounded'>
-						<option value="logistyk">Logistyk</option>
-						<option value="eksploatacja">Eksploatacja</option>
-						<option value="handlowiec">Handlowiec</option>
-					</select>
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Opis
-					<textarea name="" id="" cols={30} rows={3} className='border border-neutral-200 rounded'></textarea>
-				</label>
-				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Wyślij do bazy danych</button>
-			</form>
-			<form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded items-start w-fit'>
-				<h1 className='text-xl font-bold'>Dodaj użytkownika</h1>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Nazwa użytkownika
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Email
-					<input type="email" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Telefon
-					<input type="tel" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Hasło
-					<input type="password" className='border border-neutral-200 rounded' />
-				</label>
-				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Wyślij do bazy danych</button>
-			</form>
-			<form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded items-start w-fit'>
-				<h1 className='text-xl font-bold'>Dodaj adres rozliczeniowy</h1>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Imię
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Nazwisko
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Ulica
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Numer budynku
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Numer mieszkania (opcjonalnie)
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Kod pocztowy
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Miasto
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<label htmlFor="" className='flex flex-col gap-1'>
-					Kraj
-					<input type="text" className='border border-neutral-200 rounded' />
-				</label>
-				<button className='bg-blue-600 hover:bg-blue-500 text-white p-2 rounded cursor-pointer'>Wyślij do bazy danych</button>
-			</form>
-		</div>
-	)
+    return (
+        <div className='flex gap-2'>
+            <form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded-lg items-start w-fit'>
+                <h1 className='text-xl font-bold'>Dodaj produkt</h1>
+                    <Input type={'text'} style={'default'} placeholder={'Nazwa produktu'}/>
+                    <Input type={'number'} style={'default'} placeholder={'Cena'}/>
+                    <Select name="Kategoria" id="" style={'default'}>
+                        <SelectOption value="" title="Wybierz kategorie" disabled selected={true}/>
+                        <SelectOption value="logistyk" title="Logistyk" disabled={false} selected={false}/>
+                        <SelectOption value="eksploatacja" title="Eksploatacja" disabled={false} selected={false}/>
+                        <SelectOption value="handlowiec" title="Handlowiec" disabled={false} selected={false}/>
+                    </Select>
+                    <textarea placeholder='Opis' name="" id="" cols={30} rows={3} className='border border-neutral-200 rounded-lg focus:border-primary focus:bg-quad focus:text-text-primary transition-colors duration-200 ease-in-out'></textarea>
+                <Button style='default' type='submit'><Link href="/">Wyślij do bazy danych</Link></Button>
+            </form>
+            <form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded-lg items-start w-fit'>
+                <h1 className='text-xl font-bold'>Dodaj użytkownika</h1>
+                    <Input type={'text'} style={'default'} placeholder={'Nazwa użytkownika'}/>
+                    <Input type={'email'} style={'default'} placeholder={'Email'}/>
+                    <Input type={'tel'} style={'default'} placeholder={'Telefon'}/>
+                    <Input type={'password'} style={'default'} placeholder={'Hasło'}/>
+                <Button style='default' type='submit'><Link href="/">Wyślij do bazy danych</Link></Button>
+            </form>
+            <form action="" className='flex flex-col gap-2 p-2 border border-neutral-200 rounded-lg items-start w-fit'>
+                <h1 className='text-xl font-bold'>Dodaj adres rozliczeniowy</h1>
+                    <Input type={'text'} style={'default'} placeholder={'Imię'}/>
+                    <Input type={'text'} style={'default'} placeholder={'Nazwisko'}/>
+                    <Input type={'text'} style={'default'} placeholder={'Ulica'}/>
+                    <Input type={'text'} style={'default'} placeholder={'Numer budynku'}/>
+                    <Input type={'text'} style={'default'} placeholder={'Numer mieszkania'}/>
+                    <Input type={'text'} style={'default'} placeholder={'Kod pocztowy'}/>
+                    <Input type={'text'} style={'default'} placeholder={'Miasto'}/>
+                    <Input type={'text'} style={'default'} placeholder={'Kraj'}/>
+                <Button style='default' type='submit'><Link href="/">Wyślij do bazy danych</Link></Button>
+            </form>
+        </div>
+    )
 }

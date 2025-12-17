@@ -11,8 +11,8 @@ type Props = {
 
 export default async function CategoryBlock({ category }: Props) {
 
-  const products = await prisma.products.findMany()
-  if (!products) return null;
+  // const products = await prisma.products.findMany()
+  // if (!products) return null;
 
   const categoryData = categories.find(c => c.name === category);
   if (!categoryData) return null;
@@ -21,11 +21,11 @@ export default async function CategoryBlock({ category }: Props) {
     <section>
       <CategoryHeading>{categoryData.text}</CategoryHeading>
       <div className='grid grid-cols-5 gap-4 overflow-auto py-4'>
-        {products.map((product, idx) =>
+        {/* {products.map((product, idx) =>
           product.category == category ? (
             <ProductDisplay key={idx} data={product} />
           ) : null
-        )}
+        )} */}
       </div>
     </section>
   )

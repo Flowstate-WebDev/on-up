@@ -19,6 +19,10 @@
   --color-tertiary: oklch(70.7% 0.165 254.624); /*blue-400*/
   --color-quad: oklch(93.2% 0.032 255.585); /*blue-100*/
 
+  /* Indicators */
+  --color-indicator-warn: oklch(94.5% 0.129 101.54); /*yellow-200*/
+  --color-indicator-warn-border: oklch(85.2% 0.199 91.936); /*yellow-400*/
+
   /* Border colors */  
   --color-border-primary: oklch(87% 0 0); /*neutral-300*/
   --color-border-secondary: oklch(92.2% 0 0); /*neutral-200*/

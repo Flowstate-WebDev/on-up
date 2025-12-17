@@ -8,18 +8,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-type ProductImage {
+type ProductImages {
   main   String
   others String[]
 }
 
 model products {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  title          String       @unique
-  slug           String       @unique
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String        @unique
+  slug           String        @unique
   price          Float
-  image          ProductImage
-  category       String[]
+  images         ProductImages
+  category       String
   qualifications String[]
   description    String
 }

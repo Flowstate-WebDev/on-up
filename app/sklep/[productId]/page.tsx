@@ -1,6 +1,7 @@
 import ProductDescriptionBlock from '@/components/server/Product/ProductDescriptionBlock';
 import ProductImageGalery from '@/components/server/Product/ProductImageGalery';
 import ProductDetailsBlock from '@/components/server/Product/ProductDetailsBlock';
+
 import prisma from '@/lib/database';
 
 type Params = {
@@ -15,7 +16,7 @@ export default async function ProductPage({ params }: Params) {
 
   const product = await prisma.products.findFirst({
     where: {
-      urlSlug: productId
+      slug: productId
     }
   });
 

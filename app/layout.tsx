@@ -28,7 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body
-        className={`${inter.className} antialiased max-w-448 mx-auto`}
+        className={`${inter.className} antialiased h-screen max-w-448 mx-auto grid grid-rows-[auto_1fr_auto]`}
       >
         <Header />
         <main>

@@ -5,7 +5,7 @@ export type Product = {
   qualifications: readonly string[],
   price: number,
   description: string,
-  urlSlug: string
+  slug: string
 }
 export type ProductImages = {
   main: string,

@@ -16,7 +16,7 @@ export default async function KontoPage() {
   // })
 
   return (
-    <div className='flex justify-center items-center h-screen'>
+    <div className='flex justify-center items-center h-full'>
       <form className='flex flex-col gap-4 border border-border-primary p-4 rounded-lg'>
         <h3 className='text-2xl font-bold text-center'>Rejestracja</h3>
         <Input type="text" style="default" placeholder="nazwa uzytkownika" />

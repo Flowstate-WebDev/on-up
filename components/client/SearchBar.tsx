@@ -13,9 +13,7 @@ export default function SearchBar({}: Props) {
                       focus:border-primary text-text-primary transition-all duration-300 ease-in-out
                       hidden md:block m-auto w-full
                       '
-          placeholder='Wyszukaj produkt'
-      >
-
+          placeholder='Wyszukaj produkt'>
       </input>
     </div>
   )

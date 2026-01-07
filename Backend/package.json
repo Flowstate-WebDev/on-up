@@ -1,0 +1,21 @@
+{
+  "name": "onup-backend",
+  "version": "1.0.0",
+  "description": "Backend with shared API Endpoints for On-Up online book shop",
+  "keywords": [
+    "backend",
+    "api"
+  ],
+  "license": "ISC",
+  "author": "FlowState Studio",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "ping"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "prisma": "^7.2.0"
+  }
+}

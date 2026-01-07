@@ -1,50 +1,14 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
-  provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
-
-type ProductImages {
-  main   String
-  others String[]
-}
-
-model products {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  title          String        @unique
-  slug           String        @unique
-  price          Float
-  images         ProductImages
-  category       String
-  qualifications String[]
-  description    String
-}
-
-model users {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String   @unique
-  email       String   @unique
-  password    String
-  permissions String   @default("USER")
-  createdAt   DateTime @default(now())
-  billing     billing?
-}
-
-model billing {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String  @unique @db.ObjectId
-  user     users   @relation(fields: [userId], references: [id])
-  name     String
-  surname  String
-  street   String
-  building String
-  flat     String?
-  nip      String?
-  city     String
-  zip      String
-  country  String
+  provider = "postgresql"
 }

@@ -1,10 +1,9 @@
-import { Product } from '@/data/products'
-import React from 'react'
-import Heading from '../Reusables/Heading'
+import type { Product } from '@/data/products'
 import ProductQualifsList from './ProductQualifsList'
 import ProductPrice from './ProductPrice'
 import AddToCartForm from './AddToCartForm'
 import { categories } from '@/data/categories'
+import Heading from '../UI/Reusable/Heading'
 
 type Props = Pick<Product, 'category' | 'title' | 'qualifications' | 'price'>
 

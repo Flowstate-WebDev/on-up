@@ -1,5 +1,4 @@
-import { Product } from '@/data/products'
-import React from 'react'
+import type { Product } from '@/data/products'
 
 type Props = {
   children: number

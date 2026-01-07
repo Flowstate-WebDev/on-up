@@ -1,8 +1,7 @@
-import React from 'react';
 import { Link } from '@tanstack/react-router';
 
-import { Product } from '@/data/products';
-import Tag from '../Reusables/Tag';
+import type { Product } from '@/data/products';
+import Tag from '../UI/Reusable/Tag';
 
 type Props = {
   data: Product

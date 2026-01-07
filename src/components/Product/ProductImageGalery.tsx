@@ -1,5 +1,4 @@
-import React from 'react';
-import { ProductImages } from '@/data/products';
+import type { ProductImages } from '@/data/products';
 
 type Props = {
   images: ProductImages

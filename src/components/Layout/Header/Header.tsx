@@ -1,6 +1,7 @@
+
+import Navigation from './Navigation';
+import BurgerMenu from './BurgerMenu';
 import Logo from './Logo';
-import Navigation from '../Navigation';
-import BurgerMenu from '@/components/BurgerMenu';
 
 
 export default function Header() {

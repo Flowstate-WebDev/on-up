@@ -10,20 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as Test2IndexRouteImport } from './routes/test2/index'
 import { Route as TestIndexRouteImport } from './routes/test/index'
-import { Route as BbbIndexRouteImport } from './routes/bbb/index'
-import { Route as AaaIndexRouteImport } from './routes/aaa/index'
-import { Route as AaaCccIndexRouteImport } from './routes/aaa/ccc/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Test2IndexRoute = Test2IndexRouteImport.update({
-  id: '/test2/',
-  path: '/test2/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TestIndexRoute = TestIndexRouteImport.update({
@@ -31,62 +22,31 @@ const TestIndexRoute = TestIndexRouteImport.update({
   path: '/test/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BbbIndexRoute = BbbIndexRouteImport.update({
-  id: '/bbb/',
-  path: '/bbb/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AaaIndexRoute = AaaIndexRouteImport.update({
-  id: '/aaa/',
-  path: '/aaa/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AaaCccIndexRoute = AaaCccIndexRouteImport.update({
-  id: '/aaa/ccc/',
-  path: '/aaa/ccc/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/aaa': typeof AaaIndexRoute
-  '/bbb': typeof BbbIndexRoute
   '/test': typeof TestIndexRoute
-  '/test2': typeof Test2IndexRoute
-  '/aaa/ccc': typeof AaaCccIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/aaa': typeof AaaIndexRoute
-  '/bbb': typeof BbbIndexRoute
   '/test': typeof TestIndexRoute
-  '/test2': typeof Test2IndexRoute
-  '/aaa/ccc': typeof AaaCccIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/aaa/': typeof AaaIndexRoute
-  '/bbb/': typeof BbbIndexRoute
   '/test/': typeof TestIndexRoute
-  '/test2/': typeof Test2IndexRoute
-  '/aaa/ccc/': typeof AaaCccIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/aaa' | '/bbb' | '/test' | '/test2' | '/aaa/ccc'
+  fullPaths: '/' | '/test'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/aaa' | '/bbb' | '/test' | '/test2' | '/aaa/ccc'
-  id: '__root__' | '/' | '/aaa/' | '/bbb/' | '/test/' | '/test2/' | '/aaa/ccc/'
+  to: '/' | '/test'
+  id: '__root__' | '/' | '/test/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AaaIndexRoute: typeof AaaIndexRoute
-  BbbIndexRoute: typeof BbbIndexRoute
   TestIndexRoute: typeof TestIndexRoute
-  Test2IndexRoute: typeof Test2IndexRoute
-  AaaCccIndexRoute: typeof AaaCccIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -98,13 +58,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/test2/': {
-      id: '/test2/'
-      path: '/test2'
-      fullPath: '/test2'
-      preLoaderRoute: typeof Test2IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/test/': {
       id: '/test/'
       path: '/test'
@@ -112,37 +65,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TestIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/bbb/': {
-      id: '/bbb/'
-      path: '/bbb'
-      fullPath: '/bbb'
-      preLoaderRoute: typeof BbbIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/aaa/': {
-      id: '/aaa/'
-      path: '/aaa'
-      fullPath: '/aaa'
-      preLoaderRoute: typeof AaaIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/aaa/ccc/': {
-      id: '/aaa/ccc/'
-      path: '/aaa/ccc'
-      fullPath: '/aaa/ccc'
-      preLoaderRoute: typeof AaaCccIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AaaIndexRoute: AaaIndexRoute,
-  BbbIndexRoute: BbbIndexRoute,
   TestIndexRoute: TestIndexRoute,
-  Test2IndexRoute: Test2IndexRoute,
-  AaaCccIndexRoute: AaaCccIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,6 +1,5 @@
-import { Product } from '@/data/products'
-import React from 'react'
-import Tag from '../Reusables/Tag'
+import type { Product } from '@/data/products'
+import Tag from '../UI/Reusable/Tag'
 
 type Props = Pick<Product, 'qualifications'>
 

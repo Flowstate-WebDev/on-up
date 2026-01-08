@@ -20,9 +20,13 @@ export default function ProductCard({ data }: Props) {
           <h3 className='text-sm'>Kwalifikacje:</h3>
           <ul className='flex gap-1'>
             {
-              data.qualifications.map((item, idx) => (
-                <li key={idx}><Tag>{item.qualification.code}</Tag></li>
-              ))
+              data.qualifications.length > 0 ? (
+                data.qualifications.map((item, idx) => (
+                  <li key={idx}><Tag>{item.qualification.code}</Tag></li>
+                ))
+              ) : (
+                <p className='text-xs text-text-secondary italic'>Nie podano</p>
+              )
             }
           </ul>
         </div>

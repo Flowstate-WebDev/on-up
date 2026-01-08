@@ -3,6 +3,7 @@ import ProductImageGalery from '@/components/Product/ProductImageGalery'
 import { createFileRoute } from '@tanstack/react-router'
 
 import type { Product } from '@/data/products'
+import ProductDescriptionBlock from '@/components/Product/ProductDescriptionBlock'
 
 export const Route = createFileRoute('/sklep/$productId/')({
   component: RouteComponent,
@@ -17,9 +18,12 @@ function RouteComponent() {
   const product: Product = Route.useLoaderData()
 
   return (
-    <div className='grid grid-cols-2'>
-      <ProductImageGalery imageUrl={product.imageUrl} />
-      <ProductDetailsBlock professions={product.professions} title={product.title} qualifications={product.qualifications} price={product.price} />
+    <div>
+      <div className='grid grid-cols-2 flex-1'>
+        <ProductImageGalery imageUrl={product.imageUrl} />
+        <ProductDetailsBlock professions={product.professions} title={product.title} qualifications={product.qualifications} price={product.price} />
+      </div>
+      <ProductDescriptionBlock description={product.description} />
     </div>
   )
 }

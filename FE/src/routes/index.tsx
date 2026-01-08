@@ -29,21 +29,19 @@ function RouteComponent() {
   })
 
   return (
-    <main className="p-4 h-[strech]">
-      <div className="flex flex-col gap-8">
-        {Object.entries(groups).map(([profName, filteredBooks]) => (
-          <CategoryBlock
-            key={profName}
-            title={profName}
-            books={filteredBooks}
-          />
-        ))}
-        {Object.keys(groups).length === 0 && (
-          <div className="text-center py-10 text-gray-500">
-            No books found or backend error.
-          </div>
-        )}
-      </div>
-    </main>
+    <div className="flex flex-col gap-8">
+      {Object.entries(groups).map(([profName, filteredBooks]) => (
+        <CategoryBlock
+          key={profName}
+          title={profName}
+          books={filteredBooks}
+        />
+      ))}
+      {Object.keys(groups).length === 0 && (
+        <div className="text-center py-10 text-gray-500">
+          No books found... or just an error.
+        </div>
+      )}
+    </div>
   )
 }

@@ -1,13 +1,13 @@
 
 type Props = {
-  children: string
+  description: string
 }
 
-export default function ProductDescriptionBlock({ children }: Props) {
+export default function ProductDescriptionBlock({ description }: Props) {
   return (
-    <div>
+    <div className="py-16">
       <h1 className='text-2xl font-bold mb-4'>Opis</h1>
-      <p>{ children }</p>
+      <p>{description}</p>
     </div>
   )
 }

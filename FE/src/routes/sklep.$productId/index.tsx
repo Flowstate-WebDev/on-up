@@ -21,7 +21,7 @@ function RouteComponent() {
     <div>
       <div className='grid grid-cols-2 flex-1'>
         <ProductImageGalery imageUrl={product.imageUrl} />
-        <ProductDetailsBlock professions={product.professions} title={product.title} qualifications={product.qualifications} price={product.price} />
+        <ProductDetailsBlock {...product} />
       </div>
       <ProductDescriptionBlock description={product.description} />
     </div>

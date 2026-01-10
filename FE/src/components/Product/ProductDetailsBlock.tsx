@@ -4,16 +4,17 @@ import ProductPrice from './ProductPrice'
 import AddToCartForm from './AddToCartForm'
 import Heading from '../UI/Reusable/Heading'
 
-type Props = Pick<Product, 'professions' | 'title' | 'qualifications' | 'price'>
+type Props = Product
 
-export default function ProductDetailsBlock({ professions, title, qualifications, price }: Props) {
+export default function ProductDetailsBlock(product: Props) {
+  const { professions, title, qualifications, price } = product
   return (
     <div className='content-center'>
       <h2 className='font-semibold text-text-secondary'>{professions.map(p => p.profession.name).join(', ')}</h2>
       <Heading>{title}</Heading>
       <ProductQualifsList qualifications={qualifications} />
       <ProductPrice price={price} />
-      <AddToCartForm />
+      <AddToCartForm product={product} />
     </div>
   )
 }

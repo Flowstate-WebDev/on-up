@@ -1,4 +1,4 @@
-import { selectStyle } from "@/public/styles";
+import { selectStyle } from "@/styles";
 
 type Props = {
     children: React.ReactNode

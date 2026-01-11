@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const buttonStyle = tv({
-    base: "rounded-lg p-2",
+    base: "rounded-lg p-2 cursor-pointer",
     variants: {
         style: {
             default: "bg-primary text-text-obj hover:bg-secondary transition-colors duration-200 ease-in-out",

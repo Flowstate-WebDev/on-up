@@ -1,4 +1,4 @@
-import { inputStyle } from "@/public/styles";
+import { inputStyle } from '@/styles'
 
 type Props = {
     type: "text" | "password" | "email" | "tel" | "number" | "date" | "datetime-local" | "time"

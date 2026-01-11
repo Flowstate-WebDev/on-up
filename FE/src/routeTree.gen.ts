@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as NauczycielIndexRouteImport } from './routes/nauczyciel/index'
 import { Route as KoszykIndexRouteImport } from './routes/koszyk/index'
 import { Route as KontoIndexRouteImport } from './routes/konto/index'
+import { Route as KontoRegisterRouteImport } from './routes/konto/register'
+import { Route as KontoLoginRouteImport } from './routes/konto/login'
 import { Route as SklepProductIdIndexRouteImport } from './routes/sklep.$productId/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +37,16 @@ const KontoIndexRoute = KontoIndexRouteImport.update({
   path: '/konto/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KontoRegisterRoute = KontoRegisterRouteImport.update({
+  id: '/konto/register',
+  path: '/konto/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontoLoginRoute = KontoLoginRouteImport.update({
+  id: '/konto/login',
+  path: '/konto/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SklepProductIdIndexRoute = SklepProductIdIndexRouteImport.update({
   id: '/sklep/$productId/',
   path: '/sklep/$productId/',
@@ -43,6 +55,8 @@ const SklepProductIdIndexRoute = SklepProductIdIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/konto/login': typeof KontoLoginRoute
+  '/konto/register': typeof KontoRegisterRoute
   '/konto': typeof KontoIndexRoute
   '/koszyk': typeof KoszykIndexRoute
   '/nauczyciel': typeof NauczycielIndexRoute
@@ -50,6 +64,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/konto/login': typeof KontoLoginRoute
+  '/konto/register': typeof KontoRegisterRoute
   '/konto': typeof KontoIndexRoute
   '/koszyk': typeof KoszykIndexRoute
   '/nauczyciel': typeof NauczycielIndexRoute
@@ -58,6 +74,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/konto/login': typeof KontoLoginRoute
+  '/konto/register': typeof KontoRegisterRoute
   '/konto/': typeof KontoIndexRoute
   '/koszyk/': typeof KoszykIndexRoute
   '/nauczyciel/': typeof NauczycielIndexRoute
@@ -65,12 +83,28 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/konto' | '/koszyk' | '/nauczyciel' | '/sklep/$productId'
+  fullPaths:
+    | '/'
+    | '/konto/login'
+    | '/konto/register'
+    | '/konto'
+    | '/koszyk'
+    | '/nauczyciel'
+    | '/sklep/$productId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/konto' | '/koszyk' | '/nauczyciel' | '/sklep/$productId'
+  to:
+    | '/'
+    | '/konto/login'
+    | '/konto/register'
+    | '/konto'
+    | '/koszyk'
+    | '/nauczyciel'
+    | '/sklep/$productId'
   id:
     | '__root__'
     | '/'
+    | '/konto/login'
+    | '/konto/register'
     | '/konto/'
     | '/koszyk/'
     | '/nauczyciel/'
@@ -79,6 +113,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  KontoLoginRoute: typeof KontoLoginRoute
+  KontoRegisterRoute: typeof KontoRegisterRoute
   KontoIndexRoute: typeof KontoIndexRoute
   KoszykIndexRoute: typeof KoszykIndexRoute
   NauczycielIndexRoute: typeof NauczycielIndexRoute
@@ -115,6 +151,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KontoIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/konto/register': {
+      id: '/konto/register'
+      path: '/konto/register'
+      fullPath: '/konto/register'
+      preLoaderRoute: typeof KontoRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konto/login': {
+      id: '/konto/login'
+      path: '/konto/login'
+      fullPath: '/konto/login'
+      preLoaderRoute: typeof KontoLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sklep/$productId/': {
       id: '/sklep/$productId/'
       path: '/sklep/$productId'
@@ -127,6 +177,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  KontoLoginRoute: KontoLoginRoute,
+  KontoRegisterRoute: KontoRegisterRoute,
   KontoIndexRoute: KontoIndexRoute,
   KoszykIndexRoute: KoszykIndexRoute,
   NauczycielIndexRoute: NauczycielIndexRoute,

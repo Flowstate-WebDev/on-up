@@ -1,4 +1,4 @@
-import { buttonStyle } from '@/public/styles';
+import { buttonStyle } from '@/styles';
 
 type Props = {
   children: React.ReactNode,

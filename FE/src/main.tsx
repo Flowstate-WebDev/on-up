@@ -7,11 +7,11 @@ import { routeTree } from './routeTree.gen';
 
 import './style.css';
 
-// declare module '@tanstack/react-router' {
-//   interface Register {
-//     router: typeof router
-//   }
-// }
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
 
 const router = createRouter({ routeTree })
 const queryClient = new QueryClient()

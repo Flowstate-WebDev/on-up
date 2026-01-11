@@ -1,11 +1,15 @@
 import CategoryBlock from '@/components/Layout/Category/CategoryBlock';
 import { createFileRoute } from '@tanstack/react-router'
 
+let fetchError = false
+
 export const Route = createFileRoute('/')({
   component: RouteComponent,
   loader: async () => {
     const res = await fetch('http://localhost:3001/api/books')
-    if (!res.ok) throw new Error("Could not fetch books from /api/books!")
+    if (!res.ok) {
+      fetchError = true
+    }
     return res.json()
   }
 })
@@ -30,17 +34,18 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-8">
-      {Object.entries(groups).map(([profName, filteredBooks]) => (
-        <CategoryBlock
-          key={profName}
-          title={profName}
-          books={filteredBooks}
-        />
-      ))}
-      {Object.keys(groups).length === 0 && (
+      {fetchError ? (
         <div className="text-center py-10 text-gray-500">
           No books found... or just an error.
         </div>
+      ) : (
+        Object.entries(groups).map(([profName, filteredBooks]) => (
+          <CategoryBlock
+            key={profName}
+            title={profName}
+            books={filteredBooks}
+          />
+        ))
       )}
     </div>
   )

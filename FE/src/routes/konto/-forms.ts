@@ -1,7 +1,7 @@
 import { formOptions } from "@tanstack/react-form"
 
 //Login
-interface Login{
+export interface Login {
   username: string
   password: string
 }
@@ -10,10 +10,10 @@ const defaultLogin: Login = { username: '', password: '' }
 
 export const loginFormOpts = formOptions({
   defaultValues: defaultLogin
-}) 
+})
 
 //Register
-interface Register{
+export interface Register {
   username: string
   password: string
   repeatPassword: string

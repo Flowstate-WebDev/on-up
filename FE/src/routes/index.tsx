@@ -1,38 +1,45 @@
 import CategoryBlock from '@/components/Layout/Category/CategoryBlock';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
+
+async function fetchBooks() {
+  // await new Promise((resolve) => setTimeout(resolve, 1000)) // DELAY W MILISEKUNDACH
+  const res = await fetch('http://localhost:3001/api/books')
+  if (!res.ok) throw new Error('Could not fetch books from /api/books')
+  const data = await res.json()
+  return data
+}
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
-  loader: async () => {
-    try {
-      const res = await fetch('http://localhost:3001/api/books')
-      if (!res.ok) {
-        return { books: [], error: true }
-      }
-      const data = await res.json()
-      return { books: Array.isArray(data) ? data : [], error: false }
-    } catch (err) {
-      console.error('Failed to fetch books:', err)
-      return { books: [], error: true }
-    }
-  }
 })
 
 function RouteComponent() {
-  const { books, error } = Route.useLoaderData() as { books: any[], error: boolean }
+  const { isPending, error, data } = useQuery({
+    queryKey: ['books'],
+    queryFn: fetchBooks
+  })
 
-  if (error || !books || !Array.isArray(books)) {
+  if (isPending) {
     return (
       <div className="text-center py-10 text-gray-500">
-        Błąd podczas ładowania książek. Spróbuj odświeżyć stronę.
+        Ładowanie książek...
       </div>
     )
   }
 
-  if (books.length === 0) {
+  if (error || !data || !Array.isArray(data)) {
     return (
       <div className="text-center py-10 text-gray-500">
-        Nie znaleziono żadnych książek.
+        Ups... coś poszło nie tak.
+      </div>
+    )
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="text-center py-10 text-gray-500">
+        Nie znaleziono żadnych książek...
       </div>
     )
   }
@@ -40,7 +47,7 @@ function RouteComponent() {
   // Create a record where keys are profession names and values are arrays of books
   const groups: Record<string, any[]> = {}
 
-  books.forEach((book: any) => {
+  data.forEach((book: any) => {
     book.professions?.forEach((p: any) => {
       const profName = p.profession?.name
       if (!profName) return

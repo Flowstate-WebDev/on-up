@@ -28,3 +28,7 @@ export const selectStyle = tv({
         }
     }
 })
+
+export const errorInput = tv({
+    base: "text-red-500 text-md"
+})

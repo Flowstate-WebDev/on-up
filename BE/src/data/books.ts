@@ -15,7 +15,6 @@ async function getBooks() {
       },
     },
   });
-  console.log(books);
   return books;
 }
 

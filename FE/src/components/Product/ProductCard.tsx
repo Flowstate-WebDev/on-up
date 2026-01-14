@@ -19,7 +19,7 @@ export default function ProductCard({ data }: Props) {
         <img src={`/images/books/${data.imageUrl}`} alt={`Podręcznik ${data.title}`} className="object-cover w-full h-full" />
       </div>
       <div className='bg-bg-secondary p-2 grid grid-rows-subgrid row-start-2 row-span-3 gap-y-0'>
-        <h2 className='font-bold leading-tight [-webkit-box-orient:vertical] [-webkit-line-clamp:3] line-clamp-3 overflow-hidden row-start-1 text-sm sm:text-base mb-2'>{data.title}</h2>
+        <h2 className='font-bold leading-tight line-clamp-3 overflow-hidden row-start-1 text-sm sm:text-base mb-2'>{data.title}</h2>
         <div className='row-start-2'>
           <h3 className='text-[10px] uppercase tracking-wider text-text-tertiary'>Kwalifikacje:</h3>
           <ul className='flex flex-wrap gap-1'>

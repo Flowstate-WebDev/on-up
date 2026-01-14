@@ -7,19 +7,34 @@ import { routeTree } from './routeTree.gen';
 
 import './style.css';
 
+import { AuthProvider, useAuth } from './context/AuthContext';
+
+const router = createRouter({
+  routeTree,
+  context: {
+    auth: undefined! // This will be set in InnerApp
+  }
+})
+
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
 }
 
-const router = createRouter({ routeTree })
+function InnerApp() {
+  const auth = useAuth();
+  return <RouterProvider router={router} context={{ auth }} />;
+}
+
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <InnerApp />
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
 )

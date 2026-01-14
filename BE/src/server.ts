@@ -2,6 +2,12 @@ import express, { type NextFunction, type Request, type Response } from "express
 import cors from "cors";
 import getBooks from "./data/books.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const JWT_SECRET: string = process.env.JWT_SECRET || "fallback_secret";
 
 const saltRounds = 10;
 
@@ -39,13 +45,35 @@ app.get("/api/books/:slug", async (req: Request, res: Response) => {
     }
 });
 
+// Auth Middleware
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const parts = authHeader.split(" ");
+    if (parts.length !== 2) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+    const token = parts[1] as string;
+
+    try {
+        const decoded = jwt.verify(token!, JWT_SECRET as jwt.Secret) as any;
+        (req as any).user = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: "Invalid token" });
+    }
+};
+
 // FORMS
 import { prisma } from "./lib/prisma.js";
 
 app.post("/api/register", async (req: Request, res: Response) => {
     try {
         const { username, password, email, phone } = req.body;
-        
+
         if (!username || !password || !email || !phone) {
             return res.status(400).json({ error: "All fields are required" });
         }
@@ -102,9 +130,39 @@ app.post("/api/login", async (req: Request, res: Response) => {
             return res.status(401).json({ error: "Invalid username or password" });
         }
 
-        res.json({ message: "Login successful", user: { id: user.id, name: user.username } });
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
+
+        res.json({
+            message: "Login successful",
+            token,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                phone: user.phone
+            }
+        });
     } catch (error) {
         console.error("Error logging in:", error);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+app.get("/api/user/me", authMiddleware, async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).user.userId;
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { id: true, username: true, email: true, phone: true }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error("Error fetching current user:", error);
         res.status(500).json({ error: "Something went wrong" });
     }
 });

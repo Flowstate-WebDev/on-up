@@ -1,10 +1,11 @@
-
+import { useEffect } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { loginFormOpts, type Login } from './-forms'
 import { useForm } from '@tanstack/react-form'
 import Button from '@/components/UI/Interaction/Button'
 import { errorInput, inputStyle } from '@/styles'
+import { useAuth } from '@/context/AuthContext'
 
 export const Route = createFileRoute('/konto/login')({
     component: RouteComponent,
@@ -12,6 +13,13 @@ export const Route = createFileRoute('/konto/login')({
 
 function RouteComponent() {
     const navigate = useNavigate()
+    const { login, isAuthenticated } = useAuth()
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate({ to: '/konto' })
+        }
+    }, [isAuthenticated, navigate])
 
     const mutation = useMutation({
         mutationFn: async (value: Login) => {
@@ -31,8 +39,8 @@ function RouteComponent() {
 
             return data;
         },
-        onSuccess: () => {
-            navigate({ to: '/konto' })
+        onSuccess: (data) => {
+            login(data.token, data.user)
         }
     })
 

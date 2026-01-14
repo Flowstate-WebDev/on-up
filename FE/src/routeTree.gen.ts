@@ -10,16 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PolitykaIndexRouteImport } from './routes/polityka/index'
 import { Route as NauczycielIndexRouteImport } from './routes/nauczyciel/index'
 import { Route as KoszykIndexRouteImport } from './routes/koszyk/index'
 import { Route as KontoIndexRouteImport } from './routes/konto/index'
 import { Route as SklepProductIdRouteImport } from './routes/sklep/$productId'
+import { Route as PolitykaPolicyIdRouteImport } from './routes/polityka/$policyId'
 import { Route as KontoRegisterRouteImport } from './routes/konto/register'
 import { Route as KontoLoginRouteImport } from './routes/konto/login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PolitykaIndexRoute = PolitykaIndexRouteImport.update({
+  id: '/polityka/',
+  path: '/polityka/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NauczycielIndexRoute = NauczycielIndexRouteImport.update({
@@ -42,6 +49,11 @@ const SklepProductIdRoute = SklepProductIdRouteImport.update({
   path: '/sklep/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PolitykaPolicyIdRoute = PolitykaPolicyIdRouteImport.update({
+  id: '/polityka/$policyId',
+  path: '/polityka/$policyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KontoRegisterRoute = KontoRegisterRouteImport.update({
   id: '/konto/register',
   path: '/konto/register',
@@ -57,29 +69,35 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/polityka/$policyId': typeof PolitykaPolicyIdRoute
   '/sklep/$productId': typeof SklepProductIdRoute
   '/konto': typeof KontoIndexRoute
   '/koszyk': typeof KoszykIndexRoute
   '/nauczyciel': typeof NauczycielIndexRoute
+  '/polityka': typeof PolitykaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/polityka/$policyId': typeof PolitykaPolicyIdRoute
   '/sklep/$productId': typeof SklepProductIdRoute
   '/konto': typeof KontoIndexRoute
   '/koszyk': typeof KoszykIndexRoute
   '/nauczyciel': typeof NauczycielIndexRoute
+  '/polityka': typeof PolitykaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/polityka/$policyId': typeof PolitykaPolicyIdRoute
   '/sklep/$productId': typeof SklepProductIdRoute
   '/konto/': typeof KontoIndexRoute
   '/koszyk/': typeof KoszykIndexRoute
   '/nauczyciel/': typeof NauczycielIndexRoute
+  '/polityka/': typeof PolitykaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,38 +105,46 @@ export interface FileRouteTypes {
     | '/'
     | '/konto/login'
     | '/konto/register'
+    | '/polityka/$policyId'
     | '/sklep/$productId'
     | '/konto'
     | '/koszyk'
     | '/nauczyciel'
+    | '/polityka'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/konto/login'
     | '/konto/register'
+    | '/polityka/$policyId'
     | '/sklep/$productId'
     | '/konto'
     | '/koszyk'
     | '/nauczyciel'
+    | '/polityka'
   id:
     | '__root__'
     | '/'
     | '/konto/login'
     | '/konto/register'
+    | '/polityka/$policyId'
     | '/sklep/$productId'
     | '/konto/'
     | '/koszyk/'
     | '/nauczyciel/'
+    | '/polityka/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   KontoLoginRoute: typeof KontoLoginRoute
   KontoRegisterRoute: typeof KontoRegisterRoute
+  PolitykaPolicyIdRoute: typeof PolitykaPolicyIdRoute
   SklepProductIdRoute: typeof SklepProductIdRoute
   KontoIndexRoute: typeof KontoIndexRoute
   KoszykIndexRoute: typeof KoszykIndexRoute
   NauczycielIndexRoute: typeof NauczycielIndexRoute
+  PolitykaIndexRoute: typeof PolitykaIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -128,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/polityka/': {
+      id: '/polityka/'
+      path: '/polityka'
+      fullPath: '/polityka'
+      preLoaderRoute: typeof PolitykaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nauczyciel/': {
@@ -158,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SklepProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/polityka/$policyId': {
+      id: '/polityka/$policyId'
+      path: '/polityka/$policyId'
+      fullPath: '/polityka/$policyId'
+      preLoaderRoute: typeof PolitykaPolicyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/konto/register': {
       id: '/konto/register'
       path: '/konto/register'
@@ -179,10 +219,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   KontoLoginRoute: KontoLoginRoute,
   KontoRegisterRoute: KontoRegisterRoute,
+  PolitykaPolicyIdRoute: PolitykaPolicyIdRoute,
   SklepProductIdRoute: SklepProductIdRoute,
   KontoIndexRoute: KontoIndexRoute,
   KoszykIndexRoute: KoszykIndexRoute,
   NauczycielIndexRoute: NauczycielIndexRoute,
+  PolitykaIndexRoute: PolitykaIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -13,7 +13,7 @@ async function fetchProduct(productId: string) {
   return res.json()
 }
 
-export const Route = createFileRoute('/sklep/$productId/')({
+export const Route = createFileRoute('/sklep/$productId')({
   component: RouteComponent,
 })
 

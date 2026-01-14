@@ -3,7 +3,7 @@ type Props = {}
 
 export default function Footer({ }: Props) {
   return (
-    <div className='flex items-center justify-around bg-primary text-text-obj p-6 rounded-t-lg'>
+    <div className='flex flex-col md:flex-row items-center justify-around bg-primary text-text-obj p-6 rounded-t-lg'>
       <div className='flex gap-1'>
         <img src={'/images/onup_logo.webp'} alt={'logo'} height={52} width={52} className='grayscale' />
         <div className='flex flex-col'>
@@ -14,7 +14,7 @@ export default function Footer({ }: Props) {
       <div>
 
       </div>
-      <div className=''>
+      <div className='mt-6 md:mt-0'>
         <p>506 610 405</p>
         <p>onup.wydawnictwo@gmail.com</p><br />
         <p>ul. Gajowa 14/2, 82-500 Rakowiec</p>

@@ -50,6 +50,7 @@ function RouteComponent() {
           title={product.title}
           qualifications={product.qualifications}
           price={product.price}
+          stock={product.stock}
         />
       </div>
       <ProductDescriptionBlock description={product.description} />

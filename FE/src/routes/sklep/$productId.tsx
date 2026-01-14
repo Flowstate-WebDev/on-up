@@ -43,7 +43,7 @@ function RouteComponent() {
 
   return (
     <div>
-      <div className='grid grid-cols-2 flex-1'>
+      <div className='flex flex-col items-center gap-y-10 md:flex-row md:justify-center-safe md:gap-x-42'>
         <ProductImageGalery imageUrl={product.imageUrl} />
         <ProductDetailsBlock
           professions={product.professions}

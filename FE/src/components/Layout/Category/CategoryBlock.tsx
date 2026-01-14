@@ -6,7 +6,7 @@ export default function CategoryBlock({ title, books }: { title: string, books: 
   return (
     <section>
       <CategoryHeading>{title}</CategoryHeading>
-      <div className='grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-x-6 gap-y-12 py-4 justify-items-center sm:justify-items-start'>
+      <div className='flex flex-wrap justify-center gap-x-6 gap-y-12 py-4 w-full md:max-w-4/5 mx-auto'>
         {books.map((book: any) => (
           <ProductCard key={book.id} data={book} />
         ))}

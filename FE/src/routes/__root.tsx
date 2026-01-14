@@ -22,7 +22,7 @@ function RootComponent() {
   return (
     <div className='flex flex-col min-h-screen'>
       <Header />
-      <main className='flex-1 px-8 flex flex-col justify-center'>
+      <main className='flex-1 px-8 flex flex-col justify-center items-center'>
         <Outlet />
       </main>
       <Footer />

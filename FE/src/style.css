@@ -12,7 +12,8 @@
   /* --color-primary: oklch(54.6% 0.245 262.881); */
   --color-primary: oklch(24.658% 0.02521 261.082);
   /*blue-600*/
-  --color-secondary: oklch(62.3% 0.214 259.815);
+  /* --color-secondary: oklch(62.3% 0.214 259.815); */
+  --color-secondary: oklch(49.837% 0.01911 262.716);
   /*blue-500*/
   --color-tertiary: oklch(70.7% 0.165 254.624);
   /*blue-400*/

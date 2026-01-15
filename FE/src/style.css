@@ -9,7 +9,8 @@
   /* clr-border-obj is the color of the border of a for example button */
 
   /* Main website colors */
-  --color-primary: oklch(54.6% 0.245 262.881);
+  /* --color-primary: oklch(54.6% 0.245 262.881); */
+  --color-primary: oklch(24.658% 0.02521 261.082);
   /*blue-600*/
   --color-secondary: oklch(62.3% 0.214 259.815);
   /*blue-500*/
@@ -64,4 +65,19 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.divider-lines>*:not(:last-child) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    translate: 0 -50%;
+    width: 1px;
+    height: calc(100% + 24px);
+    background-image: linear-gradient(to top, transparent, hsla(0 0% 100% / .5), transparent);
+  }
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, type ReactNode } from 'react';
 
 interface User {
   id: string;
@@ -7,7 +7,7 @@ interface User {
   phone: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
@@ -21,22 +21,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
-  const login = useCallback((newToken: string, newUser: User) => {
+  const login = (newToken: string, newUser: User) => {
     setToken(newToken);
     setUser(newUser);
-  }, []);
+  };
 
-  const logout = useCallback(() => {
+  const logout = () => {
     setToken(null);
     setUser(null);
-  }, []);
+  };
 
   const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated, login, logout }}>
+    <AuthContext value={{ user, token, isAuthenticated, login, logout }}>
       {children}
-    </AuthContext.Provider>
+    </AuthContext>
   );
 };
 

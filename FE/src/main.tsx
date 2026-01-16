@@ -8,11 +8,13 @@ import { routeTree } from './routeTree.gen';
 import './style.css';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { CartProvider, useCart } from './context/CartContext';
 
 const router = createRouter({
   routeTree,
   context: {
-    auth: undefined! // This will be set in InnerApp
+    auth: undefined!, // Those will be set in InnerApp
+    cart: undefined!
   }
 })
 
@@ -24,7 +26,8 @@ declare module '@tanstack/react-router' {
 
 function InnerApp() {
   const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
+  const cart = useCart();
+  return <RouterProvider router={router} context={{ auth, cart }} />;
 }
 
 const queryClient = new QueryClient()
@@ -33,7 +36,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <InnerApp />
+        <CartProvider>
+          <InnerApp />
+        </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,

@@ -3,15 +3,12 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import Header from '@/components/Layout/Header/Header';
 import Footer from '@/components/Layout/Footer/Footer';
 
-interface AuthContext {
-  isAuthenticated: boolean;
-  user: { id: string; username: string; email: string } | null;
-  login: (token: string, user: any) => void;
-  logout: () => void;
-}
+import type { AuthContextType } from '@/context/AuthContext';
+import type { CartContextType } from '@/context/CartContext';
 
 interface MyRouterContext {
-  auth: AuthContext;
+  auth: AuthContextType;
+  cart: CartContextType;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

@@ -32,12 +32,16 @@ function InnerApp() {
 
 const queryClient = new QueryClient()
 
+import { ToastProvider } from './context/ToastContext';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <InnerApp />
+          <ToastProvider>
+            <InnerApp />
+          </ToastProvider>
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>

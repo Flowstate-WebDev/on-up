@@ -51,6 +51,18 @@
   --color-bg-secondary: oklch(98.5% 0 0);
   /*neutral-50*/
   --color-bg-tertiary: #000;
+
+  /* debug, errors, warnings, checkpoints */
+  --color-blue: oklch(80.9% 0.105 251.813);
+  --color-blue-bg: oklch(97% 0.014 254.604);
+
+  --color-red: oklch(70.4% 0.191 22.216);
+  --color-red-bg: oklch(97.1% 0.013 17.38);
+
+  --color-yellow: oklch(85.2% 0.199 91.936);
+  --color-yellow-bg: oklch(98.7% 0.026 102.212);
+
+
 }
 
 :root {
@@ -80,5 +92,13 @@
     width: 1px;
     height: calc(100% + 24px);
     background-image: linear-gradient(to top, transparent, hsla(0 0% 100% / .5), transparent);
+  }
+}
+
+@media screen and (width <= 40rem) {
+  .divider-lines>*:not(:last-child) {
+    &::before {
+      display: none;
+    }
   }
 }

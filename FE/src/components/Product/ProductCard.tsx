@@ -13,7 +13,7 @@ export default function ProductCard({ data }: Props) {
     <Link 
       to="/sklep/$productId" 
       params={{ productId: data.slug }} 
-      className='w-60 md:w-1/3 lg:w-1/6 shadow-md rounded-lg overflow-clip flex flex-col bg-bg-secondary'
+      className=' w-4/5 md:w-1/3 lg:w-1/4 xl:w-1/6 shadow-md rounded-lg overflow-clip flex flex-col bg-bg-secondary'
     >
       <div className="aspect-4/5 relative shrink-0">
         <img src={`/images/books/${data.imageUrl}`} alt={`Podręcznik ${data.title}`} className="object-cover w-full h-full" />

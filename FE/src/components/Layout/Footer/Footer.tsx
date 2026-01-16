@@ -5,7 +5,7 @@ type Props = {}
 
 export default function Footer({ }: Props) {
   return (
-    <div className='flex flex-col md:flex-row items-stretch justify-center px-8 bg-primary text-text-obj p-6 rounded-t-lg divider-lines'>
+    <div className='flex flex-col md:flex-row w-full xl:w-2/3 xl:mx-auto items-stretch justify-center px-8 bg-primary text-text-obj p-6 rounded-t-lg divider-lines'>
       <div className='flex grow gap-1 mb-6 md:mb-0 justify-center items-center'>
         <img src={'/images/onup_logo.webp'} alt={'logo'} height={52} width={52} className='grayscale' />
         <div className='flex flex-col'>

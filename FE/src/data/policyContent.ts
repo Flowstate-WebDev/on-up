@@ -1,6 +1,6 @@
 export const PolicyContent: Record<string, string> = {
   "Regulamin": `
-    <div class="space-y-8 text-gray-800 leading-relaxed text-left">
+    <div class="space-y-8 text-text-secondary leading-relaxed text-left">
       <section>
         <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-text-primary">§ 1 Definicje pojęć</h2>
         <p class="mb-4">Sklep internetowy działający pod adresem <a href="http://www.on-up.pl" class="text-blue-600 hover:underline">www.on-up.pl</a>, jest prowadzony przez Wydawnictwo On-Up Beata Targowska pod adresem 82-500 Rakowiec; ul. Gajowa 14/2, NIP 5811228975, REGON 192050931 wpisane do rejestru Centralnej Ewidencji i Informacji o Działalności Gospodarczej prowadzonego przez Ministra Gospodarki.</p>
@@ -140,7 +140,7 @@ export const PolicyContent: Record<string, string> = {
         <ol class="list-decimal ml-6 space-y-3">
           <li>Sprzedawca zobowiązany jest do wydania towaru bez wad. Wszystkie towary posiadają gwarancję Sprzedawcy obowiązującą na terenie Polski. W przypadku niezgodności towaru z zamówieniem, uszkodzenia towaru podczas dostawy lub stwierdzenia wad, Kupujący zgłasza reklamację do działu zamówień i rozliczeń sprzedaży: tel. 506 610 405 lub e-mail: <a href="mailto:onup.wydawnictwo@gmail.com" class="text-blue-600 hover:underline">onup.wydawnictwo@gmail.com</a>.</li>
           <li>Na zasadach określonych w Kodeksie Cywilnym, Kupujący może żądać naprawy towaru, wymiany towaru na wolny od wad, obniżenia ceny towaru albo może odstąpić od umowy sprzedaży. W takim przypadku Kupujący powinien odesłać reklamowany towar wraz z fakturą oraz protokołem niezgodności (a także ewentualne oczekiwania dotyczące sposobu realizacji zobowiązań przez Sprzedawcę) za pomocą Poczty Polskiej na adres Sprzedawcy:
-            <p class="mt-2 text-gray-700 italic">Wydawnictwo On-Up<br>ul. Gajowa 14/2,<br>82-500 Rakowiec<br>z dopiskiem: reklamacja – sklep internetowy on-up.pl</p>
+            <p class="mt-2 text-text-secondary italic">Wydawnictwo On-Up<br>ul. Gajowa 14/2,<br>82-500 Rakowiec<br>z dopiskiem: reklamacja – sklep internetowy on-up.pl</p>
           </li>
           <li>Sklep internetowy Wydawnictwa OnUp zobowiązuje się niezwłocznie, jednak najpóźniej w ciągu 14 dni od daty otrzymania przesyłki z reklamowanym towarem, ustosunkować się do złożonej reklamacji i poinformować Kupującego o dalszym postępowaniu. Koszty związane z odesłaniem towaru reklamowanego (paczka ekonomiczna), Sprzedawca zwraca po rozpatrzeniu reklamacji zgodnie z procedurą opisaną w § 7.</li>
           <li>W każdym z powyższych przypadków, gdy realizacja żądań Kupującego wiąże się z dostawą nowego lub naprawionego towaru, wszystkie koszty dostawy ponosi Sprzedawca.</li>
@@ -160,9 +160,9 @@ export const PolicyContent: Record<string, string> = {
 
 
   "Dostawy i płatność": `
-    <div class="space-y-8 text-gray-800 leading-relaxed text-left">
+    <div class="space-y-8 text-text-secondary leading-relaxed text-left">
       <section>
-        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+        <div class="bg-red-bg border-l-4 border-red p-4 mb-6">
           <p class="text-sm">Pamiętaj, że dodanie produktu do koszyka nie rezerwuje go dla Ciebie, aby otrzymać produkty należy zakończyć proces zakupu. Jeśli w trakcie składania zamówienia wybierzesz inną płatność niż płatność Blikiem nie dokonasz natychmiastowej zapłaty od razu, zamówienie zostanie wysłane dopiero po zaksięgowaniu wpłaty.</p>
         </div>
         <p class="mt-4">Zamówienia dla szkół, przesyłane na adres szkoły, możliwe z odroczoną płatnością po uzgodnieniu warunków telefonicznie. <strong>Nr tel. 506 610 405.</strong></p>
@@ -176,7 +176,7 @@ export const PolicyContent: Record<string, string> = {
       <section>
         <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-text-primary uppercase">W jaki sposób wysyłane są zamówienia</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="border p-4 rounded-lg bg-gray-50 flex justify-between items-center">
+          <div class="border p-4 rounded-lg bg-bg-primary flex justify-between items-center">
             <div>
               <p class="font-bold text-lg">Paczkomaty InPost</p>
               <p class="text-sm text-gray-500">1-2 dni robocze</p>
@@ -184,7 +184,7 @@ export const PolicyContent: Record<string, string> = {
             <p class="font-bold text-text-primary">16,00 PLN</p>
           </div>
           
-          <div class="border p-4 rounded-lg bg-gray-50 flex justify-between items-center">
+          <div class="border p-4 rounded-lg bg-bg-primary flex justify-between items-center">
             <div>
               <p class="font-bold text-lg">Orlen paczka</p>
               <p class="text-sm text-gray-500">1-2 dni robocze</p>
@@ -192,7 +192,7 @@ export const PolicyContent: Record<string, string> = {
             <p class="font-bold text-text-primary">12,00 PLN</p>
           </div>
 
-          <div class="border p-4 rounded-lg bg-gray-50 flex justify-between items-center">
+          <div class="border p-4 rounded-lg bg-bg-primary flex justify-between items-center">
             <div>
               <p class="font-bold text-lg">Kurier</p>
               <p class="text-sm text-gray-500">1-2 dni robocze koszt</p>
@@ -200,7 +200,7 @@ export const PolicyContent: Record<string, string> = {
             <p class="font-bold text-text-primary">20,00 PLN</p>
           </div>
 
-          <div class="border p-4 rounded-lg bg-gray-50 flex justify-between items-center">
+          <div class="border p-4 rounded-lg bg-bg-primary flex justify-between items-center">
             <div>
               <p class="font-bold text-lg">Poczta Polska</p>
               <p class="text-sm text-gray-500">Standardowa przesyłka</p>
@@ -212,7 +212,7 @@ export const PolicyContent: Record<string, string> = {
     </div>
   `,
   "Polityka prywatności": `
-    <div class="space-y-8 text-gray-800 leading-relaxed text-left">
+    <div class="space-y-8 text-text-secondary leading-relaxed text-left">
       <section>
         <p class="mb-4 italic">Polityka prywatności służy jako pomoc w zrozumieniu, jakie dane zbieramy i w jakim celu oraz do czego je wykorzystujemy. Te informacje są ważne, dlatego prosimy o dokładne zapoznanie się z tym dokumentem.</p>
         <p class="mb-4">Administratorem Twoich danych osobowych jest <strong>Wydawnictwo OnUP Beata Targowska z siedzibą w Rakowcu, ul. Gajowa 14/2, 82-500 Rakowiec</strong>.</p>
@@ -238,7 +238,7 @@ export const PolicyContent: Record<string, string> = {
       <section>
         <h3 class="text-xl font-bold mb-3 text-text-primary">Wycofanie zgody</h3>
         <p>Jeśli chcesz wycofać zgodę na przetwarzanie danych osobowych prosimy o wysłanie e-maila lub listu na adres:</p>
-        <p class="mt-2 bg-gray-50 p-4 border rounded italic">
+        <p class="mt-2 bg-bg-primary p-4 border rounded italic">
           Wydawnictwo OnUp<br>
           ul. Gajowa 14/2<br>
           82-500 Rakowiec<br>
@@ -266,7 +266,7 @@ export const PolicyContent: Record<string, string> = {
 
       <section>
         <h3 class="text-xl font-bold mb-3 text-text-primary uppercase">Kontakt</h3>
-        <div class="italic text-gray-700">
+        <div class="italic text-text-secondary">
           <p>Wydawnictwo OnUp</p>
           <p>ul. Gajowa 14/2 82-500 Rakowiec</p>
           <p>e-mail: <a href="mailto:onup.wydawnictwo@gmail.com" class="text-blue-600 hover:underline">onup.wydawnictwo@gmail.com</a></p>
@@ -276,11 +276,11 @@ export const PolicyContent: Record<string, string> = {
     </div>
   `,
   "Polityka zwrotów": `
-    <div class="space-y-8 text-gray-800 leading-relaxed text-left">
+    <div class="space-y-8 text-text-secondary leading-relaxed text-left">
       <section>
         <p class="mb-4">Kupującemu będącemu konsumentem przysługuje prawo do odstąpienia od umowy i zwrotu towarów zakupionych w sklepie Wydawnictwa On-UP w terminie 14 dni od daty odebrania przez niego przesyłki. Aby skorzystać z prawa odstąpienia od umowy, Kupujący powinien poinformować Sprzedawcę o swojej decyzji o odstąpieniu od umowy w drodze jednoznacznego oświadczenia o odstąpieniu od umowy. Konsument może skorzystać ze strony Formularz odstąpienia. Kupujący powinien złożyć oświadczenie o odstąpieniu od umowy wysyłając wypełnione oświadczenie na jeden z podanych poniżej adresów:</p>
         
-        <div class="mt-4 bg-gray-50 p-4 border rounded italic">
+        <div class="mt-4 bg-bg-primary p-4 border rounded italic">
           <p>adres korespondencyjny: Wydawnictwo On-Up, ul. Gajowa 14/2, 82-500 Rakowiec,</p>
           <p>email : <a href="mailto:onup.wydawnictwo@gmail.pl" class="text-blue-600 hover:underline">onup.wydawnictwo@gmail.pl</a></p>
         </div>
@@ -296,7 +296,7 @@ export const PolicyContent: Record<string, string> = {
         <h3 class="text-xl font-bold mb-3 text-text-primary uppercase">Zasady zwrotu towaru</h3>
         <p>Zwracane towary muszą być kompletne. Towary powinny być zwrócone w stanie niezmienionym. W przypadku odstąpienia od umowy, Kupujący zobowiązany jest do zwrotu otrzymanego towaru niezwłocznie, w terminie nie dłuższym niż 14 dni od dnia odstąpienia od umowy. Do zachowania tego terminu wystarczy wysłanie towaru przed jego upływem. Towar wraz z otrzymaną fakturą należy zwrócić na adres:</p>
         
-        <p class="mt-4 bg-gray-50 p-4 border rounded italic">
+        <p class="mt-4 bg-bg-primary p-4 border rounded italic">
           Wydawnictwo On-Up<br>
           ul. Gajowa 14/2,<br>
           82-500 Rakowiec<br>
@@ -325,7 +325,7 @@ export const PolicyContent: Record<string, string> = {
     </div>
   `,
   "O nas": `
-    <div class="space-y-8 text-gray-800 leading-relaxed text-left">
+    <div class="space-y-8 text-text-secondary leading-relaxed text-left">
       <section>
         <div class="space-y-4">
           <p class="text-xl font-semibold text-text-primary">Wydawnictwo OnUp</p>
@@ -346,7 +346,7 @@ export const PolicyContent: Record<string, string> = {
 
       <section>
         <h3 class="text-xl font-bold mb-3 text-text-primary uppercase">Kontakt i dane firmy</h3>
-        <div class="bg-gray-50 p-6 border rounded-lg italic space-y-1">
+        <div class="bg-bg-primary p-6 border rounded-lg italic space-y-1">
           <p class="font-bold not-italic mb-2">Wydawnictwo OnUp</p>
           <p>ul. Gajowa 14/2, 82-500 Rakowiec</p>
           <p>NIP 5811228975, REGON 192050931</p>

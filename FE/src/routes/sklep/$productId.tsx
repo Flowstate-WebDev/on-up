@@ -45,13 +45,7 @@ function RouteComponent() {
     <div>
       <div className='flex flex-col items-center gap-y-10 md:flex-row md:justify-center-safe md:gap-x-42'>
         <ProductImageGalery imageUrl={product.imageUrl} />
-        <ProductDetailsBlock
-          professions={product.professions}
-          title={product.title}
-          qualifications={product.qualifications}
-          price={product.price}
-          stock={product.stock}
-        />
+        <ProductDetailsBlock product={product} />
       </div>
       <ProductDescriptionBlock description={product.description} />
     </div>

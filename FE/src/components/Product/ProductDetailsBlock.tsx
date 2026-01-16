@@ -3,23 +3,39 @@ import ProductQualifsList from './ProductQualifsList'
 import ProductPrice from './ProductPrice'
 import AddToCartForm from './AddToCartForm'
 import Heading from '../UI/Reusable/Heading'
+import { useCart } from '@/context/CartContext'
 
-type Props = Pick<Product, 'professions' | 'title' | 'qualifications' | 'price' | 'stock'>
+import { useToast } from '@/context/ToastContext'
 
-export default function ProductDetailsBlock({ professions, title, qualifications, price, stock }: Props) {
+type Props = {
+  product: Product
+}
+
+export default function ProductDetailsBlock({ product }: Props) {
+  const { addToCart } = useCart();
+  const { showToast } = useToast();
+  const { professions, title, qualifications, price, stock } = product;
+
+  const handleAddToCart = (quantity: number) => {
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product);
+    }
+    showToast(`Książka "${title}" została dodana do koszyka`);
+  }
+
   return (
-    <div className='content-center'>
+    <div className='content-center md:max-w-1/3'>
       <h2 className='font-semibold text-text-secondary'>{professions.map(p => p.profession.name).join(', ')}</h2>
       <Heading>{title}</Heading>
       <ProductQualifsList qualifications={qualifications} />
       <ProductPrice price={price} />
       {stock > 0 ? (
         <>
-          <AddToCartForm MaxStock={stock} />
+          <AddToCartForm MaxStock={stock} onAdd={handleAddToCart} />
           <p className="text-text-tertiary opacity-70 mt-2 font-semibold">Dostępnych sztuk: {stock}</p>
         </>
       ) : (
-        <p className="text-red-500 font-semibold">Produkt niedostępny</p>
+        <p className="text-error font-semibold">Produkt niedostępny</p>
       )}
     </div>
   )

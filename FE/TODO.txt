@@ -1,0 +1,1 @@
+- trzeba zrobić refactor formularzy w /register i /login (zrobić z nich komponenty)

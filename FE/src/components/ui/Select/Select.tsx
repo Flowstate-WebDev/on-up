@@ -1,4 +1,4 @@
-import { selectStyle } from "@/styles";
+import { selectStyle } from "./variants";
 
 type Props = {
     children: React.ReactNode
@@ -7,7 +7,7 @@ type Props = {
     style: "default"
 }
 
-export default function Select({ children, name, id, style }: Props) {
+export function Select({ children, name, id, style }: Props) {
     return (
         <select name={name} id={id} className={selectStyle({ style })}>
             {children}

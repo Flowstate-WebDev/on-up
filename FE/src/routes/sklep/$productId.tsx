@@ -1,17 +1,11 @@
+import { createFileRoute } from '@tanstack/react-router'
+
+import { useProduct } from '@/hooks/queries/product/useProduct'
+
 import { ProductImageGalery } from '@/routes/sklep/components/ProductImageGalery'
 import { ProductDetailsSection } from '@/routes/sklep/components/ProductDetailsSection'
 import { ProductDescriptionSection } from '@/routes/sklep/components/ProductDescriptionSection'
-import { createFileRoute } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
-
-import type { Product } from '@/data/products'
-
-async function fetchProduct(productId: string) {
-  // await new Promise((resolve) => setTimeout(resolve, 1000)) // DELAY W MILISEKUNDACH
-  const res = await fetch(`http://localhost:3001/api/books/${productId}`)
-  if (!res.ok) throw new Error('Could not fetch product from /api/books/:productId')
-  return res.json()
-}
+import { QueryState } from '@/components/ui/QueryState'
 
 export const Route = createFileRoute('/sklep/$productId')({
   component: RouteComponent,
@@ -19,26 +13,14 @@ export const Route = createFileRoute('/sklep/$productId')({
 
 function RouteComponent() {
   const { productId } = Route.useParams()
-
-  const { isPending, error, data: product } = useQuery<Product>({
-    queryKey: ['product', productId],
-    queryFn: () => fetchProduct(productId),
-  })
+  const { isPending, error, data: product } = useProduct(productId)
 
   if (isPending) {
-    return (
-      <div className="text-center py-10 text-gray-500">
-        Ładowanie produktu...
-      </div>
-    )
+    return <QueryState>Ładowanie produktu...</QueryState>
   }
 
   if (error || !product) {
-    return (
-      <div className="text-center py-10 text-gray-500">
-        Ups... nie udało się pobrać produktu.
-      </div>
-    )
+    return <QueryState>Ups... nie udało się pobrać produktu.</QueryState>
   }
 
   return (

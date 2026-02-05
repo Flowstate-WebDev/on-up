@@ -1,53 +1,32 @@
+import { createFileRoute } from '@tanstack/react-router';
+
 import { CategorySection } from '@/routes/components/CategorySection';
+import { QueryState } from '@/components/ui/QueryState';
 
-import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router'
-
-async function fetchBooks() {
-  // await new Promise((resolve) => setTimeout(resolve, 1000)) // DELAY W MILISEKUNDACH
-  const res = await fetch('http://localhost:3001/api/books')
-  if (!res.ok) throw new Error('Could not fetch books from /api/books')
-  const data = await res.json()
-  return data
-}
+import { useBooks } from '@/hooks/queries/books/useBooks';
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { isPending, error, data } = useQuery({
-    queryKey: ['books'],
-    queryFn: fetchBooks
-  })
+  const { isPending, error, data: books } = useBooks()
 
   if (isPending) {
-    return (
-      <div className="text-center py-10 text-gray-500">
-        Ładowanie książek...
-      </div>
-    )
+    return <QueryState>Ładowanie książek...</QueryState>
   }
 
-  if (error || !data || !Array.isArray(data)) {
-    return (
-      <div className="text-center py-10 text-gray-500">
-        Ups... coś poszło nie tak.
-      </div>
-    )
+  if (error || !books || !Array.isArray(books)) {
+    return <QueryState>Ups... coś poszło nie tak.</QueryState>
   }
 
-  if (data.length === 0) {
-    return (
-      <div className="text-center py-10 text-gray-500">
-        Nie znaleziono żadnych książek...
-      </div>
-    )
+  if (books.length === 0) {
+    return <QueryState>Nie znaleziono żadnych książek...</QueryState>
   }
 
   const groups: Record<string, any[]> = {}
 
-  data.forEach((book: any) => {
+  books.forEach((book: any) => {
     book.professions?.forEach((p: any) => {
       const profName = p.profession?.name
       if (!profName) return

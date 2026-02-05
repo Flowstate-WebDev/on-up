@@ -1,14 +1,11 @@
 import { Link } from '@tanstack/react-router';
 
-import type { Product } from '@/data/products';
-import Tag from '@/components/ui/Reusable/Tag';
+import { Tag } from '@/components/ui/Tag';
 import { ProductPrice } from '@/routes/sklep/components/ProductDetailsSection/ProductPrice';
 
-type Props = {
-  data: Product
-}
+import type { ProductCardProps } from './ProductCard.types';
 
-export function ProductCard({ data }: Props) {
+export const ProductCard = ({ data }: ProductCardProps) => {
   return (
     <Link
       to="/sklep/$productId"

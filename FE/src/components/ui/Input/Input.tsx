@@ -1,4 +1,4 @@
-import { inputStyle } from '@/styles'
+import { inputStyle } from './Input.variants'
 
 type Props = {
     type: "text" | "password" | "email" | "tel" | "number" | "date" | "datetime-local" | "time"
@@ -6,7 +6,7 @@ type Props = {
     placeholder: string
 }
 
-export default function Input({ type, style, placeholder }: Props) {
+export function Input({ type, style, placeholder }: Props) {
     return (
         <input type={type} placeholder={placeholder} className={inputStyle({ style })} />
     )

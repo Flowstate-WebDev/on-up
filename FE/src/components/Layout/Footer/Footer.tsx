@@ -1,9 +1,8 @@
-import Button from "@/components/ui/Interaction/Button"
 import { Link } from "@tanstack/react-router"
 
-type Props = {}
+import { Button } from "@/components/ui/Button"
 
-export function Footer({ }: Props) {
+export const Footer = () => {
   return (
     <div className='flex flex-col md:flex-row w-full xl:w-2/3 xl:mx-auto items-stretch justify-center px-8 bg-primary text-text-obj p-6 rounded-t-lg divider-lines'>
       <div className='flex grow gap-1 mb-6 md:mb-0 justify-center items-center'>

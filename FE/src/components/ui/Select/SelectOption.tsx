@@ -5,7 +5,7 @@ type Props = {
     selected: boolean
 }
 
-export default function SelectOption({ value, title, disabled, selected }: Props) {
+export function SelectOption({ value, title, disabled, selected }: Props) {
     return (
         <option value={value} disabled={disabled ? true : false} selected={selected ? true : false}>{title}</option>
     )

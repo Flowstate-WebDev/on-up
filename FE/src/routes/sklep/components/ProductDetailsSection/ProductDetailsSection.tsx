@@ -1,17 +1,15 @@
-import type { Product } from '@/data/products'
 import { ProductQualifsList } from './ProductQualifsList'
 import { ProductPrice } from './ProductPrice'
 import AddToCartForm from './AddToCartForm'
-import Heading from '@/components/ui/Reusable/Heading'
+import { Heading } from '@/components/ui/Heading'
 import { useCart } from '@/context/CartContext'
 
 import { useToast } from '@/context/ToastContext'
 
-type Props = {
-  product: Product
-}
+import type { ProductDetailsSectionProps } from './ProductDetailsSection.types'
 
-export function ProductDetailsSection({ product }: Props) {
+
+export const ProductDetailsSection = ({ product }: ProductDetailsSectionProps) => {
   const { addToCart } = useCart();
   const { showToast } = useToast();
   const { professions, title, qualifications, price, stock } = product;

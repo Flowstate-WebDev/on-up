@@ -1,4 +1,4 @@
-import { buttonStyle } from '@/styles';
+import { buttonStyles } from './Button.variants';
 
 type Props = {
   children: React.ReactNode,
@@ -8,11 +8,11 @@ type Props = {
   onClick?: () => void
 }
 
-export default function Button({ children, style, type, disabled, onClick }: Props) {
+export function Button({ children, style, type, disabled, onClick }: Props) {
   return (
     <button
       type={type}
-      className={`${buttonStyle({ style })} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className={`${buttonStyles({ style })} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       disabled={disabled}
       onClick={onClick}
     >

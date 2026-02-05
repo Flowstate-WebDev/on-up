@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Policy } from '@/data/policy'
-import Card from '@/routes/polityka/-Card'
+import { Card } from '@/routes/polityka/-Card'
 
 export const Route = createFileRoute('/polityka/')({
   component: RouteComponent,

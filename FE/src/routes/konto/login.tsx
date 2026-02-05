@@ -3,7 +3,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { loginFormOpts, type Login } from './-forms'
 import { useForm } from '@tanstack/react-form'
-import Button from '@/components/UI/Interaction/Button'
+import Button from '@/components/ui/Interaction/Button'
 import { errorInput, inputStyle } from '@/styles'
 import { useAuth } from '@/context/AuthContext'
 

@@ -8,7 +8,9 @@ import path from 'path';
 export default defineConfig({
   plugins: [
     tailwindcss(),
-    tanstackRouter(),
+    tanstackRouter({
+      routeFileIgnorePattern: '(components)',
+    }),
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],

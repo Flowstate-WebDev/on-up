@@ -1,10 +1,10 @@
-import ProductDetailsBlock from '@/components/Product/ProductDetailsBlock'
-import ProductImageGalery from '@/components/Product/ProductImageGalery'
+import { ProductImageGalery } from '@/routes/sklep/components/ProductImageGalery'
+import { ProductDetailsSection } from '@/routes/sklep/components/ProductDetailsSection'
+import { ProductDescriptionSection } from '@/routes/sklep/components/ProductDescriptionSection'
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 
 import type { Product } from '@/data/products'
-import ProductDescriptionBlock from '@/components/Product/ProductDescriptionBlock'
 
 async function fetchProduct(productId: string) {
   // await new Promise((resolve) => setTimeout(resolve, 1000)) // DELAY W MILISEKUNDACH
@@ -45,9 +45,9 @@ function RouteComponent() {
     <div>
       <div className='flex flex-col items-center gap-y-10 md:flex-row md:justify-center-safe md:gap-x-42'>
         <ProductImageGalery imageUrl={product.imageUrl} />
-        <ProductDetailsBlock product={product} />
+        <ProductDetailsSection product={product} />
       </div>
-      <ProductDescriptionBlock description={product.description} />
+      <ProductDescriptionSection description={product.description} />
     </div>
   )
 }

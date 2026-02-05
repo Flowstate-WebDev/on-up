@@ -1,8 +1,7 @@
-import CategoryHeading from './CategoryHeading';
-import ProductCard from '@/components/Product/ProductCard';
+import { CategoryHeading } from './CategoryHeading';
+import { ProductCard } from '@/routes/components/ProductCard';
 
-export default function CategoryBlock({ title, books }: { title: string, books: any[] }) {
-
+export function CategorySection({ title, books }: { title: string, books: any[] }) {
   return (
     <section>
       <CategoryHeading>{title}</CategoryHeading>

@@ -1,18 +1,18 @@
 import { Link } from '@tanstack/react-router';
 
 import type { Product } from '@/data/products';
-import Tag from '../UI/Reusable/Tag';
-import ProductPrice from './ProductPrice';
+import Tag from '@/components/ui/Reusable/Tag';
+import { ProductPrice } from '@/routes/sklep/components/ProductDetailsSection/ProductPrice';
 
 type Props = {
   data: Product
 }
 
-export default function ProductCard({ data }: Props) {
+export function ProductCard({ data }: Props) {
   return (
-    <Link 
-      to="/sklep/$productId" 
-      params={{ productId: data.slug }} 
+    <Link
+      to="/sklep/$productId"
+      params={{ productId: data.slug }}
       className=' w-4/5 md:w-1/3 lg:w-1/4 xl:w-1/6 shadow-md rounded-lg overflow-clip flex flex-col bg-bg-secondary'
     >
       <div className="aspect-4/5 relative shrink-0">

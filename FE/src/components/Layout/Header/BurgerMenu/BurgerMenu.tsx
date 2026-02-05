@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import NavLink from './NavLink';
+import { NavLink } from '@/components/layout/Header/Navigation/NavLink';
 
 import { navpaths } from '@/data/navpaths';
 
@@ -8,7 +8,7 @@ type Props = {}
 const menu = "/icons/menu-icon.svg";
 const close = "/icons/close-icon.svg";
 
-export default function BurgerMenu({ }: Props) {
+export function BurgerMenu({ }: Props) {
 
   const [isOpen, setIsOpen] = useState(false);
 

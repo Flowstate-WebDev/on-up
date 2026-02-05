@@ -1,8 +1,8 @@
 import type { Product } from '@/data/products'
-import ProductQualifsList from './ProductQualifsList'
-import ProductPrice from './ProductPrice'
+import { ProductQualifsList } from './ProductQualifsList'
+import { ProductPrice } from './ProductPrice'
 import AddToCartForm from './AddToCartForm'
-import Heading from '../UI/Reusable/Heading'
+import Heading from '@/components/ui/Reusable/Heading'
 import { useCart } from '@/context/CartContext'
 
 import { useToast } from '@/context/ToastContext'
@@ -11,7 +11,7 @@ type Props = {
   product: Product
 }
 
-export default function ProductDetailsBlock({ product }: Props) {
+export function ProductDetailsSection({ product }: Props) {
   const { addToCart } = useCart();
   const { showToast } = useToast();
   const { professions, title, qualifications, price, stock } = product;

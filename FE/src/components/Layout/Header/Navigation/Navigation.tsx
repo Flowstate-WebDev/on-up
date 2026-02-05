@@ -1,10 +1,10 @@
-import NavLink from './NavLink';
+import { NavLink } from './NavLink';
 
 import { navpaths } from '@/data/navpaths';
 
 import { useCart } from '@/context/CartContext';
 
-export default function Navigation() {
+export function Navigation() {
   const { products } = useCart();
   const cartItemCount = products.length;
 
@@ -13,9 +13,9 @@ export default function Navigation() {
       <ul className='h-full hidden lg:flex items-center gap-8'>
         {
           navpaths.map((item, idx) => (
-            <NavLink 
-              key={idx} 
-              href={item.redirect} 
+            <NavLink
+              key={idx}
+              href={item.redirect}
               icon={item.hasIcon}
               badge={item.name === "Koszyk" ? cartItemCount : undefined}
             >

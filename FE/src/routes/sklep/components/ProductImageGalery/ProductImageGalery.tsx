@@ -2,7 +2,7 @@ type Props = {
   imageUrl: string
 }
 
-export default function ProductImageGalery({ imageUrl }: Props) {
+export function ProductImageGalery({ imageUrl }: Props) {
   return (
     <div className="content-center">
       <div className='relative aspect-3/4 max-h-164 mx-auto border border-border-primary rounded-lg'>

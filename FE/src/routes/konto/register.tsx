@@ -2,7 +2,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { registerFormOpts } from './-forms'
 import { useForm } from '@tanstack/react-form'
-import Button from '@/components/UI/Interaction/Button'
+import Button from '@/components/ui/Interaction/Button'
 import { errorInput, inputStyle } from '@/styles'
 
 export const Route = createFileRoute('/konto/register')({
@@ -40,121 +40,121 @@ function RouteComponent() {
 
     return (
         <main className='flex justify-center items-center py-10'>
-            <form onSubmit={(e)=>{
+            <form onSubmit={(e) => {
                 e.stopPropagation()
                 e.preventDefault()
                 form.handleSubmit()
             }} className='flex flex-col gap-6 justify-center items-center rounded-lg border-2 border-border-primary p-6 w-fit'>
                 <h1 className='text-3xl font-bold'>Zarejestruj się</h1>
                 <form.Field
-                name='username'
-                validators={{
-                    onChange: ({ value }) => value.length < 3 ? 'Nazwa użytkownika powinna mieć ponad 3 znaki' : undefined,
-                }}
-                children={(field)=>{
-                    return (
-                        <>
-                            <input
-                            type='text'
-                            placeholder='Nazwa użytkownika'
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
-                            />
-                            {!field.state.meta.isValid && (
-                                <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
-                            )}
-                        </>
-                    )
-                }}
+                    name='username'
+                    validators={{
+                        onChange: ({ value }) => value.length < 3 ? 'Nazwa użytkownika powinna mieć ponad 3 znaki' : undefined,
+                    }}
+                    children={(field) => {
+                        return (
+                            <>
+                                <input
+                                    type='text'
+                                    placeholder='Nazwa użytkownika'
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
+                                />
+                                {!field.state.meta.isValid && (
+                                    <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
+                                )}
+                            </>
+                        )
+                    }}
                 />
 
                 <form.Field
-                name='password'
-                validators={{
-                    onChange: ({ value }) => value.length < 6 ? 'Hasło powinno mieć ponad 6 znaków' : undefined,
-                }}
-                children={(field)=>{
-                    return (
-                        <>
-                            <input
-                            type='password'
-                            placeholder='Hasło'
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
-                            />
-                            {!field.state.meta.isValid && (
-                                <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
-                            )}
-                        </>
-                    )
-                }}
+                    name='password'
+                    validators={{
+                        onChange: ({ value }) => value.length < 6 ? 'Hasło powinno mieć ponad 6 znaków' : undefined,
+                    }}
+                    children={(field) => {
+                        return (
+                            <>
+                                <input
+                                    type='password'
+                                    placeholder='Hasło'
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
+                                />
+                                {!field.state.meta.isValid && (
+                                    <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
+                                )}
+                            </>
+                        )
+                    }}
                 />
                 <form.Field
-                name='repeatPassword'
-                validators={{
-                    onChange: ({ value }) => value !== form.state.values.password ? 'Podane hasła się nie zgadzają' : undefined,
-                }}
-                children={(field)=>{
-                    return (
-                        <>
-                            <input
-                            type='password'
-                            placeholder='Powtórz hasło'
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
-                            />
-                            {!field.state.meta.isValid && (
-                                <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
-                            )}
-                        </>
-                    )
-                }}
+                    name='repeatPassword'
+                    validators={{
+                        onChange: ({ value }) => value !== form.state.values.password ? 'Podane hasła się nie zgadzają' : undefined,
+                    }}
+                    children={(field) => {
+                        return (
+                            <>
+                                <input
+                                    type='password'
+                                    placeholder='Powtórz hasło'
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
+                                />
+                                {!field.state.meta.isValid && (
+                                    <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
+                                )}
+                            </>
+                        )
+                    }}
                 />
                 <form.Field
-                name='email'
-                validators={{
-                    onChange: ({ value }) => !value.includes('@') || !value.includes('.') ? 'Nieprawidłowy adres e-mail' : undefined,
-                }}
-                children={(field)=>{
-                    return (
-                        <>
-                            <input
-                            type='email'
-                            placeholder='E-mail'
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
-                            />
-                            {!field.state.meta.isValid && (
-                                <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
-                            )}
-                        </>
-                    )
-                }}
+                    name='email'
+                    validators={{
+                        onChange: ({ value }) => !value.includes('@') || !value.includes('.') ? 'Nieprawidłowy adres e-mail' : undefined,
+                    }}
+                    children={(field) => {
+                        return (
+                            <>
+                                <input
+                                    type='email'
+                                    placeholder='E-mail'
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
+                                />
+                                {!field.state.meta.isValid && (
+                                    <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
+                                )}
+                            </>
+                        )
+                    }}
                 />
                 <form.Field
-                name='phone'
-                validators={{
-                    onChange: ({ value }) => value.length != 9 ? 'Nieprawidłowy numer telefonu' : undefined,
-                }}
-                children={(field)=>{
-                    return (
-                        <>
-                            <input
-                            type='tel'
-                            placeholder='Telefon'
-                            maxLength={16}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
-                            />
-                            {!field.state.meta.isValid && (
-                                <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
-                            )}
-                        </>
-                    )
-                }}
+                    name='phone'
+                    validators={{
+                        onChange: ({ value }) => value.length != 9 ? 'Nieprawidłowy numer telefonu' : undefined,
+                    }}
+                    children={(field) => {
+                        return (
+                            <>
+                                <input
+                                    type='tel'
+                                    placeholder='Telefon'
+                                    maxLength={16}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    className={`${field.state.meta.errors.length > 0 ? 'border-red-500 bg-red-200' : ''} ${inputStyle({ style: 'default' })}`}
+                                />
+                                {!field.state.meta.isValid && (
+                                    <p className={errorInput()}>{field.state.meta.errors.join(', ')}</p>
+                                )}
+                            </>
+                        )
+                    }}
                 />
                 <Button style={'default'} type={'submit'}>Zarejestruj się</Button>
-                <hr className='border-text-tertiary w-full'/>
+                <hr className='border-text-tertiary w-full' />
                 <p className='text-center'>Masz już konto? <Link to='/konto/login' className='text-primary hover:text-tertiary'>Zaloguj się</Link></p>
             </form>
         </main>

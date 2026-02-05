@@ -1,6 +1,6 @@
 type Props = {}
 
-export default function SearchBar({ }: Props) {
+export function SearchBar({ }: Props) {
   return (
     <div className='w-1/3'>
       <input

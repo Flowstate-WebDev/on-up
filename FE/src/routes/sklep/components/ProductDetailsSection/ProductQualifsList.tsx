@@ -1,9 +1,9 @@
 import type { Product } from '@/data/products'
-import Tag from '../UI/Reusable/Tag'
+import Tag from '@/components/ui/Reusable/Tag'
 
 type Props = Pick<Product, 'qualifications'>
 
-export default function ProductQualifsList({ qualifications }: Props) {
+export function ProductQualifsList({ qualifications }: Props) {
   return (
     <div className='mb-8'>
       <h2>Kwalifikacje:</h2>

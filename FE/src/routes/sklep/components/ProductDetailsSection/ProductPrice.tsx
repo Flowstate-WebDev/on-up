@@ -2,7 +2,7 @@ type Props = {
   price: string | number
 }
 
-export default function ProductPrice({ price }: Props) {
+export function ProductPrice({ price }: Props) {
   const numericPrice = typeof price === 'string' ? parseFloat(price) : price
 
   return (

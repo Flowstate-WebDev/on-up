@@ -1,9 +1,8 @@
-
 type Props = {
   children: string
 }
 
-export default function CategoryHeading({ children }: Props) {
+export function CategoryHeading({ children }: Props) {
   return (
     <div className='flex justify-center'>
       <img src={'/images/strzalki-prawo.webp'} alt='' width={150} height={50} />

@@ -21,7 +21,13 @@ export interface Register {
   phone: string
 }
 
-const defaultRegister: Register = { username: '', password: '', repeatPassword: '', email: '', phone: '' }
+const defaultRegister: Register = {
+  username: '',
+  password: '',
+  repeatPassword: '',
+  email: '',
+  phone: ''
+}
 
 export const registerFormOpts = formOptions({
   defaultValues: defaultRegister

@@ -1,4 +1,5 @@
-import CategoryBlock from '@/components/Layout/Category/CategoryBlock';
+import { CategorySection } from '@/routes/components/CategorySection';
+
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -63,7 +64,7 @@ function RouteComponent() {
   return (
     <div className="flex flex-col gap-8">
       {Object.entries(groups).map(([profName, filteredBooks]) => (
-        <CategoryBlock
+        <CategorySection
           key={profName}
           title={profName}
           books={filteredBooks}

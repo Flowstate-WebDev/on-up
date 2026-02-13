@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 interface User {
   id: string;
@@ -9,9 +9,8 @@ interface User {
 
 export interface AuthContextType {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
-  login: (token: string, user: User) => void;
+  login: (user: User) => void;
   logout: () => void;
 }
 
@@ -19,23 +18,50 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const login = (newToken: string, newUser: User) => {
-    setToken(newToken);
+  const checkUser = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/api/user/me", {
+        credentials: "include"
+      })
+      if (res.ok) {
+        const userData = await res.json()
+        setUser(userData)
+      }
+    } catch (error) {
+      console.error("Auth check failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const login = (newUser: User) => {
     setUser(newUser);
   };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
+  const logout = async () => {
+    try {
+      await fetch("http://localhost:3001/api/logout", {
+        method: "POST",
+        credentials: "include"
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setUser(null);
+    }
   };
 
-  const isAuthenticated = !!token;
+  const isAuthenticated = !!user;
 
   return (
-    <AuthContext value={{ user, token, isAuthenticated, login, logout }}>
-      {children}
+    <AuthContext value={{ user, isAuthenticated, login, logout }}>
+      {!isLoading && children}
     </AuthContext>
   );
 };

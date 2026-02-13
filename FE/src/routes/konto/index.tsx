@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '@/context/AuthContext'
 
@@ -10,18 +9,19 @@ export const Route = createFileRoute('/konto/')({
       })
     }
   },
-  component: RouteComponent,
+  component: AccountPage,
 })
 
-function RouteComponent() {
-  const { user, logout, isAuthenticated } = useAuth()
+function AccountPage() {
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate({ to: '/konto/login' })
-    }
-  }, [isAuthenticated, navigate])
+  const handleLogout = async () => {
+    await logout()
+    navigate({
+      to: '/konto/login',
+    })
+  }
 
   return (
     <main className='flex flex-col justify-center items-center py-10 gap-4'>
@@ -33,7 +33,7 @@ function RouteComponent() {
         </div>
       )}
       <button
-        onClick={logout}
+        onClick={handleLogout}
         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors"
       >
         Wyloguj się

@@ -7,6 +7,9 @@ import type { Product } from '@/data/products'
 
 export const Route = createFileRoute('/koszyk/')({
   component: CartPage,
+  beforeLoad: () => {
+    document.title = 'ON-UP | Twój koszyk'
+  }
 })
 
 type CartItem = Product & { quantity: number }

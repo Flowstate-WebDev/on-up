@@ -8,10 +8,10 @@ import { ProductDescriptionSection } from '@/routes/sklep/components/ProductDesc
 import { QueryState } from '@/components/ui/QueryState'
 
 export const Route = createFileRoute('/sklep/$productId')({
-  component: RouteComponent,
+  component: ProductPage,
 })
 
-function RouteComponent() {
+function ProductPage() {
   const { productId } = Route.useParams()
   const { isPending, error, data: product } = useProduct(productId)
 

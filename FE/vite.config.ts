@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     tanstackRouter({
-      routeFileIgnorePattern: '(components)',
+      routeFileIgnorePattern: 'components|.types.ts',
     }),
     react({
       babel: {

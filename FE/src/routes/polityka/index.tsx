@@ -3,10 +3,10 @@ import { Policy } from '@/data/policy'
 import { PolicyButton } from '@/routes/polityka/components/PolicyButton'
 
 export const Route = createFileRoute('/polityka/')({
-  component: RouteComponent,
+  component: PoliciesPage,
 })
 
-function RouteComponent() {
+function PoliciesPage() {
   return (
     <main>
       <h1 className="text-4xl font-bold text-center my-10">Polityka strony</h1>

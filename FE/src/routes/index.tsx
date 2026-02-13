@@ -6,10 +6,13 @@ import { QueryState } from '@/components/ui/QueryState';
 import { useBooks } from '@/hooks/queries/books/useBooks';
 
 export const Route = createFileRoute('/')({
-  component: RouteComponent,
+  component: HomePage,
+  beforeLoad: () => {
+    document.title = 'ON-UP | Wydawnictwo podręczników'
+  }
 })
 
-function RouteComponent() {
+function HomePage() {
   const { isPending, error, data: books } = useBooks()
 
   if (isPending) {

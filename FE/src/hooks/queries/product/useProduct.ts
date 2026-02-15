@@ -1,5 +1,5 @@
 import { fetchProduct } from '@/api/productsAPI'
-import type { Product } from '@/data/products'
+import type { Product } from '@/data/mocks/products'
 import { useQuery } from '@tanstack/react-query'
 import { productKeys } from '../queryKeys'
 

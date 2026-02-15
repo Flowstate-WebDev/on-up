@@ -3,7 +3,7 @@ import { useCart } from '@/context/CartContext'
 import { Heading } from '@/components/ui/Heading'
 import { ProductPrice } from '@/routes/sklep/components/ProductDetailsSection/ProductPrice'
 import { useMemo } from 'react'
-import type { Product } from '@/data/products'
+import type { Product } from '@/data/mocks/products'
 
 export const Route = createFileRoute('/koszyk/')({
   component: CartPage,

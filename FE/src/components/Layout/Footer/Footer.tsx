@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/Button";
-import Logo from "../Header/Logo";
+import { Logo } from "../Header/Logo";
 
 export const Footer = () => {
   return (

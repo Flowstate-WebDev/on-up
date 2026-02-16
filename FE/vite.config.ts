@@ -17,7 +17,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: './',
+  base: '/on-up/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

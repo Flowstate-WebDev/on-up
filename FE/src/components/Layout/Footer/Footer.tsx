@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import { getAssetPath } from "@/utils/paths";
 
 import { Button } from "@/components/ui/Button"
 
@@ -6,7 +7,7 @@ export const Footer = () => {
   return (
     <div className='flex flex-col md:flex-row w-full xl:w-2/3 xl:mx-auto items-stretch justify-center px-8 bg-primary text-text-obj p-6 rounded-t-lg divider-lines'>
       <div className='flex grow gap-1 mb-6 md:mb-0 justify-center items-center'>
-        <img src={'./images/onup_logo.webp'} alt={'logo'} height={52} width={52} className='grayscale' />
+        <img src={getAssetPath('/images/onup_logo.webp')} alt={'logo'} height={52} width={52} className='grayscale' />
         <div className='flex flex-col'>
           <p className="text-1xl font-semibold text-white leading-none">Wydawnictwo</p>
           <h1 className="text-2xl font-bold text-white leading-none">On-Up</h1>
@@ -14,11 +15,11 @@ export const Footer = () => {
       </div>
       <div className="flex grow flex-col text-center justify-center items-center">
         <div className="flex gap-2">
-          <img src={"./icons/phone-icon.svg"} alt={""} className="w-4 h-4 brightness-0 invert self-center" />
+          <img src={getAssetPath("/icons/phone-icon.svg")} alt={""} className="w-4 h-4 brightness-0 invert self-center" />
           <p>506 610 405</p>
         </div>
         <div className="flex gap-2 mb-4">
-          <img src={"./icons/mail-icon.svg"} alt={""} className="w-4 h-4 brightness-0 invert self-center" />
+          <img src={getAssetPath("/icons/mail-icon.svg")} alt={""} className="w-4 h-4 brightness-0 invert self-center" />
           <p>onup.wydawnictwo@gmail.com</p>
         </div>
         <Button style={"outline_white"} type={"button"}><Link to={'/polityka'}>Polityka strony</Link></Button>

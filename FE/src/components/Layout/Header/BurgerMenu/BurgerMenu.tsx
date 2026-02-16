@@ -1,12 +1,13 @@
 import { useState } from 'react'
+import { getAssetPath } from '@/utils/paths';
 import { NavLink } from '@/components/layout/Header/Navigation/NavLink';
 
 import { navpaths } from '@/data/navpaths';
 
 type Props = {}
 
-const menu = "./icons/menu-icon.svg";
-const close = "./icons/close-icon.svg";
+const menu = getAssetPath("/icons/menu-icon.svg");
+const close = getAssetPath("/icons/close-icon.svg");
 
 export function BurgerMenu({ }: Props) {
 

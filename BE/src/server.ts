@@ -1,5 +1,6 @@
 import express, { type NextFunction, type Request, type Response } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import getBooks from "./data/books.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -14,11 +15,13 @@ const saltRounds = 10;
 const globalCorsConfig = {
     origin: ["http://localhost:5173", "http://localhost:3001"],
     optionsSuccessStatus: 200,
+    credentials: true,
 }
 
 const app = express();
 
 app.use(cors(globalCorsConfig));
+app.use(cookieParser());
 app.use(express.json());
 
 app.get("/api/books", async (req: Request, res: Response) => {
@@ -47,16 +50,10 @@ app.get("/api/books/:slug", async (req: Request, res: Response) => {
 
 // Auth Middleware
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    const token = req.cookies.token;
+    if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
     }
-
-    const parts = authHeader.split(" ");
-    if (parts.length !== 2) {
-        return res.status(401).json({ error: "Unauthorized" });
-    }
-    const token = parts[1] as string;
 
     try {
         const decoded = jwt.verify(token!, JWT_SECRET as jwt.Secret) as any;
@@ -132,9 +129,13 @@ app.post("/api/login", async (req: Request, res: Response) => {
 
         const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
 
-        res.json({
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // False on localhost http
+            sameSite: "lax", // Better for cross-port local dev
+            maxAge: 60 * 60 * 1000
+        }).json({
             message: "Login successful",
-            token,
             user: {
                 id: user.id,
                 username: user.username,
@@ -148,7 +149,16 @@ app.post("/api/login", async (req: Request, res: Response) => {
     }
 });
 
+app.post("/api/logout", (req: Request, res: Response) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax"
+    }).json({ message: "Logged out successfully" });
+});
+
 app.get("/api/user/me", authMiddleware, async (req: Request, res: Response) => {
+
     try {
         const userId = (req as any).user.userId;
         const user = await prisma.user.findUnique({

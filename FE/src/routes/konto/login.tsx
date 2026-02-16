@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { formOptions, useForm } from '@tanstack/react-form'
 
@@ -17,18 +16,20 @@ const loginFormOpts = formOptions({
 })
 
 export const Route = createFileRoute('/konto/login')({
-  component: RouteComponent,
+  beforeLoad: ({ context }) => {
+    if (context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/konto',
+      })
+    }
+    document.title = 'ON-UP | Logowanie'
+  },
+  component: LoginPage,
 })
 
-function RouteComponent() {
+function LoginPage() {
   const navigate = useNavigate()
-  const { login, isAuthenticated } = useAuth()
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate({ to: '/konto' })
-    }
-  }, [isAuthenticated, navigate])
+  const { login } = useAuth()
 
   const mutation = useMutation({
     mutationFn: async (value: Login) => {
@@ -38,6 +39,7 @@ function RouteComponent() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(value),
+        credentials: "include"
       });
 
       const data = await res.json();
@@ -49,7 +51,10 @@ function RouteComponent() {
       return data;
     },
     onSuccess: (data) => {
-      login(data.token, data.user)
+      login(data.user)
+      navigate({
+        to: "/konto"
+      })
     }
   })
 

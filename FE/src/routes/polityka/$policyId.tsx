@@ -3,10 +3,10 @@ import { PolicyContent } from '@/data/policyContent'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/polityka/$policyId')({
-  component: RouteComponent,
+  component: PolicyPage,
 })
 
-function RouteComponent() {
+function PolicyPage() {
   const { policyId } = Route.useParams()
   const policyItem = Policy.find((p) => p.slug === policyId)
   const content = PolicyContent[policyId]

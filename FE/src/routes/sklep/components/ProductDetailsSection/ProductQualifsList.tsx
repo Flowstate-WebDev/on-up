@@ -1,4 +1,4 @@
-import type { Product } from '@/data/products'
+import type { Product } from '@/data/mocks/products'
 import { Tag } from '@/components/ui/Tag'
 
 type Props = Pick<Product, 'qualifications'>

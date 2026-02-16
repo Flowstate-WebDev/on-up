@@ -1,12 +1,16 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { getAssetPath } from '@/utils/paths';
 import { useCart } from '@/context/CartContext'
 import { Heading } from '@/components/ui/Heading'
 import { ProductPrice } from '@/routes/sklep/components/ProductDetailsSection/ProductPrice'
 import { useMemo } from 'react'
-import type { Product } from '@/data/products'
+import type { Product } from '@/data/mocks/products'
 
 export const Route = createFileRoute('/koszyk/')({
   component: CartPage,
+  beforeLoad: () => {
+    document.title = 'ON-UP | Twój koszyk'
+  }
 })
 
 type CartItem = Product & { quantity: number }
@@ -60,7 +64,7 @@ function CartPage() {
               <div key={item.id} className={`flex gap-4 p-4 bg-bg-secondary rounded-lg shadow-sm items-center ${isOverStock ? 'border-2 border-red-500' : ''}`}>
                 <div className="w-24 h-32 shrink-0">
                   <img
-                    src={`/images/books/${item.imageUrl}`}
+                    src={getAssetPath(`/images/books/${item.imageUrl}`)}
                     alt={item.title}
                     className="w-full h-full object-cover rounded-md"
                   />

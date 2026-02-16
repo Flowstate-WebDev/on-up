@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     tanstackRouter({
-      routeFileIgnorePattern: '(components)',
+      routeFileIgnorePattern: 'components|.types.ts',
     }),
     react({
       babel: {
@@ -17,6 +17,7 @@ export default defineConfig({
       },
     }),
   ],
+  base: './',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

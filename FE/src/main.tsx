@@ -9,6 +9,7 @@ import './style.css';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider, useCart } from './context/CartContext';
+import { ToastProvider } from './context/ToastContext';
 
 const router = createRouter({
   routeTree,
@@ -32,7 +33,6 @@ function InnerApp() {
 
 const queryClient = new QueryClient()
 
-import { ToastProvider } from './context/ToastContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

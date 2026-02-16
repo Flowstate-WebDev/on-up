@@ -1,4 +1,4 @@
-import type { Product } from "@/data/products";
+import type { Product } from "@/data/mocks/products";
 import { createContext, type ReactNode, useContext, useState, useEffect } from "react";
 
 export interface CartContextType {

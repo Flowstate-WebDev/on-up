@@ -18,10 +18,13 @@ const registerFormOpts = formOptions({
 })
 
 export const Route = createFileRoute('/konto/register')({
-  component: RouteComponent,
+  component: RegisterPage,
+  beforeLoad: () => {
+    document.title = 'ON-UP | Rejestracja'
+  }
 })
 
-function RouteComponent() {
+function RegisterPage() {
   const form = useForm({
     ...registerFormOpts,
     onSubmit: async ({ value }) => {
@@ -50,7 +53,7 @@ function RouteComponent() {
   })
 
   return (
-    <main className='flex justify-center items-center py-10'>
+    <section className='flex justify-center items-center py-10'>
       <form onSubmit={(e) => {
         e.stopPropagation()
         e.preventDefault()
@@ -168,6 +171,6 @@ function RouteComponent() {
         <hr className='border-text-tertiary w-full' />
         <p className='text-center'>Masz już konto? <Link to='/konto/login' className='text-primary hover:text-tertiary'>Zaloguj się</Link></p>
       </form>
-    </main>
+    </section>
   )
 }

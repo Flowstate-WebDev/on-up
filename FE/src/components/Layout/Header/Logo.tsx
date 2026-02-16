@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { Link } from "@tanstack/react-router";
+=======
+import { Link } from '@tanstack/react-router';
+import { getAssetPath } from '@/utils/paths';
+>>>>>>> 6af984b2cae92230f72240fc47a720913b8c84da
 
 interface LogoProps {
   grayscale?: boolean;
@@ -7,6 +12,7 @@ interface LogoProps {
 export default function Logo({ grayscale }: LogoProps) {
   return (
     <div className="w-fit">
+<<<<<<< HEAD
       <Link
         to={"/"}
         id="logo"
@@ -19,6 +25,10 @@ export default function Logo({ grayscale }: LogoProps) {
           height={64}
           className="h-16 w-auto"
         />
+=======
+      <Link to={'/'} id='logo' className='flex gap-1 items-center'>
+        <img src={getAssetPath('/images/onup_logo.webp')} alt={'logo'} width={64} height={64} className="h-16 w-auto" />
+>>>>>>> 6af984b2cae92230f72240fc47a720913b8c84da
         <div>
           <p className="text-1xl font-semibold text-text-secondary leading-none">
             Wydawnictwo

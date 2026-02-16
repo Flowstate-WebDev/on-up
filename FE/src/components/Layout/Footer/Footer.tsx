@@ -11,12 +11,15 @@ export const Footer = () => {
       </div>
       <div className="flex grow flex-col text-center justify-center items-center">
         <div className="flex gap-2">
+          <p>Strona wykonana przez</p>
+        </div>
+        <div className="flex gap-2">
           <img
             className="w-4 h-4 brightness-0 invert self-center"
-            src="/icons/phone-icon.svg"
+            src="/icons/mail-icon.svg"
             alt=""
           />
-          <p>506 610 405</p>
+          <p>huelleigor1@outlook.com</p>
         </div>
         <div className="flex gap-2 mb-4">
           <img
@@ -24,7 +27,7 @@ export const Footer = () => {
             src="/icons/mail-icon.svg"
             alt=""
           />
-          <p>onup.wydawnictwo@gmail.com</p>
+          <p>33patryk.jarosz@gmail.com</p>
         </div>
         <Button style={"outline_white"} type={"button"}>
           <Link to={"/polityka"}>Polityka strony</Link>

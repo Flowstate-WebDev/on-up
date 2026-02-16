@@ -1,3 +1,7 @@
 - trzeba zrobić refactor formularzy w /register i /login (zrobić z nich komponenty)
 - coś z autoryzacją jest nie tak, nie pamiętam co dokładnie
-- wpierdolić wszędzie kropke tam gdzie jest path do czegokolwiek z publica, /images/..., /icons/...
+- dodać rok wydania dla podręczników
+- możliwość albo osobne pole dodania notki o zniżce przy zakupie kilku produktów
+- darmowa wysyłka od iluśtam zł
+- ukryć nr telefonu i adres ze stopki, nr telefonu przenieść do zakładki w politykach
+- pobawić się w układ na głównej stronie

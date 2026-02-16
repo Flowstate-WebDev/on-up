@@ -1,6 +1,6 @@
 type Props = {}
 
-export function SearchBar({ }: Props) {
+export const SearchBar = ({ }: Props) => {
   return (
     <div className='w-1/3'>
       <input

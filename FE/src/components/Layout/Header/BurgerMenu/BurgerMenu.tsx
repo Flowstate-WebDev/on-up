@@ -9,7 +9,7 @@ type Props = {}
 const menu = getAssetPath("/icons/menu-icon.svg");
 const close = getAssetPath("/icons/close-icon.svg");
 
-export function BurgerMenu({ }: Props) {
+export const BurgerMenu = ({ }: Props) => {
 
   const [isOpen, setIsOpen] = useState(false);
 

@@ -2,16 +2,13 @@ import { Link } from "@tanstack/react-router"
 import { getAssetPath } from "@/utils/paths";
 
 import { Button } from "@/components/ui/Button"
+import { Logo } from "../Header/Logo";
 
 export const Footer = () => {
   return (
     <div className='flex flex-col md:flex-row w-full xl:w-2/3 xl:mx-auto items-stretch justify-center px-8 bg-primary text-text-obj p-6 rounded-t-lg divider-lines'>
       <div className='flex grow gap-1 mb-6 md:mb-0 justify-center items-center'>
-        <img src={getAssetPath('/images/onup_logo.webp')} alt={'logo'} height={52} width={52} className='grayscale' />
-        <div className='flex flex-col'>
-          <p className="text-1xl font-semibold text-white leading-none">Wydawnictwo</p>
-          <h1 className="text-2xl font-bold text-white leading-none">On-Up</h1>
-        </div>
+        <Logo />
       </div>
       <div className="flex grow flex-col text-center justify-center items-center">
         <div className="flex gap-2">

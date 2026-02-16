@@ -4,7 +4,7 @@ import { navpaths } from '@/data/navpaths';
 
 import { useCart } from '@/context/CartContext';
 
-export function Navigation() {
+export const Navigation = () => {
   const { products } = useCart();
   const cartItemCount = products.length;
 

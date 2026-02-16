@@ -8,7 +8,7 @@ type Props = {
   onClick?: () => void
 }
 
-export function Button({ children, style, type, disabled, onClick }: Props) {
+export const Button = ({ children, style, type, disabled, onClick }: Props) => {
   return (
     <button
       type={type}

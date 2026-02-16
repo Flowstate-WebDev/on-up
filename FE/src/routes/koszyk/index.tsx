@@ -63,7 +63,7 @@ function CartPage() {
               <div key={item.id} className={`flex gap-4 p-4 bg-bg-secondary rounded-lg shadow-sm items-center ${isOverStock ? 'border-2 border-red-500' : ''}`}>
                 <div className="w-24 h-32 shrink-0">
                   <img
-                    src={`/images/books/${item.imageUrl}`}
+                    src={`./images/books/${item.imageUrl}`}
                     alt={item.title}
                     className="w-full h-full object-cover rounded-md"
                   />

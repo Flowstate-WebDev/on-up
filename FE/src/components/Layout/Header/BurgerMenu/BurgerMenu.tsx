@@ -5,8 +5,8 @@ import { navpaths } from '@/data/navpaths';
 
 type Props = {}
 
-const menu = "/icons/menu-icon.svg";
-const close = "/icons/close-icon.svg";
+const menu = "./icons/menu-icon.svg";
+const close = "./icons/close-icon.svg";
 
 export function BurgerMenu({ }: Props) {
 

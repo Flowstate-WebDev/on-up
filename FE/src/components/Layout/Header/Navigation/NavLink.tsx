@@ -8,7 +8,7 @@ type NavLinkProps = {
   badge?: number
 };
 
-export function NavLink({ href, icon, children, badge }: NavLinkProps) {
+export const NavLink = ({ href, icon, children, badge }: NavLinkProps) => {
 
   return (
     <li>

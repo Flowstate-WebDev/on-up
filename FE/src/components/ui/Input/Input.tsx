@@ -6,7 +6,7 @@ type Props = {
     placeholder: string
 }
 
-export function Input({ type, style, placeholder }: Props) {
+export const Input = ({ type, style, placeholder }: Props) => {
     return (
         <input type={type} placeholder={placeholder} className={inputStyle({ style })} />
     )

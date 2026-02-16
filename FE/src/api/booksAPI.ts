@@ -1,4 +1,4 @@
-export async function fetchBooks() {
+export const fetchBooks = async () => {
   // await new Promise((resolve) => setTimeout(resolve, 1000)) // DELAY W MILISEKUNDACH
   const res = await fetch('http://localhost:3001/api/books')
   if (!res.ok) throw new Error('Could not fetch books from /api/books')

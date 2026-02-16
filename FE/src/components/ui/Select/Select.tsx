@@ -7,7 +7,7 @@ type Props = {
     style: "default"
 }
 
-export function Select({ children, name, id, style }: Props) {
+export const Select = ({ children, name, id, style }: Props) => {
     return (
         <select name={name} id={id} className={selectStyle({ style })}>
             {children}

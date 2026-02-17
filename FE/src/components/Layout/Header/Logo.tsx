@@ -15,14 +15,10 @@ export const Logo = ({ grayscale }: LogoProps) => {
           className={`h-12 select-none ${grayscale ? "grayscale" : ""}`}
         />
         <div>
-          <p
-            className={`text-1xl font-semibold ${grayscale ? "text-shadow-text-secondary-hover" : "text-text-primary"} leading-none`}
-          >
+          <p className={`text-1xl font-semibold ${grayscale ? "text-shadow-text-secondary-hover" : "text-text-primary"} leading-none`}>
             Wydawnictwo
           </p>
-          <h1
-            className={`text-2xl font-bold ${grayscale ? "text-text-obj" : "text-text-primary"} leading-none`}
-          >
+          <h1 className={`text-2xl font-bold ${grayscale ? "text-text-obj" : "text-text-primary"} leading-none`}>
             On-Up
           </h1>
         </div>

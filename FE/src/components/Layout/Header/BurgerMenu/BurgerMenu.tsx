@@ -10,7 +10,6 @@ const menu = getAssetPath("/icons/menu-icon.svg");
 const close = getAssetPath("/icons/close-icon.svg");
 
 export const BurgerMenu = ({ }: Props) => {
-
   const [isOpen, setIsOpen] = useState(false);
 
   const ToggleMenu = () => {
@@ -24,11 +23,9 @@ export const BurgerMenu = ({ }: Props) => {
       </button>
       {isOpen && (
         <div className='absolute left-1/2 top-full transform -translate-x-[60%] mt-2 bg-bg-secondary shadow-lg rounded-lg list-none z-50 cursor-pointer min-w-max'>
-          {
-            navpaths.map((item, idx) => (
-              <NavLink key={idx} href={item.redirect} icon={item.hasIcon}>{item.name}</NavLink>
-            ))
-          }
+          {navpaths.map((item, idx) => (
+            <NavLink key={idx} href={item.redirect} icon={item.hasIcon}>{item.name}</NavLink>
+          ))}
         </div>
       )}
     </div>

@@ -21,15 +21,13 @@ export const ProductCard = ({ data }: ProductCardProps) => {
         <div className='flex-1'>
           <h3 className='text-[10px] uppercase tracking-wider text-text-tertiary mb-1'>Kwalifikacje:</h3>
           <ul className='flex flex-wrap gap-1'>
-            {
-              data.qualifications.length > 0 ? (
-                data.qualifications.map((item, idx) => (
-                  <li key={idx}><Tag>{item.qualification.code}</Tag></li>
-                ))
-              ) : (
-                <p className='text-xs text-text-secondary italic'>Nie podano</p>
-              )
-            }
+            {data.qualifications.length > 0 ? (
+              data.qualifications.map((item, idx) => (
+                <li key={idx}><Tag>{item.qualification.code}</Tag></li>
+              ))
+            ) : (
+              <p className='text-xs text-text-secondary italic'>Nie podano</p>
+            )}
           </ul>
         </div>
         <div className='flex justify-end items-end mt-auto'>

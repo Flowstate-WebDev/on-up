@@ -1,12 +1,12 @@
 type Props = {
-    value: string,
-    title: string,
-    disabled: boolean,
-    selected: boolean
+  value: string,
+  title: string,
+  disabled: boolean,
+  selected: boolean
 }
 
 export const SelectOption = ({ value, title, disabled, selected }: Props) => {
-    return (
-        <option value={value} disabled={disabled ? true : false} selected={selected ? true : false}>{title}</option>
-    )
+  return (
+    <option value={value} disabled={disabled ? true : false} selected={selected ? true : false}>{title}</option>
+  )
 }

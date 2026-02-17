@@ -9,7 +9,6 @@ type NavLinkProps = {
 };
 
 export const NavLink = ({ href, icon, children, badge }: NavLinkProps) => {
-
   return (
     <li>
       <div className="flex items-center justify-center">

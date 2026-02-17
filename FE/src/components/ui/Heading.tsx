@@ -1,9 +1,10 @@
 type Props = {
   children: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
+  center?: boolean
 }
 
-export const Heading = ({ children, size = 'md' }: Props) => {
+export const Heading = ({ children, size = 'md', center = false }: Props) => {
   const sizeClasses = {
     sm: 'text-lg',
     md: 'text-xl',
@@ -12,6 +13,6 @@ export const Heading = ({ children, size = 'md' }: Props) => {
   }
 
   return (
-    <h1 className={`font-bold ${sizeClasses[size]} mb-4`}>{children}</h1>
+    <h1 className={`font-bold ${sizeClasses[size]} ${center && 'text-center'} mb-4`}>{children}</h1>
   )
 }

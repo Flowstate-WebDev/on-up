@@ -24,7 +24,7 @@ export const ProductDetailsSection = ({ product }: ProductDetailsSectionProps) =
   return (
     <div className='content-center md:max-w-1/3'>
       <h2 className='font-semibold text-text-secondary'>{professions.map(p => p.profession.name).join(', ')}</h2>
-      <Heading>{title}</Heading>
+      <Heading size='xl'>{title}</Heading>
       <ProductQualifsList qualifications={qualifications} />
       <ProductPrice price={price} />
       {stock > 0 ? (

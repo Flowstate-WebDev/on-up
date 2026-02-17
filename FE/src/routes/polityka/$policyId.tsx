@@ -4,6 +4,9 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/polityka/$policyId')({
   component: PolicyPage,
+  beforeLoad: () => {
+    document.title = 'On-Up | Polityka strony'
+  }
 })
 
 function PolicyPage() {

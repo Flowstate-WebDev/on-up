@@ -3,6 +3,7 @@ import { useAuth } from '@/context/AuthContext'
 
 export const Route = createFileRoute('/konto/')({
   beforeLoad: ({ context }) => {
+    document.title = 'On-Up | Moje konto'
     if (!context.auth.isAuthenticated) {
       throw redirect({
         to: '/konto/login',

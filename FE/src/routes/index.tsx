@@ -9,7 +9,7 @@ import { BackgroundShapes } from './sklep/components/BackgroundShapes';
 export const Route = createFileRoute('/')({
   component: HomePage,
   beforeLoad: () => {
-    document.title = 'ON-UP | Wydawnictwo podręczników'
+    document.title = 'On-Up | Wydawnictwo podręczników'
   }
 })
 

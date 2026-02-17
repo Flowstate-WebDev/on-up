@@ -20,7 +20,7 @@ const registerFormOpts = formOptions({
 export const Route = createFileRoute('/konto/register')({
   component: RegisterPage,
   beforeLoad: () => {
-    document.title = 'ON-UP | Rejestracja'
+    document.title = 'On-Up | Rejestracja'
   }
 })
 

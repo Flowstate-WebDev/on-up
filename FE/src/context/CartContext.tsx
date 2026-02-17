@@ -1,8 +1,13 @@
 import type { Product } from "@/data/mocks/products";
+import { calculateGroupedItems, calculateTotalPrice, checkStockIssue } from "@/utils/cart/calculations";
 import { createContext, type ReactNode, useContext, useState, useEffect } from "react";
+import type { CartItem } from "@/routes/koszyk/index.types";
 
 export interface CartContextType {
   products: Product[],
+  groupedItems: CartItem[],
+  totalPrice: number,
+  isStockIssue: boolean,
   addToCart: (product: Product) => void,
   removeFromCart: (product: Product) => void,
 }
@@ -23,6 +28,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  const groupedItems = calculateGroupedItems(products);
+  const totalPrice = calculateTotalPrice(groupedItems);
+  const isStockIssue = checkStockIssue(groupedItems);
+
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(products));
   }, [products]);
@@ -35,7 +44,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }
 
   return (
-    <CartContext value={{ products, addToCart, removeFromCart }}>
+    <CartContext value={{ products, groupedItems, totalPrice, isStockIssue, addToCart, removeFromCart }}>
       {children}
     </CartContext>
   );

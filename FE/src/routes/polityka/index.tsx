@@ -4,6 +4,9 @@ import { PolicyButton } from '@/routes/polityka/components/PolicyButton'
 
 export const Route = createFileRoute('/polityka/')({
   component: PoliciesPage,
+  beforeLoad: () => {
+    document.title = 'On-Up | Polityka strony'
+  }
 })
 
 function PoliciesPage() {

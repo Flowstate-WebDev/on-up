@@ -27,7 +27,7 @@ export const Route = createFileRoute("/konto/login")({
         to: "/konto",
       });
     }
-    document.title = "ON-UP | Logowanie";
+    document.title = "On-Up | Logowanie";
   },
   component: LoginPage,
 });

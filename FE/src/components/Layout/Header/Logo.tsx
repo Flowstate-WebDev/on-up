@@ -12,9 +12,7 @@ export const Logo = ({ grayscale }: LogoProps) => {
         <img
           src={getAssetPath("/images/onup_logo.webp")}
           alt="Logo wydawnictwa"
-          width={64}
-          height={64}
-          className={`h-16 w-auto ${grayscale ? "grayscale" : ""}`}
+          className={`h-12 select-none ${grayscale ? "grayscale" : ""}`}
         />
         <div>
           <p

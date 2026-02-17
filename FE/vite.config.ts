@@ -11,17 +11,13 @@ export default defineConfig({
     tanstackRouter({
       routeFileIgnorePattern: "components|.types.ts",
     }),
-    react(),
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
   ],
   base: "/",
-  server: {
-    host: true,
-    watch: {
-      usePolling: true,
-      interval: 100,
-    },
-  },
-
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

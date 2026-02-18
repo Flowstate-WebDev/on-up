@@ -78,10 +78,98 @@ import { prisma } from "./lib/prisma.js";
 
 app.post("/api/payment/create", async (req: Request, res: Response) => {
   try {
-    const { amount, email, firstName, lastName, externalId } = req.body;
+    const {
+      amount,
+      email,
+      phone,
+      firstName,
+      lastName,
+      externalId,
+      items,
+      address,
+    } = req.body;
 
-    if (!amount || !email || !firstName || !lastName || !externalId) {
+    if (
+      !amount ||
+      !email ||
+      !phone ||
+      !firstName ||
+      !lastName ||
+      !externalId ||
+      !items ||
+      !address
+    ) {
       return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Sprawdź czy użytkownik jest zalogowany
+    const token = req.cookies.token;
+    let userId: string | undefined;
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, JWT_SECRET) as any;
+        userId = decoded.userId;
+      } catch (e) {
+        // Ignorujemy błąd tokena, potraktujemy jako gościa
+      }
+    }
+
+    // Jeśli nie mamy userId, możemy spróbować znaleźć użytkownika po emailu
+    if (!userId) {
+      const existingUser = await prisma.user.findUnique({ where: { email } });
+      if (existingUser) userId = existingUser.id;
+    }
+
+    // 1. Zawsze twórz zamówienie w bazie danych
+    await prisma.order.create({
+      data: {
+        orderNumber: externalId,
+        totalAmount: amount,
+        status: "PENDING" as any,
+        userId: userId || null,
+        customerEmail: email,
+        customerFirstName: firstName,
+        customerLastName: lastName,
+        customerPhone: phone,
+        customerCity: address.city,
+        customerStreet: address.street,
+        customerPostalCode: address.postalCode,
+        customerBuilding: address.building,
+        customerApartment: address.apartment,
+        items: {
+          create: items.map((item: any) => ({
+            bookId: item.id,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
+      },
+    });
+
+    // 2. Jeśli mamy userId, zaktualizuj też jego stały adres rozliczeniowy
+    if (userId) {
+      await prisma.billingAddress.upsert({
+        where: { userId: userId },
+        update: {
+          city: address.city,
+          postalCode: address.postalCode,
+          street: address.street,
+          building: address.building,
+          apartment: address.apartment,
+          firstname: firstName,
+          lastname: lastName,
+        },
+        create: {
+          userId: userId,
+          city: address.city,
+          postalCode: address.postalCode,
+          street: address.street,
+          building: address.building,
+          apartment: address.apartment,
+          firstname: firstName,
+          lastname: lastName,
+        },
+      });
     }
 
     const payload = {
@@ -130,10 +218,10 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
 
     res.json(data);
   } catch (error) {
-    console.error("Error creating payment:", error);
+    console.error("Error creating payment and order:", error);
     res
       .status(500)
-      .json({ error: "Internal server error during payment creation" });
+      .json({ error: "Internal server error during payment/order creation" });
   }
 });
 
@@ -252,6 +340,55 @@ app.get("/api/user/me", authMiddleware, async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching current user:", error);
     res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+app.post("/api/payment/notifications", async (req: Request, res: Response) => {
+  try {
+    const signature = req.headers["signature"] as string;
+    const body = JSON.stringify(req.body);
+    const signatureKey = process.env.PAYNOW_SIGNATURE_KEY!;
+
+    // 1. Weryfikacja podpisu (zabezpieczenie przed podszywaniem się)
+    const calculatedSignature = crypto
+      .createHmac("sha256", signatureKey)
+      .update(body)
+      .digest("base64");
+
+    if (signature !== calculatedSignature) {
+      console.error("Invalid PayNow signature");
+      return res.status(400).send("Invalid signature");
+    }
+
+    const { externalId, status, paymentId } = req.body;
+    console.log(
+      `Received PayNow notification for ${externalId}: ${status} (${paymentId})`,
+    );
+
+    // 2. Mapowanie statusów PayNow na statusy Twojej bazy (OrderStatus)
+    // PayNow statuses: NEW, PENDING, CONFIRMED, REJECTED, ERROR
+    const statusMap: Record<string, any> = {
+      CONFIRMED: "CONFIRMED",
+      REJECTED: "REJECTED",
+      ERROR: "ERROR",
+      PENDING: "PENDING",
+    };
+
+    const newStatus = statusMap[status];
+
+    if (newStatus) {
+      // 3. Aktualizacja statusu zamówienia w bazie
+      await prisma.order.update({
+        where: { orderNumber: externalId },
+        data: { status: newStatus },
+      });
+      console.log(`Order ${externalId} updated to ${newStatus}`);
+    }
+
+    res.status(200).send("OK");
+  } catch (error) {
+    console.error("Error processing PayNow notification:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 

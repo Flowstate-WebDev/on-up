@@ -83,15 +83,26 @@ model BookProfession {
 }
 
 model Order {
-  id          String      @id @default(cuid())
-  orderNumber String      @unique @default(cuid())
-  status      OrderStatus @default(PENDING)
-  totalAmount Decimal     @db.Decimal(10, 2)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
-  items       OrderItem[]
+  id                 String      @id @default(cuid())
+  orderNumber        String      @unique @default(cuid())
+  status             OrderStatus @default(PENDING)
+  totalAmount        Decimal     @db.Decimal(10, 2)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  userId             String?
+  user               User?       @relation(fields: [userId], references: [id])
+  items              OrderItem[]
+  
+  // Dane kupującego (zwłaszcza dla gości)
+  customerEmail      String?
+  customerFirstName  String?
+  customerLastName   String?
+  customerPhone      String?
+  customerCity       String?
+  customerStreet     String?
+  customerPostalCode String?
+  customerBuilding   String?
+  customerApartment  String?
 
   @@index([userId])
 }

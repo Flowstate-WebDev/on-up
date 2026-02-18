@@ -9,13 +9,18 @@ export const Route = createFileRoute("/koszyk/podsumowanie")({
 });
 
 function PodsumowaniePage() {
-  const { groupedItems, totalPrice } = useCart();
+  const { groupedItems, totalPrice, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
     firstName: "",
     lastName: "",
+    city: "",
+    postalCode: "",
+    street: "",
+    building: "",
+    apartment: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,9 +40,22 @@ function PodsumowaniePage() {
         body: JSON.stringify({
           amount: totalPrice,
           email: formData.email,
+          phone: formData.phone,
           firstName: formData.firstName,
           lastName: formData.lastName,
+          address: {
+            city: formData.city,
+            postalCode: formData.postalCode,
+            street: formData.street,
+            building: formData.building,
+            apartment: formData.apartment,
+          },
           externalId: `ORDER-${Date.now()}`,
+          items: groupedItems.map((item) => ({
+            id: item.id,
+            price: item.price,
+            quantity: item.quantity,
+          })),
         }),
       });
 
@@ -46,6 +64,9 @@ function PodsumowaniePage() {
       if (!response.ok) {
         throw new Error(data.error || "Błąd podczas tworzenia płatności");
       }
+
+      // Czyścimy koszyk przed przekierowaniem
+      clearCart();
 
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl;
@@ -128,6 +149,84 @@ function PodsumowaniePage() {
                   type="text"
                   style="default"
                   placeholder="Kowalski"
+                  required
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Adres rozliczeniowy */}
+          <section className="bg-bg-secondary p-6 rounded-lg shadow-md">
+            <Heading size="md">Adres rozliczeniowy</Heading>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-text-secondary">
+                  Ulica
+                </label>
+                <Input
+                  name="street"
+                  value={formData.street}
+                  onChange={handleChange}
+                  type="text"
+                  style="default"
+                  placeholder="ul. Sezamkowa"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-text-secondary">
+                    Nr domu
+                  </label>
+                  <Input
+                    name="building"
+                    value={formData.building}
+                    onChange={handleChange}
+                    type="text"
+                    style="default"
+                    placeholder="12"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-text-secondary">
+                    Nr lokalu
+                  </label>
+                  <Input
+                    name="apartment"
+                    value={formData.apartment}
+                    onChange={handleChange}
+                    type="text"
+                    style="default"
+                    placeholder="4"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-text-secondary">
+                  Kod pocztowy
+                </label>
+                <Input
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  type="text"
+                  style="default"
+                  placeholder="00-000"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-text-secondary">
+                  Miasto
+                </label>
+                <Input
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  type="text"
+                  style="default"
+                  placeholder="Warszawa"
                   required
                 />
               </div>

@@ -1,13 +1,17 @@
-import { inputStyle } from './Input.variants'
+import { inputStyle } from "./Input.variants";
 
-type Props = {
-  type: "text" | "password" | "email" | "tel" | "number" | "date" | "datetime-local" | "time"
-  style: "default"
-  placeholder: string
+interface Props extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "style"
+> {
+  style: "default";
 }
 
-export const Input = ({ type, style, placeholder }: Props) => {
+export const Input = ({ style, className, ...props }: Props) => {
   return (
-    <input type={type} placeholder={placeholder} className={inputStyle({ style })} />
-  )
-}
+    <input
+      className={`${inputStyle({ style })} w-full ${className}`}
+      {...props}
+    />
+  );
+};

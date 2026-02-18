@@ -16,6 +16,8 @@ import { Route as KoszykIndexRouteImport } from './routes/koszyk/index'
 import { Route as KontoIndexRouteImport } from './routes/konto/index'
 import { Route as SklepProductIdRouteImport } from './routes/sklep/$productId'
 import { Route as PolitykaPolicyIdRouteImport } from './routes/polityka/$policyId'
+import { Route as KoszykSukcesRouteImport } from './routes/koszyk/sukces'
+import { Route as KoszykPodsumowanieRouteImport } from './routes/koszyk/podsumowanie'
 import { Route as KontoRegisterRouteImport } from './routes/konto/register'
 import { Route as KontoLoginRouteImport } from './routes/konto/login'
 import { Route as KontoAdminRouteImport } from './routes/konto/admin'
@@ -55,6 +57,16 @@ const PolitykaPolicyIdRoute = PolitykaPolicyIdRouteImport.update({
   path: '/polityka/$policyId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KoszykSukcesRoute = KoszykSukcesRouteImport.update({
+  id: '/koszyk/sukces',
+  path: '/koszyk/sukces',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KoszykPodsumowanieRoute = KoszykPodsumowanieRouteImport.update({
+  id: '/koszyk/podsumowanie',
+  path: '/koszyk/podsumowanie',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KontoRegisterRoute = KontoRegisterRouteImport.update({
   id: '/konto/register',
   path: '/konto/register',
@@ -76,6 +88,8 @@ export interface FileRoutesByFullPath {
   '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/koszyk/podsumowanie': typeof KoszykPodsumowanieRoute
+  '/koszyk/sukces': typeof KoszykSukcesRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
   '/sklep/$productId': typeof SklepProductIdRoute
   '/konto': typeof KontoIndexRoute
@@ -88,6 +102,8 @@ export interface FileRoutesByTo {
   '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/koszyk/podsumowanie': typeof KoszykPodsumowanieRoute
+  '/koszyk/sukces': typeof KoszykSukcesRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
   '/sklep/$productId': typeof SklepProductIdRoute
   '/konto': typeof KontoIndexRoute
@@ -101,6 +117,8 @@ export interface FileRoutesById {
   '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/koszyk/podsumowanie': typeof KoszykPodsumowanieRoute
+  '/koszyk/sukces': typeof KoszykSukcesRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
   '/sklep/$productId': typeof SklepProductIdRoute
   '/konto/': typeof KontoIndexRoute
@@ -115,6 +133,8 @@ export interface FileRouteTypes {
     | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
+    | '/koszyk/podsumowanie'
+    | '/koszyk/sukces'
     | '/polityka/$policyId'
     | '/sklep/$productId'
     | '/konto'
@@ -127,6 +147,8 @@ export interface FileRouteTypes {
     | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
+    | '/koszyk/podsumowanie'
+    | '/koszyk/sukces'
     | '/polityka/$policyId'
     | '/sklep/$productId'
     | '/konto'
@@ -139,6 +161,8 @@ export interface FileRouteTypes {
     | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
+    | '/koszyk/podsumowanie'
+    | '/koszyk/sukces'
     | '/polityka/$policyId'
     | '/sklep/$productId'
     | '/konto/'
@@ -152,6 +176,8 @@ export interface RootRouteChildren {
   KontoAdminRoute: typeof KontoAdminRoute
   KontoLoginRoute: typeof KontoLoginRoute
   KontoRegisterRoute: typeof KontoRegisterRoute
+  KoszykPodsumowanieRoute: typeof KoszykPodsumowanieRoute
+  KoszykSukcesRoute: typeof KoszykSukcesRoute
   PolitykaPolicyIdRoute: typeof PolitykaPolicyIdRoute
   SklepProductIdRoute: typeof SklepProductIdRoute
   KontoIndexRoute: typeof KontoIndexRoute
@@ -211,6 +237,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PolitykaPolicyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/koszyk/sukces': {
+      id: '/koszyk/sukces'
+      path: '/koszyk/sukces'
+      fullPath: '/koszyk/sukces'
+      preLoaderRoute: typeof KoszykSukcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/koszyk/podsumowanie': {
+      id: '/koszyk/podsumowanie'
+      path: '/koszyk/podsumowanie'
+      fullPath: '/koszyk/podsumowanie'
+      preLoaderRoute: typeof KoszykPodsumowanieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/konto/register': {
       id: '/konto/register'
       path: '/konto/register'
@@ -240,6 +280,8 @@ const rootRouteChildren: RootRouteChildren = {
   KontoAdminRoute: KontoAdminRoute,
   KontoLoginRoute: KontoLoginRoute,
   KontoRegisterRoute: KontoRegisterRoute,
+  KoszykPodsumowanieRoute: KoszykPodsumowanieRoute,
+  KoszykSukcesRoute: KoszykSukcesRoute,
   PolitykaPolicyIdRoute: PolitykaPolicyIdRoute,
   SklepProductIdRoute: SklepProductIdRoute,
   KontoIndexRoute: KontoIndexRoute,

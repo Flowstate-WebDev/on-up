@@ -110,9 +110,11 @@ model OrderItem {
 }
 
 enum OrderStatus {
+  NEW
   PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
+  CONFIRMED
+  REJECTED
+  ERROR
+  EXPIRED
+  ABANDONED
 }

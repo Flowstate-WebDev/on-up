@@ -1,19 +1,37 @@
-import { Heading } from "@/components/ui/Heading"
-import type { CartItem } from "../../index.types"
+import { Heading } from "@/components/ui/Heading";
+import type { CartItem } from "../../index.types";
+import { Link } from "@tanstack/react-router";
 
-export const CartSummary = ({ groupedItems, totalPrice, isStockIssue }: { groupedItems: CartItem[], totalPrice: number, isStockIssue: boolean }) => {
+export const CartSummary = ({
+  groupedItems,
+  totalPrice,
+  isStockIssue,
+}: {
+  groupedItems: CartItem[];
+  totalPrice: number;
+  isStockIssue: boolean;
+}) => {
   return (
     <div className="lg:w-1/3 shrink-0">
       <div className="bg-bg-secondary p-6 rounded-lg shadow-md sticky top-24">
         <Heading size="md">Podsumowanie</Heading>
 
         <div className="flex flex-col gap-3 mb-6">
-          {groupedItems.map(item => (
-            <div key={item.id} className="text-sm border-b border-gray-600/20 pb-2 last:border-0 text-text-secondary">
-              <p className="font-medium truncate mb-1" title={item.title}>{item.title}</p>
+          {groupedItems.map((item) => (
+            <div
+              key={item.id}
+              className="text-sm border-b border-gray-600/20 pb-2 last:border-0 text-text-secondary"
+            >
+              <p className="font-medium truncate mb-1" title={item.title}>
+                {item.title}
+              </p>
               <div className="flex justify-between">
-                <span>{Number(item.price).toFixed(2)} PLN x {item.quantity}</span>
-                <span className="font-semibold text-text-primary">{(Number(item.price) * item.quantity).toFixed(2)} PLN</span>
+                <span>
+                  {Number(item.price).toFixed(2)} PLN x {item.quantity}
+                </span>
+                <span className="font-semibold text-text-primary">
+                  {(Number(item.price) * item.quantity).toFixed(2)} PLN
+                </span>
               </div>
             </div>
           ))}
@@ -26,12 +44,17 @@ export const CartSummary = ({ groupedItems, totalPrice, isStockIssue }: { groupe
           </span>
         </div>
 
-        <button
+        <Link
+          to="/koszyk/podsumowanie"
           disabled={isStockIssue}
-          className={`w-full text-text-obj font-bold py-3 rounded-lg transition-colors shadow-lg cursor-pointer ${isStockIssue ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-secondary'}`}
+          className={`w-full block text-center text-text-obj font-bold py-3 rounded-lg transition-colors shadow-lg cursor-pointer ${
+            isStockIssue
+              ? "bg-gray-400 cursor-not-allowed opacity-50"
+              : "bg-primary hover:bg-secondary"
+          }`}
         >
           Przejdź do płatności
-        </button>
+        </Link>
         {isStockIssue && (
           <p className="text-red-500 text-sm font-semibold mt-2 text-center">
             Masz za dużo książek w koszyku. Zmniejsz ilość, aby kontynuować.
@@ -39,5 +62,5 @@ export const CartSummary = ({ groupedItems, totalPrice, isStockIssue }: { groupe
         )}
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react'
+
 type Props = {
-  children: string
+  children: ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl'
   center?: boolean
 }

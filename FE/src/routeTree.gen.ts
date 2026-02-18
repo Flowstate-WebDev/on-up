@@ -18,6 +18,7 @@ import { Route as SklepProductIdRouteImport } from './routes/sklep/$productId'
 import { Route as PolitykaPolicyIdRouteImport } from './routes/polityka/$policyId'
 import { Route as KontoRegisterRouteImport } from './routes/konto/register'
 import { Route as KontoLoginRouteImport } from './routes/konto/login'
+import { Route as KontoAdminRouteImport } from './routes/konto/admin'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,9 +65,15 @@ const KontoLoginRoute = KontoLoginRouteImport.update({
   path: '/konto/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KontoAdminRoute = KontoAdminRouteImport.update({
+  id: '/konto/admin',
+  path: '/konto/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
     | '/polityka/$policyId'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
     | '/polityka/$policyId'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
     | '/polityka/$policyId'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  KontoAdminRoute: typeof KontoAdminRoute
   KontoLoginRoute: typeof KontoLoginRoute
   KontoRegisterRoute: typeof KontoRegisterRoute
   PolitykaPolicyIdRoute: typeof PolitykaPolicyIdRoute
@@ -212,11 +225,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KontoLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/konto/admin': {
+      id: '/konto/admin'
+      path: '/konto/admin'
+      fullPath: '/konto/admin'
+      preLoaderRoute: typeof KontoAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  KontoAdminRoute: KontoAdminRoute,
   KontoLoginRoute: KontoLoginRoute,
   KontoRegisterRoute: KontoRegisterRoute,
   PolitykaPolicyIdRoute: PolitykaPolicyIdRoute,

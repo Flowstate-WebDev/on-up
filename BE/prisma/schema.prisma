@@ -13,6 +13,7 @@ model User {
   password       String
   username       String          @unique(map: "User_name_key")
   phone          String          @unique
+  role           String          @default("USER")
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   billingAddress BillingAddress?

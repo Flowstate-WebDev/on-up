@@ -1,15 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heading } from "@/components/ui/Heading";
 import { useEffect } from "react";
-import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/koszyk/sukces")({
   component: SuccessPage,
 });
 
 function SuccessPage() {
-  const { products } = useCart();
-
   useEffect(() => {
     document.title = "On-Up | Dziękujemy za zamówienie";
   }, []);
@@ -55,7 +52,7 @@ function SuccessPage() {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-10">
+        <div className="flex flex-col items-end gap-4 min-w-30">
           <Link
             to="/"
             className="w-full sm:w-auto group relative bg-primary text-text-obj font-black px-12 py-5 rounded-2xl shadow-[0_10px_40px_-10px_rgba(var(--color-primary),0.5)] hover:shadow-primary/40 hover:-translate-y-1 transition-all text-center uppercase tracking-tighter overflow-hidden"

@@ -47,7 +47,6 @@ function PodsumowaniePage() {
         throw new Error(data.error || "Błąd podczas tworzenia płatności");
       }
 
-      // Przekierowanie do bramki PayNow
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl;
       } else {
@@ -64,52 +63,20 @@ function PodsumowaniePage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl animate-fadeIn">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-        <div>
-          <Heading size="xl">Finalizacja zamówienia</Heading>
-          <p className="text-text-tertiary -mt-4">
-            Wypełnij dane, aby dokończyć zakup
-          </p>
-        </div>
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <Heading size="xl">Finalizacja zamówienia</Heading>
 
-        {/* Progress Tracker */}
-        <div className="flex items-center gap-2 text-sm font-bold">
-          <div className="flex items-center gap-2 text-primary">
-            <span className="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-xs">
-              1
-            </span>
-            <span className="hidden sm:inline">Koszyk</span>
-          </div>
-          <div className="w-8 h-0.5 bg-primary/20" />
-          <div className="flex items-center gap-2 text-primary">
-            <span className="w-8 h-8 rounded-full bg-primary text-text-obj flex items-center justify-center text-xs shadow-lg shadow-primary/30">
-              2
-            </span>
-            <span>Podsumowanie</span>
-          </div>
-          <div className="w-8 h-0.5 bg-gray-600/20" />
-          <div className="flex items-center gap-2 text-text-tertiary opacity-50">
-            <span className="w-8 h-8 rounded-full border-2 border-gray-600/20 flex items-center justify-center text-xs">
-              3
-            </span>
-            <span className="hidden sm:inline">Płatność</span>
-          </div>
-        </div>
-      </div>
-
-      <form onSubmit={handlePayNow} className="grid lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-8 space-y-8">
+      <form
+        onSubmit={handlePayNow}
+        className="mt-8 flex flex-col lg:flex-row gap-8"
+      >
+        <div className="flex-1 flex flex-col gap-6">
           {/* Dane kontaktowe */}
-          <section className="bg-bg-secondary p-8 rounded-4xl shadow-sm border border-gray-600/5 backdrop-blur-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-1.5 h-8 bg-primary rounded-full" />
-              <Heading size="md">Dane do zamówienia</Heading>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-secondary ml-1">
+          <section className="bg-bg-secondary p-6 rounded-lg shadow-md">
+            <Heading size="md">Dane do zamówienia</Heading>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-text-secondary">
                   Adres E-mail
                 </label>
                 <Input
@@ -122,8 +89,8 @@ function PodsumowaniePage() {
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-secondary ml-1">
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-text-secondary">
                   Numer telefonu
                 </label>
                 <Input
@@ -136,8 +103,8 @@ function PodsumowaniePage() {
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-secondary ml-1">
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-text-secondary">
                   Imię
                 </label>
                 <Input
@@ -150,8 +117,8 @@ function PodsumowaniePage() {
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-text-secondary ml-1">
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-text-secondary">
                   Nazwisko
                 </label>
                 <Input
@@ -168,175 +135,71 @@ function PodsumowaniePage() {
           </section>
 
           {/* Metoda płatności */}
-          <section className="bg-bg-secondary p-8 rounded-4xl shadow-sm border border-gray-600/5 backdrop-blur-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-1.5 h-8 bg-primary rounded-full" />
-              <Heading size="md">Metoda płatności</Heading>
-            </div>
-
-            <div className="group relative border-2 border-primary bg-primary/5 p-6 rounded-2xl flex items-center justify-between transition-all hover:bg-primary/10 cursor-pointer">
-              <div className="flex items-center gap-5">
-                <div className="bg-white px-3 py-1.5 rounded-lg shadow-sm">
-                  <span className="text-xl font-black italic tracking-tighter text-[#7134FE]">
+          <section className="bg-bg-secondary p-6 rounded-lg shadow-md">
+            <Heading size="md">Metoda płatności</Heading>
+            <div className="flex items-center justify-between p-4 border-2 border-primary bg-primary/5 rounded-lg mt-4">
+              <div className="flex items-center gap-4">
+                <div className="bg-white px-2 py-1 rounded shadow-sm">
+                  <span className="text-lg font-black italic tracking-tighter text-[#7134FE]">
                     Pay<span className="text-[#212121]">now</span>
                   </span>
                 </div>
-                <div>
-                  <p className="font-black text-text-primary uppercase text-sm tracking-tight">
-                    Szybki przelew / BLIK
-                  </p>
-                  <p className="text-xs text-text-tertiary">
-                    Bezpieczna płatność obsługiwana przez mBank
-                  </p>
-                </div>
+                <span className="font-semibold text-text-primary">
+                  Szybki przelew / BLIK
+                </span>
               </div>
-              <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md shadow-primary/20">
-                <div className="w-2.5 h-2.5 bg-text-obj rounded-full" />
-              </div>
+              <div className="w-5 h-5 rounded-full border-4 border-primary bg-primary" />
             </div>
           </section>
         </div>
 
         {/* Sidebar Summary */}
-        <div className="lg:col-span-4">
-          <div className="bg-bg-secondary p-8 rounded-4xl shadow-2xl border border-primary/10 sticky top-24 overflow-hidden group">
-            {/* Design accents */}
-            <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-primary via-secondary to-primary bg-size-[200%_auto] animate-[gradient_3s_linear_infinite]" />
+        <div className="lg:w-1/3 shrink-0">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow-md sticky top-24">
+            <Heading size="md">Twoje zamówienie</Heading>
 
-            <div className="mb-8">
-              <Heading size="md">Twoje produkty</Heading>
-            </div>
-
-            <div className="space-y-5 mb-8 max-h-[40vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-primary/20">
+            <div className="flex flex-col gap-3 my-6">
               {groupedItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex justify-between items-start gap-4 group/item"
+                  className="text-sm border-b border-gray-600/20 pb-2 last:border-0 text-text-secondary"
                 >
-                  <div className="flex-1">
-                    <p className="font-bold text-sm line-clamp-2 text-text-primary group-hover/item:text-primary transition-colors">
-                      {item.title}
-                    </p>
-                    <p className="text-[10px] font-black uppercase tracking-tighter text-text-tertiary mt-1">
-                      {item.quantity} szt. × {Number(item.price).toFixed(2)} PLN
-                    </p>
+                  <p className="font-medium truncate mb-1" title={item.title}>
+                    {item.title}
+                  </p>
+                  <div className="flex justify-between">
+                    <span>
+                      {Number(item.price).toFixed(2)} PLN x {item.quantity}
+                    </span>
+                    <span className="font-semibold text-text-primary">
+                      {(Number(item.price) * item.quantity).toFixed(2)} PLN
+                    </span>
                   </div>
-                  <span className="font-black text-sm whitespace-nowrap text-text-primary">
-                    {(Number(item.price) * item.quantity).toFixed(2)} PLN
-                  </span>
                 </div>
               ))}
             </div>
 
-            <div className="space-y-4 pt-8 border-t border-gray-600/10">
-              <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-text-tertiary">
-                <span>Wartość koszyka:</span>
-                <span className="text-text-secondary">
-                  {totalPrice.toFixed(2)} PLN
-                </span>
-              </div>
-              <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-text-tertiary">
-                <span>Dostawa (E-mail):</span>
-                <span className="text-green-500 font-black">BEZPŁATNIE</span>
-              </div>
-
-              <div className="flex justify-between items-center pt-6 mt-2 border-t-2 border-primary/20">
-                <span className="font-black text-xl uppercase tracking-tighter">
-                  Do zapłaty:
-                </span>
-                <div className="text-right">
-                  <span className="block text-3xl font-black text-primary drop-shadow-sm leading-none">
-                    {totalPrice.toFixed(2)} PLN
-                  </span>
-                  <span className="text-[10px] text-text-tertiary font-bold">
-                    zawiera podatek VAT
-                  </span>
-                </div>
-              </div>
+            <div className="flex justify-between items-center mb-6 text-lg border-t-2 border-primary pt-4">
+              <Heading size="sm">Do zapłaty:</Heading>
+              <span className="font-bold text-primary text-xl">
+                {totalPrice.toFixed(2)} PLN
+              </span>
             </div>
 
-            <div className="mt-10">
-              <button
-                type="submit"
-                disabled={isProcessing}
-                className={`w-full group relative overflow-hidden bg-primary text-text-obj font-black py-5 rounded-2xl transition-all shadow-lg hover:shadow-primary/40 hover:-translate-y-1 active:translate-y-0 cursor-pointer disabled:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed`}
-              >
-                {isProcessing ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <svg
-                      className="animate-spin h-6 w-6 text-current"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        fill="none"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    Przetwarzanie...
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center gap-2">
-                    ZAPŁAĆ Z PAYNOW
-                    <svg
-                      className="w-5 h-5 transition-transform group-hover:translate-x-1.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="3"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      />
-                    </svg>
-                  </span>
-                )}
-              </button>
-            </div>
-
-            <div className="mt-8 flex items-center justify-center gap-2 text-[9px] text-text-tertiary uppercase tracking-[0.2em] font-black">
-              <svg
-                className="w-3.5 h-3.5 text-green-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Secure Checkout
-            </div>
+            <button
+              type="submit"
+              disabled={isProcessing}
+              className={`w-full text-text-obj font-bold py-3 rounded-lg transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-2 ${
+                isProcessing
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-primary hover:bg-secondary"
+              }`}
+            >
+              {isProcessing ? "Przetwarzanie..." : "ZAPŁAĆ Z PAYNOW"}
+            </button>
           </div>
         </div>
       </form>
-
-      <style>{`
-        @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.6s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 }

@@ -78,25 +78,15 @@ import { prisma } from "./lib/prisma.js";
 
 app.post("/api/payment/create", async (req: Request, res: Response) => {
   try {
-    const {
-      amount,
-      email,
-      phone,
-      firstName,
-      lastName,
-      externalId,
-      items,
-      address,
-    } = req.body;
+    const { email, phone, firstName, lastName, items, address } = req.body;
 
     if (
-      !amount ||
       !email ||
       !phone ||
       !firstName ||
       !lastName ||
-      !externalId ||
       !items ||
+      !items.length ||
       !address
     ) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -120,68 +110,110 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
       if (existingUser) userId = existingUser.id;
     }
 
-    // 1. Zawsze twórz zamówienie w bazie danych
-    await prisma.order.create({
-      data: {
-        orderNumber: externalId,
-        totalAmount: amount,
-        status: "PENDING" as any,
-        userId: userId || null,
-        customerEmail: email,
-        customerFirstName: firstName,
-        customerLastName: lastName,
-        customerPhone: phone,
-        customerCity: address.city,
-        customerStreet: address.street,
-        customerPostalCode: address.postalCode,
-        customerBuilding: address.building,
-        customerApartment: address.apartment,
-        items: {
-          create: items.map((item: any) => ({
-            bookId: item.id,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-        },
-      },
-    });
+    // TRANSAKCJA: Sprawdzenie dostępności -> Obliczenie Ceny -> Rezerwacja Towaru (Odejmowanie) -> Utworzenie Zamówienia
+    const result = await prisma.$transaction(async (tx) => {
+      let calculatedTotal = 0;
+      const orderItemsData = [];
 
-    // 2. Jeśli mamy userId, zaktualizuj też jego stały adres rozliczeniowy
-    if (userId) {
-      await prisma.billingAddress.upsert({
-        where: { userId: userId },
-        update: {
-          city: address.city,
-          postalCode: address.postalCode,
-          street: address.street,
-          building: address.building,
-          apartment: address.apartment,
-          firstname: firstName,
-          lastname: lastName,
-        },
-        create: {
-          userId: userId,
-          city: address.city,
-          postalCode: address.postalCode,
-          street: address.street,
-          building: address.building,
-          apartment: address.apartment,
-          firstname: firstName,
-          lastname: lastName,
+      for (const itemRequest of items) {
+        const book = await tx.book.findUnique({
+          where: { id: itemRequest.id },
+        });
+
+        if (!book) {
+          throw new Error(`Produkt o ID ${itemRequest.id} nie istnieje.`);
+        }
+
+        if (book.stock < itemRequest.quantity) {
+          throw new Error(
+            `Produkt "${book.title}" jest niedostępny w wybranej ilości (pozostało: ${book.stock}).`,
+          );
+        }
+
+        // Konwersja Decimal na number dla obliczeń (lub użycie biblioteki do Decimal jeśli wymagana precyzja finansowa)
+        // Tutaj zakładamy prostą matematykę, ale w produkcji warto uważać na precyzję float.
+        const price = Number(book.price);
+        calculatedTotal += price * itemRequest.quantity;
+
+        // Odejmowanie stanu magazynowego (Rezerwacja)
+        await tx.book.update({
+          where: { id: book.id },
+          data: { stock: { decrement: itemRequest.quantity } },
+        });
+
+        orderItemsData.push({
+          bookId: book.id,
+          quantity: itemRequest.quantity,
+          price: book.price, // Zapisujemy cenę z momentu zakupu
+        });
+      }
+
+      // Utworzenie obiektu zamówienia
+      const order = await tx.order.create({
+        data: {
+          // orderNumber wygeneruje się automatycznie (CUID)
+          totalAmount: calculatedTotal,
+          status: "PENDING",
+          userId: userId || null,
+          customerEmail: email,
+          customerFirstName: firstName,
+          customerLastName: lastName,
+          customerPhone: phone,
+          customerCity: address.city,
+          customerStreet: address.street,
+          customerPostalCode: address.postalCode,
+          customerBuilding: address.building,
+          customerApartment: address.apartment,
+          items: {
+            create: orderItemsData,
+          },
         },
       });
-    }
+
+      // Aktualizacja adresu rozliczeniowego użytkownika
+      if (userId) {
+        await tx.billingAddress.upsert({
+          where: { userId: userId },
+          update: {
+            city: address.city,
+            postalCode: address.postalCode,
+            street: address.street,
+            building: address.building,
+            apartment: address.apartment,
+            firstname: firstName,
+            lastname: lastName,
+          },
+          create: {
+            userId: userId,
+            city: address.city,
+            postalCode: address.postalCode,
+            street: address.street,
+            building: address.building,
+            apartment: address.apartment,
+            firstname: firstName,
+            lastname: lastName,
+          },
+        });
+      }
+
+      return { order, totalAmount: calculatedTotal };
+    });
+
+    const { order, totalAmount } = result;
 
     const payload = {
-      amount: Math.round(amount * 100), // convert to grosze
+      amount: Math.round(totalAmount * 100), // convert to grosze
       currency: "PLN",
-      externalId: externalId,
-      description: `Zamówienie On-Up #${externalId}`,
-      continueUrl: "http://localhost:5173/koszyk/sukces",
+      externalId: order.orderNumber,
+      description: `Zamówienie On-Up #${order.orderNumber}`,
+      continueUrl: process.env.FRONTEND_URL
+        ? `${process.env.FRONTEND_URL}/koszyk/sukces`
+        : "http://localhost:5173/koszyk/sukces",
       buyer: {
         email: email,
         firstName: firstName,
         lastName: lastName,
+        locale: "pl-PL",
       },
     };
 
@@ -211,14 +243,38 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
 
     if (!response.ok) {
       console.error("PayNow Error:", data);
+
+      // Jeśli PayNow odrzuci (np. błąd konfiguracji), powinniśmy oznaczyć zamówienie jako błąd i zwrócić towar?
+      // W tym prostym flow, jeśli request do PayNow nie przejdzie, rzucamy błąd,
+      // co może (jeśli obsłużymy) triggerować zwrot towaru, ale transaction już poszła commit.
+      // Dobre miejsce na "Manual rollback" lub ustawienie statusu ERROR.
+
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { status: "ERROR" },
+      });
+
+      // Przywracamy stock
+      // (W idealnym świecie to powinno być w osobnym bloku catch/finally lub kolejce)
+      for (const item of items) {
+        await prisma.book.update({
+          where: { id: item.id },
+          data: { stock: { increment: item.quantity } },
+        });
+      }
+
       return res
         .status(response.status)
         .json({ error: "PayNow integration error", details: data });
     }
 
     res.json(data);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating payment and order:", error);
+    // Obsługa custom errors z transakcji
+    if (error.message && error.message.includes("niedostępny")) {
+      return res.status(400).json({ error: error.message });
+    }
     res
       .status(500)
       .json({ error: "Internal server error during payment/order creation" });
@@ -345,8 +401,16 @@ app.get("/api/user/me", authMiddleware, async (req: Request, res: Response) => {
 
 app.post("/api/payment/notifications", async (req: Request, res: Response) => {
   try {
+    console.log("🔔 Otrzymano powiadomienie płatności!");
+
+    // Logowanie nagłówków i body dla debugowania
     const signature = req.headers["signature"] as string;
+    console.log("Headers:", req.headers);
+    console.log("Signature headers:", signature);
+
     const body = JSON.stringify(req.body);
+    console.log("Body:", body);
+
     const signatureKey = process.env.PAYNOW_SIGNATURE_KEY!;
 
     // 1. Weryfikacja podpisu (zabezpieczenie przed podszywaniem się)
@@ -355,14 +419,18 @@ app.post("/api/payment/notifications", async (req: Request, res: Response) => {
       .update(body)
       .digest("base64");
 
+    console.log(
+      `Signature check: Received=${signature}, Calculated=${calculatedSignature}`,
+    );
+
     if (signature !== calculatedSignature) {
-      console.error("Invalid PayNow signature");
+      console.error("❌ Invalid PayNow signature");
       return res.status(400).send("Invalid signature");
     }
 
     const { externalId, status, paymentId } = req.body;
     console.log(
-      `Received PayNow notification for ${externalId}: ${status} (${paymentId})`,
+      `✅ Valid PayNow notification for ${externalId}: ${status} (${paymentId})`,
     );
 
     // 2. Mapowanie statusów PayNow na statusy Twojej bazy (OrderStatus)
@@ -372,17 +440,48 @@ app.post("/api/payment/notifications", async (req: Request, res: Response) => {
       REJECTED: "REJECTED",
       ERROR: "ERROR",
       PENDING: "PENDING",
+      ABANDONED: "ABANDONED",
+      EXPIRED: "EXPIRED",
     };
 
     const newStatus = statusMap[status];
 
     if (newStatus) {
-      // 3. Aktualizacja statusu zamówienia w bazie
+      // Pobierz aktualny stan zamówienia
+      const currentOrder = await prisma.order.findUnique({
+        where: { orderNumber: externalId },
+        include: { items: true },
+      });
+
+      if (!currentOrder) {
+        console.error(`Order not found for notification: ${externalId}`);
+        return res.status(404).send("Order not found");
+      }
+
+      // 3. Aktualizacja statusu
       await prisma.order.update({
         where: { orderNumber: externalId },
         data: { status: newStatus },
       });
       console.log(`Order ${externalId} updated to ${newStatus}`);
+
+      // 4. OBSŁUGA ZWROTU TOWARU (Jeśli płatność się nie udała)
+      // Jeśli nowe statusy to REJECTED, ERROR, EXPIRED itd., a zamówienie nie było wcześniej potwierdzone/odrzucone
+      const failureStatuses = ["REJECTED", "ERROR", "EXPIRED", "ABANDONED"];
+      const wasPending =
+        currentOrder.status === "PENDING" || currentOrder.status === "NEW";
+
+      if (failureStatuses.includes(newStatus) && wasPending) {
+        console.log(`Restoring stock for refused order ${externalId}`);
+        await prisma.$transaction(
+          currentOrder.items.map((item) =>
+            prisma.book.update({
+              where: { id: item.bookId },
+              data: { stock: { increment: item.quantity } },
+            }),
+          ),
+        );
+      }
     }
 
     res.status(200).send("OK");

@@ -38,7 +38,6 @@ function PodsumowaniePage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: totalPrice,
           email: formData.email,
           phone: formData.phone,
           firstName: formData.firstName,
@@ -50,10 +49,8 @@ function PodsumowaniePage() {
             building: formData.building,
             apartment: formData.apartment,
           },
-          externalId: `ORDER-${Date.now()}`,
           items: groupedItems.map((item) => ({
             id: item.id,
-            price: item.price,
             quantity: item.quantity,
           })),
         }),

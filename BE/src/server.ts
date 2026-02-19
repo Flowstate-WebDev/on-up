@@ -140,7 +140,8 @@ app.post("/api/login", async (req: Request, res: Response) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                phone: user.phone
+                phone: user.phone,
+                role: user.role
             }
         });
     } catch (error) {
@@ -163,7 +164,13 @@ app.get("/api/user/me", authMiddleware, async (req: Request, res: Response) => {
         const userId = (req as any).user.userId;
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { id: true, username: true, email: true, phone: true }
+            select: {
+                id: true,
+                username: true,
+                email: true,
+                phone: true,
+                role: true
+            }
         });
 
         if (!user) {

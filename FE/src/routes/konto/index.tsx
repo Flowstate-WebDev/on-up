@@ -1,6 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '@/context/AuthContext'
 import { Heading } from '@/components/ui/Heading'
+import { UserDataBlock } from './components/UserDataBlock/UserDataBlock'
 
 export const Route = createFileRoute('/konto/')({
   beforeLoad: ({ context }) => {
@@ -29,30 +30,23 @@ function AccountPage() {
     })
   }
 
+  const userData = [
+    { label: 'Nazwa użytkownika', value: user.username },
+    { label: 'Adres E-mail', value: user.email },
+    { label: 'Numer Telefonu', value: user.phone || 'Nie podano' },
+    { label: 'Typ konta', value: user.role === 'admin' ? 'Administrator' : 'Użytkownik' },
+  ]
+
   return (
     <section className='w-full xl:w-2/3 grid grid-cols-2'>
       <div className="">
         <Heading size="xl">Dzień dobry, {user.username}!</Heading>
         <p className="text-text-tertiary -mt-4 mb-8">Zarządzaj swoim kontem i danymi</p>
-        <div className="flex flex-col gap-1 mb-4">
-          <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">Nazwa użytkownika</span>
-          <p className="text-lg font-medium">{user.username}</p>
-        </div>
 
-        <div className="flex flex-col gap-1 mb-4">
-          <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">Adres E-mail</span>
-          <p className="text-lg font-medium">{user.email}</p>
-        </div>
+        {userData.map((data) => (
+          <UserDataBlock key={data.label} label={data.label} value={data.value} />
+        ))}
 
-        <div className="flex flex-col gap-1 mb-4">
-          <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">Numer Telefonu</span>
-          <p className="text-lg font-medium">{user.phone || 'Nie podano'}</p>
-        </div>
-
-        <div className="flex flex-col gap-1 mb-4">
-          <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">Typ konta</span>
-          <p className="text-lg font-medium">{user.role === 'admin' ? 'Administrator' : 'Użytkownik'}</p>
-        </div>
         {user.role === 'admin' && (
           <button
             onClick={() => navigate({ to: '/konto/admin' })}

@@ -11,8 +11,22 @@ function ErrorPage() {
   const errorMsg = searchParams.get("error");
 
   useEffect(() => {
-    document.title = "On-Up | Błąd zamówienia";
-  }, []);
+    document.title = "On-Up | Płatność nieudana";
+
+    // Automatyczne anulowanie zamówienia, aby zwrócić towar do magazynu
+    const orderNumber = searchParams.get("externalId");
+
+    if (orderNumber) {
+      fetch("http://localhost:3001/api/payment/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderNumber }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("Order cancelled:", data))
+        .catch((err) => console.error("Error cancelling order:", err));
+    }
+  }, [searchParams]); // Added searchParams to dependency array as it's used inside
 
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl text-center">

@@ -13,9 +13,9 @@ model User {
   password       String
   username       String          @unique(map: "User_name_key")
   phone          String          @unique
-  role           String          @default("USER")
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+  role           String          @default("USER")
   billingAddress BillingAddress?
   orders         Order[]
 }
@@ -90,19 +90,19 @@ model Order {
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
   userId             String?
-  user               User?       @relation(fields: [userId], references: [id])
-  items              OrderItem[]
-  
-  // Dane kupującego (zwłaszcza dla gości)
+  customerApartment  String?
+  customerBuilding   String?
+  customerCity       String?
   customerEmail      String?
   customerFirstName  String?
   customerLastName   String?
   customerPhone      String?
-  customerCity       String?
-  customerStreet     String?
   customerPostalCode String?
-  customerBuilding   String?
-  customerApartment  String?
+  customerStreet     String?
+  shippingMethod     String?
+  shippingPoint      String?
+  user               User?       @relation(fields: [userId], references: [id])
+  items              OrderItem[]
 
   @@index([userId])
 }

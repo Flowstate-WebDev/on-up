@@ -10,6 +10,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import crypto from "crypto";
+import { createFurgonetkaPackage } from "./lib/furgonetka.js";
 
 dotenv.config();
 
@@ -84,7 +85,16 @@ import { prisma } from "./lib/prisma.js";
 
 app.post("/api/payment/create", async (req: Request, res: Response) => {
   try {
-    const { email, phone, firstName, lastName, items, address } = req.body;
+    const {
+      email,
+      phone,
+      firstName,
+      lastName,
+      items,
+      address,
+      shippingMethod,
+      shippingPoint,
+    } = req.body;
 
     if (
       !email ||
@@ -170,6 +180,8 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
           customerPostalCode: address.postalCode,
           customerBuilding: address.building,
           customerApartment: address.apartment,
+          shippingMethod: shippingMethod,
+          shippingPoint: shippingPoint,
           items: {
             create: orderItemsData,
           },
@@ -205,10 +217,37 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
       return { order, totalAmount: calculatedTotal };
     });
 
-    const { order, totalAmount } = result;
+    let { order, totalAmount } = result;
+
+    // Business logic: Free delivery and discounts
+    const shippingPrices: Record<string, number> = {
+      inpost: 14.0,
+      orlen: 11.0,
+      kurier: 18.0,
+      poczta: 15.0,
+    };
+
+    let shippingCost = shippingPrices[shippingMethod] || 15.0;
+    let discount = 0;
+
+    if (totalAmount >= 400) {
+      shippingCost = 0;
+    }
+
+    if (totalAmount >= 500) {
+      discount = totalAmount * 0.05;
+    }
+
+    const finalAmount = totalAmount - discount + shippingCost;
+
+    // Update the order with the final amount if it differs from calculated (due to shipping/discount)
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { totalAmount: finalAmount },
+    });
 
     const payload = {
-      amount: Math.round(totalAmount * 100), // convert to grosze
+      amount: Math.round(finalAmount * 100), // convert to grosze
       currency: "PLN",
       externalId: order.orderNumber,
       description: `Zamówienie On-Up #${order.orderNumber}`,
@@ -286,6 +325,54 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
       .json({ error: "Internal server error during payment/order creation" });
   }
 });
+
+// Endpoint do anulowania zamówienia i zwrotu towaru
+app.post("/api/payment/cancel", async (req: Request, res: Response) => {
+  try {
+    const { orderNumber } = req.body;
+
+    if (!orderNumber) {
+      return res.status(400).json({ error: "Missing orderNumber" });
+    }
+
+    const order = await prisma.order.findUnique({
+      where: { orderNumber },
+      include: { items: true },
+    });
+
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Tylko zamówienia PENDING mogą być anulowane w ten sposób
+    if (order.status !== "PENDING" && order.status !== "NEW") {
+      return res.status(400).json({ error: "Order cannot be cancelled" });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      // 1. Zmień status
+      await tx.order.update({
+        where: { id: order.id },
+        data: { status: "REJECTED" },
+      });
+
+      // 2. Zwróć stock
+      for (const item of order.items) {
+        await tx.book.update({
+          where: { id: item.bookId },
+          data: { stock: { increment: item.quantity } },
+        });
+      }
+    });
+
+    res.json({ message: "Order cancelled and stock restored" });
+  } catch (error) {
+    console.error("Error cancelling order:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Seed API (Tymczasowe do dodania książki)
 
 app.post("/api/register", async (req: Request, res: Response) => {
   try {
@@ -459,7 +546,7 @@ app.post("/api/payment/notifications", async (req: Request, res: Response) => {
       // Pobierz aktualny stan zamówienia
       const currentOrder = await prisma.order.findUnique({
         where: { orderNumber: externalId },
-        include: { items: true },
+        include: { items: { include: { book: true } } },
       });
 
       if (!currentOrder) {
@@ -473,6 +560,13 @@ app.post("/api/payment/notifications", async (req: Request, res: Response) => {
         data: { status: newStatus },
       });
       console.log(`Order ${externalId} updated to ${newStatus}`);
+
+      // 3.1. Wyślij do Furgonetki jeśli zamówienie zostało opłacone
+      if (newStatus === "CONFIRMED" && currentOrder.status !== "CONFIRMED") {
+        console.log(`Sending order ${externalId} to Furgonetka...`);
+        // Przekazujemy pełny obiekt zamówienia (już go mamy w currentOrder)
+        await createFurgonetkaPackage(currentOrder);
+      }
 
       // 4. OBSŁUGA ZWROTU TOWARU (Jeśli płatność się nie udała)
       // Jeśli nowe statusy to REJECTED, ERROR, EXPIRED itd., a zamówienie nie było wcześniej potwierdzone/odrzucone

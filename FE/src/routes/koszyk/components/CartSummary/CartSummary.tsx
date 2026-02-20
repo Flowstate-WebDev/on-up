@@ -1,6 +1,7 @@
 import { Heading } from "@/components/ui/Heading";
 import type { CartItem } from "../../index.types";
 import { Link } from "@tanstack/react-router";
+import { PriceSummary } from "../PriceSummary";
 
 export const CartSummary = ({
   groupedItems,
@@ -16,32 +17,8 @@ export const CartSummary = ({
       <div className="bg-bg-secondary p-6 rounded-lg shadow-md sticky top-24">
         <Heading size="md">Podsumowanie</Heading>
 
-        <div className="flex flex-col gap-3 mb-6">
-          {groupedItems.map((item) => (
-            <div
-              key={item.id}
-              className="text-sm border-b border-gray-600/20 pb-2 last:border-0 text-text-secondary"
-            >
-              <p className="font-medium truncate mb-1" title={item.title}>
-                {item.title}
-              </p>
-              <div className="flex justify-between">
-                <span>
-                  {Number(item.price).toFixed(2)} PLN x {item.quantity}
-                </span>
-                <span className="font-semibold text-text-primary">
-                  {(Number(item.price) * item.quantity).toFixed(2)} PLN
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex justify-between items-center mb-4 text-lg border-t-2 border-primary pt-4">
-          <Heading size="sm">Łączna kwota:</Heading>
-          <span className="font-bold text-primary text-xl">
-            {totalPrice.toFixed(2)} PLN
-          </span>
+        <div className="my-6">
+          <PriceSummary groupedItems={groupedItems} totalPrice={totalPrice} />
         </div>
 
         <Link

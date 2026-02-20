@@ -3,6 +3,7 @@ import { Heading } from "@/components/ui/Heading";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import { Input } from "@/components/ui/Input";
+import { PriceSummary } from "./components/PriceSummary";
 
 export const Route = createFileRoute("/koszyk/podsumowanie")({
   component: PodsumowaniePage,
@@ -22,6 +23,19 @@ function PodsumowaniePage() {
     building: "",
     apartment: "",
   });
+
+  const [shippingMethod, setShippingMethod] = useState("inpost");
+  const [shippingPoint, setShippingPoint] = useState("");
+
+  const shippingPrices: Record<string, number> = {
+    inpost: 14,
+    orlen: 11,
+    kurier: 18,
+    poczta: 15,
+  };
+
+  const currentShippingCost =
+    shippingPrices[shippingMethod as keyof typeof shippingPrices] || 0;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -53,6 +67,8 @@ function PodsumowaniePage() {
             id: item.id,
             quantity: item.quantity,
           })),
+          shippingMethod,
+          shippingPoint,
         }),
       });
 
@@ -62,7 +78,6 @@ function PodsumowaniePage() {
         throw new Error(data.error || "Błąd podczas tworzenia płatności");
       }
 
-      // Czyścimy koszyk przed przekierowaniem
       clearCart();
 
       if (data.redirectUrl) {
@@ -89,7 +104,6 @@ function PodsumowaniePage() {
         className="mt-8 flex flex-col lg:flex-row gap-8"
       >
         <div className="flex-1 flex flex-col gap-6">
-          {/* Dane kontaktowe */}
           <section className="bg-bg-secondary p-6 rounded-lg shadow-md">
             <Heading size="md">Dane do zamówienia</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -152,7 +166,6 @@ function PodsumowaniePage() {
             </div>
           </section>
 
-          {/* Adres rozliczeniowy */}
           <section className="bg-bg-secondary p-6 rounded-lg shadow-md">
             <Heading size="md">Adres rozliczeniowy</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -230,15 +243,68 @@ function PodsumowaniePage() {
             </div>
           </section>
 
-          {/* Metoda płatności */}
+          <section className="bg-bg-secondary p-6 rounded-lg shadow-md">
+            <Heading size="md">Opcje wysyłki</Heading>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              {[
+                { id: "inpost", name: "Inpost Paczkomaty 24/7", cost: 14 },
+                { id: "orlen", name: "Orlen paczka", cost: 11 },
+                { id: "kurier", name: "Kurier", cost: 18 },
+                { id: "poczta", name: "Poczta Polska", cost: 15 },
+              ].map((method) => (
+                <label
+                  key={method.id}
+                  className={`flex flex-col p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    shippingMethod === method.id
+                      ? "border-primary bg-primary/5"
+                      : "border-gray-600/20 hover:border-primary/50"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="radio"
+                        name="shippingMethod"
+                        value={method.id}
+                        checked={shippingMethod === method.id}
+                        onChange={(e) => setShippingMethod(e.target.value)}
+                        className="w-4 h-4 text-primary focus:ring-primary"
+                      />
+                      <span className="font-semibold text-text-primary">
+                        {method.name}
+                      </span>
+                    </div>
+                  </div>
+                  {shippingMethod === method.id &&
+                    (method.id === "inpost" || method.id === "orlen") && (
+                      <div className="mt-3">
+                        <Input
+                          placeholder={
+                            method.id === "inpost"
+                              ? "Kod paczkomatu (np. WAW01N)"
+                              : "Nr punktu PSD (np. 106088)"
+                          }
+                          value={shippingPoint}
+                          onChange={(e) => setShippingPoint(e.target.value)}
+                          required
+                          style="default"
+                        />
+                        <p className="text-[10px] text-text-secondary mt-1 italic">
+                          Wpisz kod punktu odbioru. Docelowo tutaj będzie mapa.
+                        </p>
+                      </div>
+                    )}
+                </label>
+              ))}
+            </div>
+          </section>
+
           <section className="bg-bg-secondary p-6 rounded-lg shadow-md">
             <Heading size="md">Metoda płatności</Heading>
             <div className="flex items-center justify-between p-4 border-2 border-primary bg-primary/5 rounded-lg mt-4">
               <div className="flex items-center gap-4">
                 <div className="bg-white px-2 py-1 rounded shadow-sm">
-                  <span className="text-lg font-black italic tracking-tighter text-[#7134FE]">
-                    Pay<span className="text-[#212121]">now</span>
-                  </span>
+                  <img src="/images/paynowLogo.png" className="h-8" />
                 </div>
                 <span className="font-semibold text-text-primary">
                   Szybki przelew / BLIK
@@ -249,39 +315,16 @@ function PodsumowaniePage() {
           </section>
         </div>
 
-        {/* Sidebar Summary */}
         <div className="lg:w-1/3 shrink-0">
           <div className="bg-bg-secondary p-6 rounded-lg shadow-md sticky top-24">
             <Heading size="md">Twoje zamówienie</Heading>
-
-            <div className="flex flex-col gap-3 my-6">
-              {groupedItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="text-sm border-b border-gray-600/20 pb-2 last:border-0 text-text-secondary"
-                >
-                  <p className="font-medium truncate mb-1" title={item.title}>
-                    {item.title}
-                  </p>
-                  <div className="flex justify-between">
-                    <span>
-                      {Number(item.price).toFixed(2)} PLN x {item.quantity}
-                    </span>
-                    <span className="font-semibold text-text-primary">
-                      {(Number(item.price) * item.quantity).toFixed(2)} PLN
-                    </span>
-                  </div>
-                </div>
-              ))}
+            <div className="my-6">
+              <PriceSummary
+                groupedItems={groupedItems}
+                totalPrice={totalPrice}
+                shippingCost={currentShippingCost}
+              />
             </div>
-
-            <div className="flex justify-between items-center mb-6 text-lg border-t-2 border-primary pt-4">
-              <Heading size="sm">Do zapłaty:</Heading>
-              <span className="font-bold text-primary text-xl">
-                {totalPrice.toFixed(2)} PLN
-              </span>
-            </div>
-
             <button
               type="submit"
               disabled={isProcessing}

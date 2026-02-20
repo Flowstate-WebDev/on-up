@@ -108,10 +108,11 @@ model Order {
 }
 
 model OrderItem {
-  id       String  @id @default(cuid())
-  quantity Int
-  price    Decimal @db.Decimal(10, 2)
-  orderId  String
+  id          String  @id @default(cuid())
+  quantity    Int
+  price       Decimal @db.Decimal(10, 2)
+  orderNumber String?
+  orderId     String
   bookId   String
   book     Book    @relation(fields: [bookId], references: [id])
   order    Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)

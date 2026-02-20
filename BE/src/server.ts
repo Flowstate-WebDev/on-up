@@ -131,6 +131,12 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
       let calculatedTotal = 0;
       const orderItemsData = [];
 
+      // Generowanie ładnego numeru zamówienia: ONUP-DATA-LOSOWY
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
+      const randomPart = Math.floor(Math.random() * 9000 + 1000); // Losowe 4 cyfry
+      const generatedOrderNumber = `ONUP-${dateStr}-${randomPart}`;
+
       for (const itemRequest of items) {
         const book = await tx.book.findUnique({
           where: { id: itemRequest.id },
@@ -161,13 +167,14 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
           bookId: book.id,
           quantity: itemRequest.quantity,
           price: book.price, // Zapisujemy cenę z momentu zakupu
+          orderNumber: generatedOrderNumber,
         });
       }
 
       // Utworzenie obiektu zamówienia
       const order = await tx.order.create({
         data: {
-          // orderNumber wygeneruje się automatycznie (CUID)
+          orderNumber: generatedOrderNumber,
           totalAmount: calculatedTotal,
           status: "PENDING",
           userId: userId || null,
@@ -315,14 +322,18 @@ app.post("/api/payment/create", async (req: Request, res: Response) => {
 
     res.json(data);
   } catch (error: any) {
-    console.error("Error creating payment and order:", error);
+    console.error("DEBUG: Error during payment/order creation:", error);
+
     // Obsługa custom errors z transakcji
     if (error.message && error.message.includes("niedostępny")) {
       return res.status(400).json({ error: error.message });
     }
-    res
-      .status(500)
-      .json({ error: "Internal server error during payment/order creation" });
+
+    res.status(500).json({
+      error: "Internal server error during payment/order creation",
+      message: error.message,
+      details: error.stack, // Opcjonalne, pomocne w debugowaniu
+    });
   }
 });
 

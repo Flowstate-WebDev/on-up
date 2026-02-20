@@ -18,6 +18,7 @@ import { Route as SklepProductIdRouteImport } from './routes/sklep/$productId'
 import { Route as PolitykaPolicyIdRouteImport } from './routes/polityka/$policyId'
 import { Route as KoszykSukcesRouteImport } from './routes/koszyk/sukces'
 import { Route as KoszykPodsumowanieRouteImport } from './routes/koszyk/podsumowanie'
+import { Route as KoszykBladRouteImport } from './routes/koszyk/blad'
 import { Route as KontoRegisterRouteImport } from './routes/konto/register'
 import { Route as KontoLoginRouteImport } from './routes/konto/login'
 import { Route as KontoAdminRouteImport } from './routes/konto/admin'
@@ -67,6 +68,11 @@ const KoszykPodsumowanieRoute = KoszykPodsumowanieRouteImport.update({
   path: '/koszyk/podsumowanie',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KoszykBladRoute = KoszykBladRouteImport.update({
+  id: '/koszyk/blad',
+  path: '/koszyk/blad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KontoRegisterRoute = KontoRegisterRouteImport.update({
   id: '/konto/register',
   path: '/konto/register',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/koszyk/blad': typeof KoszykBladRoute
   '/koszyk/podsumowanie': typeof KoszykPodsumowanieRoute
   '/koszyk/sukces': typeof KoszykSukcesRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/koszyk/blad': typeof KoszykBladRoute
   '/koszyk/podsumowanie': typeof KoszykPodsumowanieRoute
   '/koszyk/sukces': typeof KoszykSukcesRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/konto/admin': typeof KontoAdminRoute
   '/konto/login': typeof KontoLoginRoute
   '/konto/register': typeof KontoRegisterRoute
+  '/koszyk/blad': typeof KoszykBladRoute
   '/koszyk/podsumowanie': typeof KoszykPodsumowanieRoute
   '/koszyk/sukces': typeof KoszykSukcesRoute
   '/polityka/$policyId': typeof PolitykaPolicyIdRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
+    | '/koszyk/blad'
     | '/koszyk/podsumowanie'
     | '/koszyk/sukces'
     | '/polityka/$policyId'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
+    | '/koszyk/blad'
     | '/koszyk/podsumowanie'
     | '/koszyk/sukces'
     | '/polityka/$policyId'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/konto/admin'
     | '/konto/login'
     | '/konto/register'
+    | '/koszyk/blad'
     | '/koszyk/podsumowanie'
     | '/koszyk/sukces'
     | '/polityka/$policyId'
@@ -176,6 +188,7 @@ export interface RootRouteChildren {
   KontoAdminRoute: typeof KontoAdminRoute
   KontoLoginRoute: typeof KontoLoginRoute
   KontoRegisterRoute: typeof KontoRegisterRoute
+  KoszykBladRoute: typeof KoszykBladRoute
   KoszykPodsumowanieRoute: typeof KoszykPodsumowanieRoute
   KoszykSukcesRoute: typeof KoszykSukcesRoute
   PolitykaPolicyIdRoute: typeof PolitykaPolicyIdRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KoszykPodsumowanieRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/koszyk/blad': {
+      id: '/koszyk/blad'
+      path: '/koszyk/blad'
+      fullPath: '/koszyk/blad'
+      preLoaderRoute: typeof KoszykBladRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/konto/register': {
       id: '/konto/register'
       path: '/konto/register'
@@ -280,6 +300,7 @@ const rootRouteChildren: RootRouteChildren = {
   KontoAdminRoute: KontoAdminRoute,
   KontoLoginRoute: KontoLoginRoute,
   KontoRegisterRoute: KontoRegisterRoute,
+  KoszykBladRoute: KoszykBladRoute,
   KoszykPodsumowanieRoute: KoszykPodsumowanieRoute,
   KoszykSukcesRoute: KoszykSukcesRoute,
   PolitykaPolicyIdRoute: PolitykaPolicyIdRoute,

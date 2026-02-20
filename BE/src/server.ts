@@ -27,7 +27,13 @@ const app = express();
 
 app.use(cors(globalCorsConfig));
 app.use(cookieParser());
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req: any, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  }),
+);
 
 app.get("/api/books", async (req: Request, res: Response) => {
   try {
@@ -408,15 +414,18 @@ app.post("/api/payment/notifications", async (req: Request, res: Response) => {
     console.log("Headers:", req.headers);
     console.log("Signature headers:", signature);
 
-    const body = JSON.stringify(req.body);
-    console.log("Body:", body);
+    const rawBody = (req as any).rawBody; // Używamy RAW body
+    console.log("Raw Body received for signature check:", rawBody);
+
+    // Fallback gdyby rawBody nie zadziałał (np. inna konfiguracja middleware)
+    const verificationBody = rawBody || JSON.stringify(req.body);
 
     const signatureKey = process.env.PAYNOW_SIGNATURE_KEY!;
 
     // 1. Weryfikacja podpisu (zabezpieczenie przed podszywaniem się)
     const calculatedSignature = crypto
       .createHmac("sha256", signatureKey)
-      .update(body)
+      .update(verificationBody)
       .digest("base64");
 
     console.log(

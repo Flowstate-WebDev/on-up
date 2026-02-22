@@ -75,10 +75,17 @@ export async function createFurgonetkaPackage(order: any) {
 
     const targetServiceId = slugMap[order.shippingMethod as string] || 11328057;
 
+    const isInpost = targetServiceId === 11328062;
+
     let shipmentType: string;
-    if (order.shippingPoint) {
-      shipmentType = targetServiceId === 11328062 ? "point_apm" : "point"; // InPost ma point_apm
+    if (isInpost) {
+      // InPost na stronie to zawsze paczkomat (Paczkomaty 24/7)
+      shipmentType = "point_apm";
+    } else if (order.shippingPoint) {
+      // Orlen - punkt odbioru
+      shipmentType = "point";
     } else {
+      // Kurier / poczta - door-to-door
       shipmentType = "door";
     }
 
@@ -101,9 +108,12 @@ export async function createFurgonetkaPackage(order: any) {
         phone: order.customerPhone.replace(/\D/g, "").slice(-9),
         email: order.customerEmail,
         country: "PL",
+        // Dla paczkomatów/punktów odbioru – kod punktu idzie w receiver.point
+        ...(order.shippingPoint ? { point: order.shippingPoint } : {}),
       },
       pickup: {
-        type: shipmentType === "door" ? "courier" : "point",
+        // Dla InPost paczkomat nadawca też nadaje z punktu, nie kurierowo
+        type: shipmentType === "door" ? "courier" : "courier",
         name: senderName,
         company: senderName,
         street: senderStreet,
@@ -125,10 +135,6 @@ export async function createFurgonetkaPackage(order: any) {
       label_type: "pdf",
       user_reference: order.orderNumber,
     };
-
-    if (order.shippingPoint) {
-      payload.point = order.shippingPoint;
-    }
 
     const response = await fetch(`${FURGONETKA_API_URL}/packages`, {
       method: "POST",

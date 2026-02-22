@@ -503,19 +503,31 @@ app.get("/api/user/me", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+app.get("/orders", (req: Request, res: Response) => {
+  const furgonetkaToken = req.headers["x-furgonetka-token"];
+  const expectedToken =
+    process.env.FURGONETKA_INTEGRATION_TOKEN || "on-up-super-secret-token";
+
+  console.log(`[Furgonetka] GET /orders - Received Token: ${furgonetkaToken}`);
+
+  if (furgonetkaToken !== expectedToken) {
+    console.warn(
+      "[Furgonetka] Unauthorized access attempt - tokens do not match!",
+    );
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  // Ngrok bypass (opcjonalnie)
+  res.setHeader("ngrok-skip-browser-warning", "69420");
+
+  // Zwracamy pustą listę zamówień
+  res.status(200).json({ orders: [] });
+});
+
 app.post("/api/payment/notifications", async (req: Request, res: Response) => {
   try {
-    console.log("🔔 Otrzymano powiadomienie płatności!");
-
-    // Logowanie nagłówków i body dla debugowania
     const signature = req.headers["signature"] as string;
-    console.log("Headers:", req.headers);
-    console.log("Signature headers:", signature);
-
-    const rawBody = (req as any).rawBody; // Używamy RAW body
-    console.log("Raw Body received for signature check:", rawBody);
-
-    // Fallback gdyby rawBody nie zadziałał (np. inna konfiguracja middleware)
+    const rawBody = (req as any).rawBody;
     const verificationBody = rawBody || JSON.stringify(req.body);
 
     const signatureKey = process.env.PAYNOW_SIGNATURE_KEY!;
@@ -526,19 +538,13 @@ app.post("/api/payment/notifications", async (req: Request, res: Response) => {
       .update(verificationBody)
       .digest("base64");
 
-    console.log(
-      `Signature check: Received=${signature}, Calculated=${calculatedSignature}`,
-    );
-
     if (signature !== calculatedSignature) {
       console.error("❌ Invalid PayNow signature");
       return res.status(400).send("Invalid signature");
     }
 
     const { externalId, status, paymentId } = req.body;
-    console.log(
-      `✅ Valid PayNow notification for ${externalId}: ${status} (${paymentId})`,
-    );
+    console.log(`Paynow notification: ${status}`);
 
     // 2. Mapowanie statusów PayNow na statusy Twojej bazy (OrderStatus)
     // PayNow statuses: NEW, PENDING, CONFIRMED, REJECTED, ERROR
@@ -575,8 +581,13 @@ app.post("/api/payment/notifications", async (req: Request, res: Response) => {
       // 3.1. Wyślij do Furgonetki jeśli zamówienie zostało opłacone
       if (newStatus === "CONFIRMED" && currentOrder.status !== "CONFIRMED") {
         console.log(`Sending order ${externalId} to Furgonetka...`);
-        // Przekazujemy pełny obiekt zamówienia (już go mamy w currentOrder)
-        await createFurgonetkaPackage(currentOrder);
+        const result = await createFurgonetkaPackage(currentOrder);
+        if (!result.success) {
+          console.error(
+            `Furgonetka error for order ${externalId}:`,
+            result.error,
+          );
+        }
       }
 
       // 4. OBSŁUGA ZWROTU TOWARU (Jeśli płatność się nie udała)

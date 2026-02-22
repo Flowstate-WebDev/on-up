@@ -66,25 +66,32 @@ export async function createFurgonetkaPackage(order: any) {
       ? `${order.customerStreet} ${order.customerBuilding}/${order.customerApartment}`
       : `${order.customerStreet} ${order.customerBuilding}`;
 
-    const serviceMap: Record<string, string> = {
-      inpost: "inpost",
-      orlen: "orlen",
-      kurier: "dpd",
-      poczta: "poczta",
+    const slugMap: Record<string, number> = {
+      inpost: 11328062, // inpost
+      orlen: 11328063, // orlen
+      kurier: 11328057, // dpd
+      poczta: 11328061, // poczta
     };
 
-    const slug = serviceMap[order.shippingMethod as string] || "dpd";
-    let shipmentType = "door";
+    const targetServiceId = slugMap[order.shippingMethod as string] || 11328057;
+
+    let shipmentType: string;
     if (order.shippingPoint) {
-      shipmentType = slug === "inpost" ? "point_apm" : "point";
+      shipmentType = targetServiceId === 11328062 ? "point_apm" : "point"; // InPost ma point_apm
+    } else {
+      shipmentType = "door";
     }
 
-    const senderEmail = process.env.FURGONETKA_EMAIL || "sklep@on-up.pl";
-    let senderPhoneRaw = process.env.FURGONETKA_SENDER_PHONE || "500600700";
-    const senderPhone = senderPhoneRaw.replace(/\D/g, "").slice(-9);
+    const senderEmail = process.env.FURGONETKA_EMAIL;
+    const senderPhoneRaw = process.env.FURGONETKA_SENDER_PHONE;
+
+    const senderName = process.env.FURGONETKA_SENDER_NAME;
+    const senderStreet = process.env.FURGONETKA_SENDER_STREET;
+    const senderPostcode = process.env.FURGONETKA_SENDER_POSTCODE;
+    const senderCity = process.env.FURGONETKA_SENDER_CITY;
 
     const payload: any = {
-      service: slug,
+      service_id: targetServiceId,
       shipment_type: shipmentType,
       receiver: {
         name: `${order.customerFirstName} ${order.customerLastName}`,
@@ -95,23 +102,14 @@ export async function createFurgonetkaPackage(order: any) {
         email: order.customerEmail,
         country: "PL",
       },
-      sender: {
-        name: process.env.FURGONETKA_SENDER_NAME || "Patryk Jarosz",
-        company: process.env.FURGONETKA_SENDER_NAME || "Patryk Jarosz",
-        street: process.env.FURGONETKA_SENDER_STREET || "ul. Marcowa 5 m 1",
-        postcode: process.env.FURGONETKA_SENDER_POSTCODE || "00-001",
-        city: process.env.FURGONETKA_SENDER_CITY || "Warszawa",
-        phone: senderPhone,
-        email: senderEmail,
-      },
       pickup: {
         type: shipmentType === "door" ? "courier" : "point",
-        name: process.env.FURGONETKA_SENDER_NAME || "Patryk Jarosz",
-        company: process.env.FURGONETKA_SENDER_NAME || "Patryk Jarosz",
-        street: process.env.FURGONETKA_SENDER_STREET || "ul. Marcowa 5 m 1",
-        postcode: process.env.FURGONETKA_SENDER_POSTCODE || "00-001",
-        city: process.env.FURGONETKA_SENDER_CITY || "Warszawa",
-        phone: senderPhone,
+        name: senderName,
+        company: senderName,
+        street: senderStreet,
+        postcode: senderPostcode,
+        city: senderCity,
+        phone: senderPhoneRaw,
         email: senderEmail,
       },
       parcels: [
@@ -132,10 +130,7 @@ export async function createFurgonetkaPackage(order: any) {
       payload.point = order.shippingPoint;
     }
 
-    console.log(
-      `DEBUG: Próba utworzenia przesyłki (slug: ${slug}, type: ${shipmentType})...`,
-    );
-    let response = await fetch(`${FURGONETKA_API_URL}/packages`, {
+    const response = await fetch(`${FURGONETKA_API_URL}/packages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -145,61 +140,15 @@ export async function createFurgonetkaPackage(order: any) {
       body: JSON.stringify(payload),
     });
 
-    let responseText = await response.text();
-    let data;
-    try {
-      data = responseText ? JSON.parse(responseText) : {};
-    } catch (e) {
-      console.error(
-        "Furgonetka Error: Could not parse response as JSON",
-        responseText,
-      );
-      return {
-        success: false,
-        error: "Invalid JSON response",
-        raw: responseText,
-      };
-    }
-
-    // AUTO-RETRY Z WYBOREM OFERTY
-    if (!response.ok && data.offers && data.offers.length > 0) {
-      const firstOffer = data.offers[0];
-      console.log(
-        `DEBUG: Wykryto błąd 'Proszę wybrać ofertę'. Automatycznie wybieram service_id: ${firstOffer.service_id} (${firstOffer.name})...`,
-      );
-
-      delete payload.service;
-      payload.service_id = firstOffer.service_id;
-
-      response = await fetch(`${FURGONETKA_API_URL}/packages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/vnd.furgonetka.v2+json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      responseText = await response.text();
-      data = responseText ? JSON.parse(responseText) : {};
-    }
+    const responseText = await response.text();
+    const data = responseText ? JSON.parse(responseText) : {};
 
     if (!response.ok) {
-      console.error(
-        `Furgonetka Package Creation Error (Status ${response.status}):`,
-        data,
-      );
       return { success: false, error: data, status: response.status };
     }
 
-    console.log(
-      `✅ Furgonetka package created for order ${order.orderNumber}:`,
-      data.package_id,
-    );
     return { success: true, packageId: data.package_id };
   } catch (error: any) {
-    console.error("Furgonetka Integration Error:", error);
     return { success: false, error: error.message || error };
   }
 }

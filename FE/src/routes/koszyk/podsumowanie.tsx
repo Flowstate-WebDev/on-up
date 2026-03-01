@@ -9,6 +9,12 @@ export const Route = createFileRoute("/koszyk/podsumowanie")({
   component: PodsumowaniePage,
 });
 
+declare global {
+  interface Window {
+    Furgonetka: any;
+  }
+}
+
 function PodsumowaniePage() {
   const { groupedItems, totalPrice, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -277,20 +283,64 @@ function PodsumowaniePage() {
                   </div>
                   {shippingMethod === method.id &&
                     (method.id === "inpost" || method.id === "orlen") && (
-                      <div className="mt-3">
-                        <Input
-                          placeholder={
-                            method.id === "inpost"
-                              ? "Kod paczkomatu (np. WAW01N)"
-                              : "Nr punktu PSD (np. 106088)"
-                          }
-                          value={shippingPoint}
-                          onChange={(e) => setShippingPoint(e.target.value)}
-                          required
-                          style="default"
-                        />
-                        <p className="text-[10px] text-text-secondary mt-1 italic">
-                          Wpisz kod punktu odbioru. Docelowo tutaj będzie mapa.
+                      <div className="mt-3 flex flex-col gap-2">
+                        <div className="flex gap-2">
+                          <Input
+                            placeholder={
+                              method.id === "inpost"
+                                ? "Wybrany paczkomat"
+                                : "Wybrany punkt"
+                            }
+                            value={shippingPoint}
+                            readOnly
+                            required
+                            style="default"
+                            className="flex-1 bg-gray-50 cursor-not-allowed"
+                            onChange={() => {}}
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (
+                                typeof window !== "undefined" &&
+                                window.Furgonetka
+                              ) {
+                                new window.Furgonetka.Map({
+                                  courierServices:
+                                    method.id === "inpost"
+                                      ? ["inpost"]
+                                      : ["orlen", "ruch"],
+                                  city: formData.city || undefined,
+                                  street: formData.street || undefined,
+                                  callback: function (params: any) {
+                                    console.log(
+                                      "Furgonetka map selected point:",
+                                      params,
+                                    );
+                                    if (params?.point?.code) {
+                                      setShippingPoint(params.point.code);
+                                      // Close modal if there is a close method or an HTML element
+                                      const closeBtn = document.querySelector(
+                                        ".furgonetka-map-modal-close, .furgonetka-map-close",
+                                      ) as HTMLElement;
+                                      if (closeBtn) closeBtn.click();
+                                    }
+                                  },
+                                }).show();
+                              } else {
+                                alert(
+                                  "Skrypt mapy nie został załadowany. Odśwież stronę.",
+                                );
+                              }
+                            }}
+                            className="bg-primary hover:bg-secondary text-text-obj px-4 py-2 rounded-lg font-semibold transition-colors text-sm whitespace-nowrap"
+                          >
+                            Wybierz na mapie
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-text-secondary italic">
+                          Wybierz punkt z mapy Furgonetki.
                         </p>
                       </div>
                     )}

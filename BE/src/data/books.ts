@@ -33,66 +33,119 @@ export async function getBooks() {
 }
 
 export async function createBook(data: BookData) {
-  const { professionIds, qualificationIds, ...bookData } = data;
-  return await prisma.book.create({
-    data: {
-      ...bookData,
-      professions: {
-        create: (professionIds || []).map((id) => ({
+  try {
+    const { professionIds, qualificationIds, ...bookData } = data;
+    
+    // Ensure sequential ID
+    const lastBook = await prisma.book.findFirst({
+      orderBy: { id: 'desc' }
+    });
+    
+    const nextId = lastBook ? lastBook.id + 1 : 1;
+
+    console.log(`Creating book with ID: ${nextId}, Title: ${bookData.title}`);
+
+    return await prisma.book.create({
+      data: {
+        ...bookData,
+        id: nextId,
+        professions: {
+          create: (professionIds || []).map((id) => ({
+            professionId: id,
+          })),
+        },
+        qualifications: {
+          create: (qualificationIds || []).map((id) => ({
+            qualificationId: id,
+          })),
+        },
+      },
+      include: {
+        professions: { include: { profession: true } },
+        qualifications: { include: { qualification: true } },
+      },
+    });
+  } catch (error: any) {
+    console.error("Prisma Error (createBook):", error);
+    if (error.code === 'P2002') {
+      throw new Error(`Produkt o tym tytule lub slugu już istnieje (${error.meta?.target})`);
+    }
+    throw error;
+  }
+}
+
+export async function updateBook(id: string | number, data: Partial<BookData>) {
+  try {
+    const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
+    const { professionIds, qualificationIds, ...bookData } = data;
+
+    // Remove ID from bookData if it exists to avoid trying to update PK
+    const { id: _, ...cleanUpdateData } = bookData as any;
+    const updateData: any = { ...cleanUpdateData };
+
+    if (professionIds) {
+      updateData.professions = {
+        deleteMany: {},
+        create: professionIds.map((id) => ({
           professionId: id,
         })),
-      },
-      qualifications: {
-        create: (qualificationIds || []).map((id) => ({
+      };
+    }
+
+    if (qualificationIds) {
+      updateData.qualifications = {
+        deleteMany: {},
+        create: qualificationIds.map((id) => ({
           qualificationId: id,
         })),
+      };
+    }
+
+    return await prisma.book.update({
+      where: { id: numericId },
+      data: updateData,
+      include: {
+        professions: { include: { profession: true } },
+        qualifications: { include: { qualification: true } },
       },
-    },
-    include: {
-      professions: { include: { profession: true } },
-      qualifications: { include: { qualification: true } },
-    },
-  });
+    });
+  } catch (error: any) {
+    console.error("Prisma Error (updateBook):", error);
+    throw error;
+  }
 }
 
-export async function updateBook(id: string, data: Partial<BookData>) {
-  const { professionIds, qualificationIds, ...bookData } = data;
+export async function deleteBook(id: string | number) {
+  try {
+    const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
 
-  // For simplicity, we'll replace all professions/qualifications if provided
-  const updateData: any = { ...bookData };
+    return await prisma.$transaction(async (tx) => {
+      // 1. Delete the book
+      const deleted = await tx.book.delete({
+        where: { id: numericId },
+      });
 
-  if (professionIds) {
-    updateData.professions = {
-      deleteMany: {},
-      create: professionIds.map((id) => ({
-        professionId: id,
-      })),
-    };
+      // 2. Shift all subsequent IDs down by 1 to fill the gap
+      const bToShift = await tx.book.findMany({
+        where: { id: { gt: numericId } },
+        orderBy: { id: 'asc' },
+      });
+
+      for (const book of bToShift) {
+        await tx.book.update({
+          where: { id: book.id },
+          data: { id: book.id - 1 },
+        });
+      }
+
+      return deleted;
+    }, {
+      timeout: 10000 // Higher timeout for sequential updates
+    });
+  } catch (error: any) {
+    console.error("Prisma Error (deleteBook):", error);
+    throw error;
   }
-
-  if (qualificationIds) {
-    updateData.qualifications = {
-      deleteMany: {},
-      create: qualificationIds.map((id) => ({
-        qualificationId: id,
-      })),
-    };
-  }
-
-  return await prisma.book.update({
-    where: { id },
-    data: updateData,
-    include: {
-      professions: { include: { profession: true } },
-      qualifications: { include: { qualification: true } },
-    },
-  });
-}
-
-export async function deleteBook(id: string) {
-  return await prisma.book.delete({
-    where: { id },
-  });
 }
 
 export default getBooks;

@@ -4,13 +4,13 @@ import { prisma } from "../lib/prisma.js";
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-    try {
-        const qualifications = await prisma.qualification.findMany();
-        res.json(qualifications);
-    } catch (error) {
-        console.error("Error fetching qualifications:", error);
-        res.status(500).json({ error: "Something went wrong" });
-    }
+  try {
+    const qualifications = await prisma.qualification.findMany();
+    res.json(qualifications);
+  } catch (error) {
+    console.error("Problem z pobieraniem kwalifikacji:", error);
+    res.status(500).json({ error: "Problem z pobieraniem kwalifikacji!" });
+  }
 });
 
 export default router;

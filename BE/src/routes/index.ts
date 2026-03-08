@@ -15,9 +15,9 @@ const router = Router();
  * - books.ts containing router.get('/') -> mounted at /api/books (becomes /api/books)
  */
 export async function setupRoutes() {
-    const files = fs.readdirSync(__dirname).filter(file => 
-        (file.endsWith(".ts") || file.endsWith(".js")) && 
-        file !== "index.ts" && 
+    const files = fs.readdirSync(__dirname).filter(file =>
+        (file.endsWith(".ts") || file.endsWith(".js")) &&
+        file !== "index.ts" &&
         file !== "index.js"
     );
 
@@ -25,18 +25,16 @@ export async function setupRoutes() {
         const routeName = path.parse(file).name;
         const filePath = path.join(__dirname, file);
         const module = await import(pathToFileURL(filePath).href);
-        
+
         if (module.default) {
             // "auth" and "api" files are mounted at the root level /api
             // Other files like "books" are mounted at /api/books
-            const prefix = (routeName === 'auth' || routeName === 'api') 
-                ? "" 
-                : `/${routeName}`;
-            
+            const prefix = (routeName === 'auth' || routeName === 'api') ? "" : `/${routeName}`;
+
             router.use(prefix, module.default);
-            console.log(`[Router] Dynamically loaded ${routeName} at /api${prefix}`);
+            console.log(`[Server] Dynamic route loaded: ${routeName} at /api${prefix}`);
         }
     }
-    
+
     return router;
 }

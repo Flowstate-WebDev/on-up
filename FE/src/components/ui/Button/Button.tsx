@@ -1,20 +1,16 @@
 import { buttonStyles } from './Button.variants';
 
-type Props = {
+type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode,
   style: "default" | "outline" | "default_white" | "outline_white",
-  type: "button" | "submit" | "reset",
-  disabled?: boolean,
-  onClick?: () => void
 }
 
-export const Button = ({ children, style, type, disabled, onClick }: Props) => {
+export const Button = ({ children, style, className, disabled, ...props }: Props) => {
   return (
     <button
-      type={type}
-      className={`${buttonStyles({ style })} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className={`${buttonStyles({ style })} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className || ''}`}
       disabled={disabled}
-      onClick={onClick}
+      {...props}
     >
       {children}
     </button>

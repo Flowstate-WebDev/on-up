@@ -1,7 +1,7 @@
 import express, { type NextFunction, type Request, type Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import getBooks from "./data/books.js";
+import { getBooks, createBook, updateBook, deleteBook } from "./data/books.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -48,6 +48,7 @@ app.get("/api/books/:slug", async (req: Request, res: Response) => {
     }
 });
 
+
 // Auth Middleware
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
@@ -56,13 +57,63 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 
     try {
-        const decoded = jwt.verify(token!, JWT_SECRET as jwt.Secret) as any;
+        const decoded = jwt.verify(token!, JWT_SECRET as string) as any;
         (req as any).user = decoded;
         next();
     } catch (error) {
         return res.status(401).json({ error: "Invalid token" });
     }
 };
+
+app.post("/api/books", authMiddleware, async (req: Request, res: Response) => {
+    try {
+        const book = await createBook(req.body);
+        res.status(201).json(book);
+    } catch (error) {
+        console.error("Error creating book:", error);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+app.put("/api/books/:id", authMiddleware, async (req: Request, res: Response) => {
+    try {
+        const book = await updateBook(req.params.id, req.body);
+        res.json(book);
+    } catch (error) {
+        console.error("Error updating book:", error);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+app.delete("/api/books/:id", authMiddleware, async (req: Request, res: Response) => {
+    try {
+        await deleteBook(req.params.id);
+        res.json({ message: "Book deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting book:", error);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+app.get("/api/professions", async (req: Request, res: Response) => {
+    try {
+        const professions = await prisma.profession.findMany();
+        res.json(professions);
+    } catch (error) {
+        console.error("Error fetching professions:", error);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+app.get("/api/qualifications", async (req: Request, res: Response) => {
+    try {
+        const qualifications = await prisma.qualification.findMany();
+        res.json(qualifications);
+    } catch (error) {
+        console.error("Error fetching qualifications:", error);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
 
 // FORMS
 import { prisma } from "./lib/prisma.js";
@@ -127,7 +178,7 @@ app.post("/api/login", async (req: Request, res: Response) => {
             return res.status(401).json({ error: "Invalid username or password" });
         }
 
-        const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userId: user.id }, JWT_SECRET as string, { expiresIn: "1h" });
 
         res.cookie("token", token, {
             httpOnly: true,

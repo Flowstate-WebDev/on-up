@@ -1,13 +1,14 @@
 import { inputStyle } from './Input.variants'
 
-type Props = {
-  type: "text" | "password" | "email" | "tel" | "number" | "date" | "datetime-local" | "time"
-  style: "default"
-  placeholder: string
+type Props = React.InputHTMLAttributes<HTMLInputElement> & {
+  style?: "default"
 }
 
-export const Input = ({ type, style, placeholder }: Props) => {
+export const Input = ({ style = "default", className, ...props }: Props) => {
   return (
-    <input type={type} placeholder={placeholder} className={inputStyle({ style })} />
+    <input 
+      className={inputStyle({ style }) + (className ? ` ${className}` : '')} 
+      {...props} 
+    />
   )
 }

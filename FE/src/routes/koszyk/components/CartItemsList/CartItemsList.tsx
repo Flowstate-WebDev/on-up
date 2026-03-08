@@ -4,13 +4,22 @@ import { getAssetPath } from "@/utils/paths";
 import type { Product } from "@/data/mocks/products";
 import { Heading } from "@/components/ui/Heading";
 
-export const CartItemsList = ({ groupedItems, removeFromCart }: { groupedItems: CartItem[], removeFromCart: (product: Product) => void }) => {
+export const CartItemsList = ({
+  groupedItems,
+  removeFromCart,
+}: {
+  groupedItems: CartItem[];
+  removeFromCart: (product: Product) => void;
+}) => {
   return (
     <div className="flex-1 flex flex-col gap-4">
       {groupedItems.map((item) => {
         const isOverStock = item.quantity > item.stock;
         return (
-          <div key={item.id} className={`flex gap-4 p-4 bg-bg-secondary rounded-lg shadow-sm items-center ${isOverStock ? 'border-2 border-red-500' : ''}`}>
+          <div
+            key={item.id}
+            className={`flex gap-4 p-4 bg-bg-secondary rounded-lg shadow-sm items-center ${isOverStock ? "border-2 border-red-500" : ""}`}
+          >
             <div className="w-24 h-32 shrink-0">
               <img
                 src={getAssetPath(`/images/books/${item.imageUrl}`)}
@@ -22,8 +31,17 @@ export const CartItemsList = ({ groupedItems, removeFromCart }: { groupedItems: 
             <div className="flex-1 flex flex-col gap-1">
               <Heading size="md">{item.title}</Heading>
               <p className="text-sm text-text-tertiary">
-                Ilość: <span className={`font-semibold ${isOverStock ? 'text-red-500' : 'text-text-primary'}`}>{item.quantity}</span>
-                {isOverStock && <span className="text-red-500 text-xs ml-2 font-bold">(Dostępne tylko: {item.stock})</span>}
+                Ilość:{" "}
+                <span
+                  className={`font-semibold ${isOverStock ? "text-red-500" : "text-text-primary"}`}
+                >
+                  {item.quantity}
+                </span>
+                {isOverStock && (
+                  <span className="text-red-500 text-xs ml-2 font-bold">
+                    (Dostępne tylko: {item.stock})
+                  </span>
+                )}
               </p>
             </div>
 
@@ -37,8 +55,8 @@ export const CartItemsList = ({ groupedItems, removeFromCart }: { groupedItems: 
               </button>
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};

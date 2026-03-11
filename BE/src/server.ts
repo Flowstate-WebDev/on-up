@@ -26,10 +26,14 @@ app.get("/orders", (req: express.Request, res: express.Response) => {
   const expectedToken =
     process.env.FURGONETKA_INTEGRATION_TOKEN || "on-up-super-secret-token";
 
-  console.log(`[Furgonetka] GET /orders - Received Token: ${furgonetkaToken}`);
+  console.log(
+    "\x1b[93m%s\x1b[0m",
+    `[Furgonetka] GET /orders - Received Token: ${furgonetkaToken}`,
+  );
 
   if (furgonetkaToken !== expectedToken) {
     console.warn(
+      "\x1b[91m%s\x1b[0m",
       "[Furgonetka] Unauthorized access attempt - tokens do not match!",
     );
     return res.status(401).json({ error: "Unauthorized" });

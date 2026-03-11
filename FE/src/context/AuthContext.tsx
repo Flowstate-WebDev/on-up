@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 interface User {
   id: string;
@@ -17,25 +23,27 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const checkUser = async () => {
     try {
       const res = await fetch("http://localhost:3001/api/user/me", {
-        credentials: "include"
-      })
+        credentials: "include",
+      });
       if (res.ok) {
-        const userData = await res.json()
-        setUser(userData)
+        const userData = await res.json();
+        setUser(userData);
       }
     } catch (error) {
-      console.error("Auth check failed:", error);
+      console.error("\x1b[91m%s\x1b[0m", "[User] Auth check failed:", error);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     checkUser();
@@ -49,10 +57,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       await fetch("http://localhost:3001/api/logout", {
         method: "POST",
-        credentials: "include"
+        credentials: "include",
       });
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error("\x1b[91m%s\x1b[0m", "[User] Logout failed:", error);
     } finally {
       setUser(null);
     }
@@ -70,7 +78,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

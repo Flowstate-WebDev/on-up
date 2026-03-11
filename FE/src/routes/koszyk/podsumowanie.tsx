@@ -266,7 +266,7 @@ function PodsumowaniePage() {
                       : "border-gray-600/20 hover:border-primary/50"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col items-center justify-between">
                     <div className="flex items-center gap-3">
                       <input
                         type="radio"
@@ -314,10 +314,6 @@ function PodsumowaniePage() {
                                   city: formData.city || undefined,
                                   street: formData.street || undefined,
                                   callback: function (params: any) {
-                                    console.log(
-                                      "Furgonetka map selected point:",
-                                      params,
-                                    );
                                     if (params?.point?.code) {
                                       setShippingPoint(params.point.code);
                                       // Close modal if there is a close method or an HTML element

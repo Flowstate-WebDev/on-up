@@ -30,7 +30,8 @@ async function authenticate() {
   );
 
   console.log(
-    `DEBUG: Authenticating with Furgonetka at ${FURGONETKA_API_URL} using email: ${FURGONETKA_EMAIL}`,
+    "\x1b[93m%s\x1b[0m",
+    `[Furgonetka] Auth attempt: ${FURGONETKA_API_URL} via: ${FURGONETKA_EMAIL}`,
   );
 
   const response = await fetch(`${FURGONETKA_API_URL}/oauth/token`, {
@@ -44,7 +45,7 @@ async function authenticate() {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Furgonetka Auth Error:", errorText);
+    console.error("\x1b[91m%s\x1b[0m", "Furgonetka Auth Error:", errorText);
     throw new Error(
       `Failed to authenticate with Furgonetka: ${response.statusText}`,
     );

@@ -215,7 +215,7 @@ router.post("/create", async (req: Request, res: Response) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("PayNow Error:", data);
+      console.error("\x1b[91m%s\x1b[0m", "[Payment] Error:", data);
 
       await prisma.order.update({
         where: { id: order.id },
@@ -237,7 +237,11 @@ router.post("/create", async (req: Request, res: Response) => {
 
     res.json(data);
   } catch (error: any) {
-    console.error("DEBUG: Error during payment/order creation:", error);
+    console.error(
+      "\x1b[91m%s\x1b[0m",
+      "[Payment] Error during creation:",
+      error,
+    );
 
     if (error.message && error.message.includes("niedostępny")) {
       return res.status(400).json({ error: error.message });
@@ -292,7 +296,11 @@ router.post("/cancel", async (req: Request, res: Response) => {
 
     res.json({ message: "Order cancelled and stock restored" });
   } catch (error) {
-    console.error("Error cancelling order:", error);
+    console.error(
+      "\x1b[91m%s\x1b[0m",
+      "[Payment] Error cancelling order:",
+      error,
+    );
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -312,12 +320,12 @@ router.post("/notifications", async (req: Request, res: Response) => {
       .digest("base64");
 
     if (signature !== calculatedSignature) {
-      console.error("❌ Invalid PayNow signature");
+      console.error("\x1b[91m%s\x1b[0m", "[Payment] Invalid signature");
       return res.status(400).send("Invalid signature");
     }
 
     const { externalId, status, paymentId } = req.body;
-    console.log(`Paynow notification: ${status}`);
+    console.log("\x1b[96m%s\x1b[0m", `[Payment]: ${status} ${externalId}`);
 
     // 2. Mapowanie statusów PayNow na statusy Twojej bazy (OrderStatus)
     const statusMap: Record<string, any> = {
@@ -338,7 +346,10 @@ router.post("/notifications", async (req: Request, res: Response) => {
       });
 
       if (!currentOrder) {
-        console.error(`Order not found for notification: ${externalId}`);
+        console.error(
+          "\x1b[93m%s\x1b[0m",
+          `[Payment] Order not found for: ${externalId}`,
+        );
         return res.status(404).send("Order not found");
       }
 
@@ -347,15 +358,22 @@ router.post("/notifications", async (req: Request, res: Response) => {
         where: { orderNumber: externalId },
         data: { status: newStatus },
       });
-      console.log(`Order ${externalId} updated to ${newStatus}`);
+      console.log(
+        "\x1b[96m%s\x1b[0m",
+        `[Payment] Order ${externalId} updated to ${newStatus}`,
+      );
 
       // 3.1. Wyślij do Furgonetki jeśli zamówienie zostało opłacone
       if (newStatus === "CONFIRMED" && currentOrder.status !== "CONFIRMED") {
-        console.log(`Sending order ${externalId} to Furgonetka...`);
+        console.log(
+          "\x1b[96m%s\x1b[0m",
+          `[Payment] Sending ${externalId} to Furgonetka`,
+        );
         const result = await createFurgonetkaPackage(currentOrder);
         if (!result.success) {
           console.error(
-            `Furgonetka error for order ${externalId}:`,
+            "\x1b[91m%s\x1b[0m",
+            `[Furgonetka] error for order ${externalId}:`,
             result.error,
           );
         }
@@ -367,7 +385,10 @@ router.post("/notifications", async (req: Request, res: Response) => {
         currentOrder.status === "PENDING" || currentOrder.status === "NEW";
 
       if (failureStatuses.includes(newStatus) && wasPending) {
-        console.log(`Restoring stock for refused order ${externalId}`);
+        console.log(
+          "\x1b[96m%s\x1b[0m",
+          `[Payment] Restoring stock for refused order ${externalId}`,
+        );
         await prisma.$transaction(
           currentOrder.items.map((item) =>
             prisma.book.update({

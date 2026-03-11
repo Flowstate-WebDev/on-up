@@ -1,55 +1,65 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
-import { useAuth } from '@/context/AuthContext'
-import { Heading } from '@/components/ui/Heading'
-import { UserDataBlock } from './components/UserDataBlock/UserDataBlock'
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { useAuth } from "@/context/AuthContext";
+import { Heading } from "@/components/ui/Heading";
+import { UserDataBlock } from "./components/UserDataBlock/UserDataBlock";
+import { OrderHistory } from "./components/OrderHistory/OrderHistory";
 
-export const Route = createFileRoute('/konto/')({
+export const Route = createFileRoute("/konto/")({
   beforeLoad: ({ context }) => {
-    document.title = 'On-Up | Moje konto'
+    document.title = "On-Up | Moje konto";
     if (!context.auth.isAuthenticated) {
       throw redirect({
-        to: '/konto/login',
-      })
+        to: "/konto/login",
+      });
     }
   },
   component: AccountPage,
-})
+});
 
 function AccountPage() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   if (!user) {
-    return null
+    return null;
   }
 
   const handleLogout = async () => {
-    await logout()
+    await logout();
     navigate({
-      to: '/konto/login',
-    })
-  }
+      to: "/konto/login",
+    });
+  };
 
   const userData = [
-    { label: 'Nazwa użytkownika', value: user.username },
-    { label: 'Adres E-mail', value: user.email },
-    { label: 'Numer Telefonu', value: user.phone || 'Nie podano' },
-    { label: 'Typ konta', value: user.role === 'admin' ? 'Administrator' : 'Użytkownik' },
-  ]
+    { label: "Nazwa użytkownika", value: user.username },
+    { label: "Adres E-mail", value: user.email },
+    { label: "Numer Telefonu", value: user.phone || "Nie podano" },
+    {
+      label: "Typ konta",
+      value: user.role === "admin" ? "Administrator" : "Użytkownik",
+    },
+  ];
 
   return (
-    <section className='w-full xl:w-2/3 grid grid-cols-2'>
-      <div className="">
+    <section className="w-full xl:w-5/6 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 py-8">
+      <div className="space-y-4">
         <Heading size="xl">Dzień dobry, {user.username}!</Heading>
-        <p className="text-text-tertiary -mt-4 mb-8">Zarządzaj swoim kontem i danymi</p>
+        <p className="text-text-tertiary -mt-4 mb-8">
+          Zarządzaj swoim kontem i danymi
+        </p>
 
         {userData.map((data) => (
-          <UserDataBlock key={data.label} label={data.label} value={data.value} />
+          <UserDataBlock
+            key={data.label}
+            label={data.label}
+            value={data.value}
+          />
         ))}
 
-        {user.role === 'admin' && (
+        {user.role === "admin" && (
           <button
-            onClick={() => navigate({ to: '/konto/admin' })}
+            onClick={() => navigate({ to: "/konto/admin" })}
             className="mt-4 w-full bg-primary-500/10 hover:bg-primary-500/20 text-primary-500 font-semibold py-3 rounded-xl border border-primary-500/20 transition-all duration-200 cursor-pointer text-center"
           >
             Panel administracyjny
@@ -63,9 +73,9 @@ function AccountPage() {
           Wyloguj się
         </button>
       </div>
-      <div>
-        <p>tutaj będzie historia zamówień</p>
+      <div className="pl-0 lg:pl-12">
+        <OrderHistory />
       </div>
     </section>
-  )
+  );
 }

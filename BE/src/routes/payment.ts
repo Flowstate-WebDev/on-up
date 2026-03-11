@@ -51,6 +51,18 @@ router.post("/create", async (req: Request, res: Response) => {
       if (existingUser) userId = existingUser.id;
     }
 
+    if (userId) {
+      console.log(
+        "\x1b[92m%s\x1b[0m",
+        `[Payment] Creating order for registered user: ${userId}`,
+      );
+    } else {
+      console.log(
+        "\x1b[93m%s\x1b[0m",
+        `[Payment] Creating order for guest: ${email}`,
+      );
+    }
+
     // TRANSAKCJA: Sprawdzenie dostępności -> Obliczenie Ceny -> Rezerwacja Towaru (Odejmowanie) -> Utworzenie Zamówienia
     const result = await prisma.$transaction(async (tx) => {
       let calculatedTotal = 0;

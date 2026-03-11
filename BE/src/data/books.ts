@@ -41,7 +41,9 @@ export async function createBook(data: BookData) {
       orderBy: { id: "desc" },
     });
 
-    const nextId = lastBook ? lastBook.id + 1 : 1;
+    const nextId = lastBook
+      ? (parseInt(String(lastBook.id), 10) + 1).toString()
+      : "1";
 
     console.log(
       "\x1b[93m%s\x1b[0m",
@@ -81,7 +83,7 @@ export async function createBook(data: BookData) {
 
 export async function updateBook(id: string | number, data: Partial<BookData>) {
   try {
-    const numericId = typeof id === "string" ? parseInt(id, 10) : id;
+    const stringId = String(id);
     const { professionIds, qualificationIds, ...bookData } = data;
 
     // Remove ID from bookData if it exists to avoid trying to update PK
@@ -107,7 +109,7 @@ export async function updateBook(id: string | number, data: Partial<BookData>) {
     }
 
     return await prisma.book.update({
-      where: { id: numericId },
+      where: { id: stringId },
       data: updateData,
       include: {
         professions: { include: { profession: true } },
@@ -122,15 +124,13 @@ export async function updateBook(id: string | number, data: Partial<BookData>) {
 
 export async function deleteBook(id: string | number) {
   try {
-    const numericId = typeof id === "string" ? parseInt(id, 10) : id;
+    const stringId = String(id);
 
     return await prisma.book.delete({
-      where: { id: numericId },
+      where: { id: stringId },
     });
   } catch (error: any) {
     console.error("\x1b[91m%s\x1b[0m", "[Prisma] Error (deleteBook):", error);
     throw error;
   }
 }
-
-export default getBooks;

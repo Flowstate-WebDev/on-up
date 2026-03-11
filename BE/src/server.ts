@@ -17,7 +17,13 @@ app.use(
   }),
 );
 
+// Load dynamic routes
 const router = await setupRoutes();
+console.log("\x1b[92m%s\x1b[0m", "[Server] Routes setup complete");
 app.use("/api", router);
+
+app.get("/api/test-ping", (req, res) => {
+  res.json({ message: "pong" });
+});
 
 export default app;

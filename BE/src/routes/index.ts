@@ -24,6 +24,11 @@ export async function setupRoutes() {
         file !== "index.js",
     );
 
+  console.log(
+    "\x1b[94m%s\x1b[0m",
+    `[Router] Found route files: ${files.join(", ")}`,
+  );
+
   for (const file of files) {
     const routeName = path.parse(file).name;
     const filePath = path.join(__dirname, file);
@@ -37,8 +42,8 @@ export async function setupRoutes() {
 
       router.use(prefix, module.default);
       console.log(
-        "\x1b[95m%s\x1b[0m",
-        `[Router] Dynamically loaded ${routeName} at /api${prefix}`,
+        "\x1b[94m%s\x1b[0m",
+        `[Router] Loaded ${routeName} at /api${prefix}`,
       );
     }
   }

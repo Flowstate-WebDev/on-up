@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Heading } from "@/components/ui/Heading";
 import { useCart } from "@/context/CartContext";
-import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/Input";
 import { PriceSummary } from "./components/PriceSummary";
 
@@ -17,10 +18,11 @@ declare global {
 
 function PodsumowaniePage() {
   const { groupedItems, totalPrice, clearCart } = useCart();
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    phone: "",
+    email: user?.email || "",
+    phone: user?.phone || "",
     firstName: "",
     lastName: "",
     city: "",
@@ -29,6 +31,17 @@ function PodsumowaniePage() {
     building: "",
     apartment: "",
   });
+
+  // Pre-fill form when user state changes
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        email: user.email,
+        phone: user.phone,
+      }));
+    }
+  }, [user]);
 
   const [shippingMethod, setShippingMethod] = useState("inpost");
   const [shippingPoint, setShippingPoint] = useState("");
@@ -57,6 +70,7 @@ function PodsumowaniePage() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           email: formData.email,
           phone: formData.phone,

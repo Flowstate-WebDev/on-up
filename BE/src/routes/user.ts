@@ -33,4 +33,34 @@ router.get("/me", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+// GET /api/user/orders - Get current user's order history
+router.get("/orders", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      include: {
+        items: {
+          include: {
+            book: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.json(orders);
+  } catch (error) {
+    console.error(
+      "\x1b[91m%s\x1b[0m",
+      "[User] Error fetching user orders:",
+      error,
+    );
+    res.status(500).json({ error: "Failed to fetch order history" });
+  }
+});
+
 export default router;

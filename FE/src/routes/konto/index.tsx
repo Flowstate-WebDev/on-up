@@ -42,7 +42,7 @@ function AccountPage() {
   ];
 
   return (
-    <section className="w-full xl:w-5/6 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 py-8">
+    <section className="w-full xl:w-5/6 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 py-8 px-4">
       <div className="space-y-4">
         <Heading size="xl">Dzień dobry, {user.username}!</Heading>
         <p className="text-text-tertiary -mt-4 mb-8">

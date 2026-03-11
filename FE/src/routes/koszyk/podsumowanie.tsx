@@ -116,7 +116,7 @@ function PodsumowaniePage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div className="container mx-auto px-6 md:px-4 py-8 max-w-6xl">
       <Heading size="xl">Finalizacja zamówienia</Heading>
 
       <form
@@ -297,8 +297,8 @@ function PodsumowaniePage() {
                   </div>
                   {shippingMethod === method.id &&
                     (method.id === "inpost" || method.id === "orlen") && (
-                      <div className="mt-3 flex flex-col gap-2">
-                        <div className="flex gap-2">
+                      <div className="mt-3 flex flex-col gap-3">
+                        <div className="flex flex-col gap-2">
                           <Input
                             placeholder={
                               method.id === "inpost"
@@ -309,7 +309,7 @@ function PodsumowaniePage() {
                             readOnly
                             required
                             style="default"
-                            className="flex-1 bg-gray-50 cursor-not-allowed"
+                            className="bg-gray-50 cursor-not-allowed"
                             onChange={() => {}}
                           />
                           <button
@@ -344,14 +344,30 @@ function PodsumowaniePage() {
                                 );
                               }
                             }}
-                            className="bg-primary hover:bg-secondary text-text-obj px-4 py-2 rounded-lg font-semibold transition-colors text-sm whitespace-nowrap"
+                            className="w-full bg-primary hover:bg-secondary text-text-obj px-4 py-3 rounded-lg font-bold transition-colors text-sm uppercase tracking-wider shadow-sm flex items-center justify-center gap-2"
                           >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                            </svg>
                             Wybierz na mapie
                           </button>
                         </div>
-                        <p className="text-[10px] text-text-secondary italic">
-                          Wybierz punkt z mapy Furgonetki.
-                        </p>
                       </div>
                     )}
                 </label>

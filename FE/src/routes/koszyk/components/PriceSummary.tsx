@@ -31,7 +31,7 @@ export const PriceSummary = ({
               <span>
                 {Number(item.price).toFixed(2)} PLN x {item.quantity}
               </span>
-              <span className="font-semibold text-text-primary">
+              <span className="font-semibold text-text-primary text-xs md:text-sm">
                 {(Number(item.price) * item.quantity).toFixed(2)} PLN
               </span>
             </div>

@@ -6,6 +6,7 @@ import { JWT_SECRET, SALT_ROUNDS, NODE_ENV } from "../config/env.js";
 
 const router = Router();
 
+// POSTs
 router.post("/register", async (req: Request, res: Response) => {
   try {
     const { username, password, email, phone } = req.body;

@@ -28,7 +28,7 @@ router.post("/create", async (req: Request, res: Response) => {
       !items.length ||
       !address
     ) {
-      return res.status(400).json({ error: "Missing required fields" });
+      return res.status(400).json({ error: "Brakuje wymaganych danych do złożenia zamówienia!" });
     }
 
     // Sprawdź czy użytkownik jest zalogowany

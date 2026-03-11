@@ -4,6 +4,7 @@ import { authMiddleware } from "../middleware/auth.js";
 
 const router = Router();
 
+// GETs
 router.get("/", async (req: Request, res: Response) => {
   try {
     const books = await getBooks();
@@ -13,7 +14,6 @@ router.get("/", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
-
 router.get("/:slug", async (req: Request, res: Response) => {
   try {
     const books = await getBooks();
@@ -28,6 +28,7 @@ router.get("/:slug", async (req: Request, res: Response) => {
   }
 });
 
+// POSTs
 router.post("/", authMiddleware, async (req: Request, res: Response) => {
   try {
     console.log(
@@ -43,6 +44,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+// PUTs
 router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const book = await updateBook(req.params.id as string, req.body);
@@ -53,6 +55,7 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+// DELETEs
 router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     await deleteBook(req.params.id as string);

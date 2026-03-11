@@ -28,7 +28,9 @@ router.post("/create", async (req: Request, res: Response) => {
       !items.length ||
       !address
     ) {
-      return res.status(400).json({ error: "Brakuje wymaganych danych do złożenia zamówienia!" });
+      return res
+        .status(400)
+        .json({ error: "Brakuje wymaganych danych do złożenia zamówienia!" });
     }
 
     // Sprawdź czy użytkownik jest zalogowany
@@ -325,7 +327,7 @@ router.post("/notifications", async (req: Request, res: Response) => {
     }
 
     const { externalId, status, paymentId } = req.body;
-    console.log("\x1b[96m%s\x1b[0m", `[Payment]: ${status} ${externalId}`);
+    console.log("\x1b[96m%s\x1b[0m", `[Payment]: ${status} for ${externalId}`);
 
     // 2. Mapowanie statusów PayNow na statusy Twojej bazy (OrderStatus)
     const statusMap: Record<string, any> = {

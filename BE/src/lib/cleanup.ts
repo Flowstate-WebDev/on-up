@@ -77,7 +77,7 @@ export function startOrderCleanupJob(
 ) {
   console.log(
     "\x1b[93m%s\x1b[0m",
-    `[Cleanup] Starting background job... Interval: ${intervalMinutes}m, Timeout: ${timeoutMinutes}m`,
+    `[Cleanup] Starting - Interval: ${intervalMinutes}m, Timeout: ${timeoutMinutes}m`,
   );
 
   // Uruchom od razu przy starcie, a potem co interwał

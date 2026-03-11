@@ -7,5 +7,5 @@ app.listen(3001, () => {
   // Start periodic cleanup of expired pending orders
   // Interval: 2 minutes
   // Timeout: 15 minutes
-  startOrderCleanupJob(1, 1);
+  startOrderCleanupJob(2, 15);
 });

@@ -69,7 +69,7 @@ export async function createBook(data: BookData) {
       },
     });
   } catch (error: any) {
-    console.error("Prisma Error (createBook):", error);
+    console.error("\x1b[91m%s\x1b[0m", "[Prisma] Error (createBook):", error);
     if (error.code === "P2002") {
       throw new Error(
         `Produkt o tym tytule lub slugu już istnieje (${error.meta?.target})`,
@@ -115,7 +115,7 @@ export async function updateBook(id: string | number, data: Partial<BookData>) {
       },
     });
   } catch (error: any) {
-    console.error("Prisma Error (updateBook):", error);
+    console.error("\x1b[91m%s\x1b[0m", "[Prisma] Error (updateBook):", error);
     throw error;
   }
 }
@@ -124,34 +124,11 @@ export async function deleteBook(id: string | number) {
   try {
     const numericId = typeof id === "string" ? parseInt(id, 10) : id;
 
-    return await prisma.$transaction(
-      async (tx) => {
-        // 1. Delete the book
-        const deleted = await tx.book.delete({
-          where: { id: numericId },
-        });
-
-        // 2. Shift all subsequent IDs down by 1 to fill the gap
-        const bToShift = await tx.book.findMany({
-          where: { id: { gt: numericId } },
-          orderBy: { id: "asc" },
-        });
-
-        for (const book of bToShift) {
-          await tx.book.update({
-            where: { id: book.id },
-            data: { id: book.id - 1 },
-          });
-        }
-
-        return deleted;
-      },
-      {
-        timeout: 10000, // Higher timeout for sequential updates
-      },
-    );
+    return await prisma.book.delete({
+      where: { id: numericId },
+    });
   } catch (error: any) {
-    console.error("Prisma Error (deleteBook):", error);
+    console.error("\x1b[91m%s\x1b[0m", "[Prisma] Error (deleteBook):", error);
     throw error;
   }
 }

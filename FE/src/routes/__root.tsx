@@ -1,10 +1,10 @@
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
-import type { AuthContextType } from '@/context/AuthContext';
-import type { CartContextType } from '@/context/CartContext';
+import type { AuthContextType } from "@/context/AuthContext";
+import type { CartContextType } from "@/context/CartContext";
 
 interface MyRouterContext {
   auth: AuthContextType;
@@ -13,16 +13,16 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
-})
+});
 
 function RootComponent() {
   return (
-    <div className='flex flex-col min-h-screen'>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className='relative flex-1 px-8 flex flex-col justify-center items-center'>
+      <main className="relative flex-1 px-2 flex flex-col justify-center items-center">
         <Outlet />
       </main>
       <Footer />
     </div>
-  )
+  );
 }

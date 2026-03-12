@@ -29,7 +29,7 @@ function SuccessPage() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-20 max-w-4xl text-center">
+    <div className="container mx-auto px-8 py-20 max-w-4xl text-center">
       <div className="animate-fadeIn space-y-12">
         {/* Success Icon with layered animation */}
         <div className="flex justify-center">

@@ -13,9 +13,15 @@ export const Footer = () => {
       </div>
       <div className="grid grid-cols-4">
         <div className="">
-          <Heading size="md">Kontakt</Heading>
-          <ContactBlock icon="/icons/mail-icon.svg" text="huelleigor1@outlook.com" />
-          <ContactBlock icon="/icons/mail-icon.svg" text="33patryk.jarosz@gmail.com" />
+          <Heading size="md">Realizacja strony</Heading>
+          <ContactBlock
+            icon="/icons/mail-icon.svg"
+            text="huelleigor1@outlook.com"
+          />
+          <ContactBlock
+            icon="/icons/mail-icon.svg"
+            text="33patryk.jarosz@gmail.com"
+          />
         </div>
         <div className="">
           <Heading size="md">Polityka strony</Heading>

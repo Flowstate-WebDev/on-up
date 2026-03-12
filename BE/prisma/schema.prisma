@@ -114,7 +114,7 @@ model OrderItem {
   orderId     String
   bookId      String
   orderNumber String?
-  book        Book    @relation(fields: [bookId], references: [id])
+  book        Book    @relation(fields: [bookId], references: [id], onDelete: Cascade)
   order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId])

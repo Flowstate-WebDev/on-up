@@ -6,6 +6,7 @@ interface Account {
   id: string;
   username: string;
   email: string;
+  phone?: string;
   role: Role;
   createdAt: string;
 }
@@ -48,17 +49,22 @@ export function AccountManagement() {
 
   const saveRole = async (accountId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/user/${accountId}/role`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: editRole }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `http://localhost:3001/api/user/${accountId}/role`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: editRole }),
+          credentials: "include",
+        },
+      );
 
       if (!response.ok) throw new Error("Failed to update role");
-      
+
       setAccounts((prev) =>
-        prev.map((acc) => (acc.id === accountId ? { ...acc, role: editRole } : acc))
+        prev.map((acc) =>
+          acc.id === accountId ? { ...acc, role: editRole } : acc,
+        ),
       );
       setEditingId(null);
       setErrorMsg(null);
@@ -68,13 +74,19 @@ export function AccountManagement() {
   };
 
   if (loading) {
-    return <div className="text-center py-8 text-text-tertiary">Ładowanie kont...</div>;
+    return (
+      <div className="text-center py-8 text-text-tertiary">
+        Ładowanie kont...
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-text-primary">Zarządzanie Kontami</h2>
+        <h2 className="text-2xl font-semibold text-text-primary">
+          Zarządzanie Kontami
+        </h2>
       </div>
 
       {errorMsg && (
@@ -88,8 +100,9 @@ export function AccountManagement() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-bg-secondary border-b border-border-secondary text-text-secondary text-sm">
-                <th className="p-4 font-medium">Użytkownik</th>
-                <th className="p-4 font-medium">Email</th>
+                <th className="p-4 font-medium min-w-[150px]">Użytkownik</th>
+                <th className="p-4 font-medium min-w-[200px]">Email</th>
+                <th className="p-4 font-medium">Telefon</th>
                 <th className="p-4 font-medium">Typ konta</th>
                 <th className="p-4 font-medium text-right">Akcje</th>
               </tr>
@@ -103,14 +116,35 @@ export function AccountManagement() {
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-accent-primary/10 rounded-xl text-accent-primary">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
                         </svg>
                       </div>
-                      <span className="font-medium text-text-primary">{account.username}</span>
+                      <span className="font-semibold text-text-primary">
+                        {account.username}
+                      </span>
                     </div>
                   </td>
-                  <td className="p-4 text-text-secondary">{account.email}</td>
+                  <td className="p-4 text-text-secondary text-sm">
+                    {account.email}
+                  </td>
+                  <td className="p-4 text-text-secondary text-sm">
+                    {account.phone ? (
+                      <span className="font-mono">{account.phone}</span>
+                    ) : (
+                      <span className="italic text-text-tertiary">Brak</span>
+                    )}
+                  </td>
                   <td className="p-4">
                     {editingId === account.id ? (
                       <select
@@ -118,18 +152,20 @@ export function AccountManagement() {
                         value={editRole}
                         onChange={(e) => setEditRole(e.target.value as Role)}
                       >
-                        <option value="USER">USER</option>
+                        <option value="USER">Użytkownik</option>
                         <option value="ADMIN">ADMIN</option>
                       </select>
                     ) : (
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          account.role === "ADMIN"
-                            ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300"
-                            : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300"
+                        className={`inline-flex items-center text-[10px] font-bold tracking-widest uppercase ${
+                          account.role.toUpperCase() === "ADMIN"
+                            ? "text-purple-600 px-3 py-1"
+                            : "text-text-tertiary"
                         }`}
                       >
-                        {account.role}
+                        {account.role.toUpperCase() === "ADMIN"
+                          ? "ADMIN"
+                          : "Użytkownik"}
                       </span>
                     )}
                   </td>
@@ -141,8 +177,18 @@ export function AccountManagement() {
                           className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                           title="Zapisz"
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
                           </svg>
                         </button>
                         <button
@@ -150,8 +196,18 @@ export function AccountManagement() {
                           className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           title="Anuluj"
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
                           </svg>
                         </button>
                       </div>
@@ -161,8 +217,18 @@ export function AccountManagement() {
                         className="p-1.5 text-text-tertiary hover:text-accent-primary hover:bg-accent-primary/10 rounded-lg transition-colors"
                         title="Edytuj typ konta"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          />
                         </svg>
                       </button>
                     )}
@@ -171,7 +237,10 @@ export function AccountManagement() {
               ))}
               {accounts.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-text-tertiary">
+                  <td
+                    colSpan={6}
+                    className="p-8 text-center text-text-tertiary"
+                  >
                     Brak kont do wyświetlenia
                   </td>
                 </tr>

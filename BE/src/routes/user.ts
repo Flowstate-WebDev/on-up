@@ -10,7 +10,7 @@ router.get("/me", authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.userId;
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: userId as string },
       select: {
         id: true,
         username: true,
@@ -72,7 +72,7 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
 
     // Check if the user exists
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: userId as string },
     });
 
     if (!user) {
@@ -82,20 +82,20 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
     const updateData: any = {};
 
     if (username && username !== user.username) {
-      const existing = await prisma.user.findUnique({ where: { username } });
-      if (existing) return res.status(400).json({ error: "Username already taken" });
+      const existing = await prisma.user.findUnique({ where: { username: username as string } });
+      if (existing) return res.status(400).json({ error: "Ta nazwa użytkownika jest już zajęta" });
       updateData.username = username;
     }
 
     if (email && email !== user.email) {
-      const existing = await prisma.user.findUnique({ where: { email } });
-      if (existing) return res.status(400).json({ error: "Email already taken" });
+      const existing = await prisma.user.findUnique({ where: { email: email as string } });
+      if (existing) return res.status(400).json({ error: "Ten adres e-mail jest już zajęty" });
       updateData.email = email;
     }
 
     if (phone && phone !== user.phone) {
-      const existing = await prisma.user.findUnique({ where: { phone } });
-      if (existing) return res.status(400).json({ error: "Phone number already taken" });
+      const existing = await prisma.user.findUnique({ where: { phone: phone as string } });
+      if (existing) return res.status(400).json({ error: "Ten numer telefonu jest już zajęty" });
       updateData.phone = phone;
     }
 
@@ -108,7 +108,7 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
     }
 
     const updatedUser = await prisma.user.update({
-      where: { id: userId },
+      where: { id: userId as string },
       data: updateData,
       select: {
         id: true,
@@ -130,11 +130,46 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+router.post("/change-password", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ error: "Old and new password are required" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId as string },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Stare hasło jest nieprawidłowe" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+    await prisma.user.update({
+      where: { id: userId as string },
+      data: { password: hashedPassword },
+    });
+
+    res.json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("[User] Error changing password:", error);
+    res.status(500).json({ error: "Failed to change password" });
+  }
+});
+
 router.get("/all", authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.userId;
-    const currentUser = await prisma.user.findUnique({ where: { id: userId } });
-    if (!currentUser || currentUser.role !== "ADMIN") {
+    const currentUser = await prisma.user.findUnique({ where: { id: userId as string } });
+    if (!currentUser || currentUser.role.toUpperCase() !== "ADMIN") {
       return res.status(403).json({ error: "Forbidden: Admins only" });
     }
 
@@ -144,6 +179,7 @@ router.get("/all", authMiddleware, async (req: Request, res: Response) => {
         username: true,
         email: true,
         role: true,
+        phone: true,
         createdAt: true,
       },
       orderBy: { createdAt: "desc" },
@@ -159,8 +195,8 @@ router.get("/all", authMiddleware, async (req: Request, res: Response) => {
 router.put("/:id/role", authMiddleware, async (req: Request, res: Response) => {
   try {
     const adminId = (req as any).user.userId;
-    const adminUser = await prisma.user.findUnique({ where: { id: adminId } });
-    if (!adminUser || adminUser.role !== "ADMIN") {
+    const adminUser = await prisma.user.findUnique({ where: { id: adminId as string } });
+    if (!adminUser || adminUser.role.toUpperCase() !== "ADMIN") {
       return res.status(403).json({ error: "Forbidden: Admins only" });
     }
 
@@ -172,7 +208,7 @@ router.put("/:id/role", authMiddleware, async (req: Request, res: Response) => {
     }
 
     const updatedUser = await prisma.user.update({
-      where: { id: targetUserId },
+      where: { id: targetUserId as string },
       data: { role },
       select: { id: true, username: true, email: true, role: true },
     });

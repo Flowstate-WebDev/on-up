@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useUpdateOrderStatus } from "@/hooks/queries/admin/useAdminOrders";
-import { useToast } from "@/context/ToastContext";
+// import { useUpdateOrderStatus } from "@/hooks/queries/admin/useAdminOrders";
+// import { useToast } from "@/context/ToastContext";
 
 interface OrderRowProps {
   order: any;
@@ -8,20 +8,20 @@ interface OrderRowProps {
 
 export function OrderRow({ order }: OrderRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { showToast } = useToast();
-  const updateStatusMutation = useUpdateOrderStatus();
+  // const { showToast } = useToast();
+  // const updateStatusMutation = useUpdateOrderStatus();
 
-  const handleStatusChange = async (newStatus: string) => {
-    try {
-      await updateStatusMutation.mutateAsync({
-        id: order.id,
-        status: newStatus,
-      });
-      showToast("Status zamówienia zaktualizowany", "success");
-    } catch (err: any) {
-      showToast("Błąd: " + err.message, "error");
-    }
-  };
+  // const handleStatusChange = async (newStatus: string) => {
+  //   try {
+  //     await updateStatusMutation.mutateAsync({
+  //       id: order.id,
+  //       status: newStatus,
+  //     });
+  //     showToast("Status zamówienia zaktualizowany", "success");
+  //   } catch (err: any) {
+  //     showToast("Błąd: " + err.message, "error");
+  //   }
+  // };
 
   const statusColors: Record<string, string> = {
     PENDING: "bg-yellow-100 text-yellow-700 border-yellow-200",
@@ -107,7 +107,7 @@ export function OrderRow({ order }: OrderRowProps) {
             {/* Items */}
             <div className="space-y-4">
               <h4 className="text-sm font-bold text-text-tertiary uppercase tracking-widest flex items-center gap-2">
-                📦 Produkty
+                Produkty
               </h4>
               <div className="space-y-2">
                 {order.items.map((item: any) => (
@@ -135,7 +135,7 @@ export function OrderRow({ order }: OrderRowProps) {
             <div className="space-y-6">
               <div className="space-y-4">
                 <h4 className="text-sm font-bold text-text-tertiary uppercase tracking-widest flex items-center gap-2">
-                  📍 Adres Dostawy
+                  Adres Dostawy
                 </h4>
                 <div className="bg-bg-primary p-4 rounded-xl border border-border-secondary text-sm space-y-1">
                   <p className="font-bold text-text-primary">
@@ -151,7 +151,7 @@ export function OrderRow({ order }: OrderRowProps) {
                     {order.customerPostalCode} {order.customerCity}
                   </p>
                   <p className="text-text-secondary mt-2">
-                    📞 {order.customerPhone}
+                    {order.customerPhone}
                   </p>
                   <div className="mt-3 pt-3 border-t border-border-secondary flex gap-2 flex-wrap">
                     <span className="text-[10px] font-bold text-text-tertiary uppercase">
@@ -166,10 +166,10 @@ export function OrderRow({ order }: OrderRowProps) {
                 </div>
               </div>
 
-              {/* Status Change */}
-              <div className="space-y-3">
+              {/* Status Change - Commented out as requested */}
+              {/* <div className="space-y-3">
                 <h4 className="text-sm font-bold text-text-tertiary uppercase tracking-widest flex items-center gap-2">
-                  ⚡ Akcje
+                  Akcje
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {[
@@ -197,7 +197,7 @@ export function OrderRow({ order }: OrderRowProps) {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

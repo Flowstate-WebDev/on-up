@@ -1,5 +1,5 @@
-import type { Product } from "@/data/mocks/products"
+import type { Product } from "@/data/mocks/products";
 
 export type ProductCardProps = {
-  data: Product
-}
+  data: Product;
+};

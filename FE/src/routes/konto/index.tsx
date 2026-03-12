@@ -1,9 +1,10 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/context/AuthContext";
 import { Heading } from "@/components/ui/Heading";
-import { UserDataBlock } from "./components/UserDataBlock";
+import { UserDataBlock, PasswordChangeSection } from "./components/UserDataBlock";
 import { OrderHistory } from "./components/OrderHistory";
 import { Button } from "@/components/ui/Button";
+import { useToast } from "@/context/ToastContext";
 
 export const Route = createFileRoute("/konto/")({
   beforeLoad: ({ context }) => {
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/konto/")({
 function AccountPage() {
   const { user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   if (!user) {
     return null;
@@ -43,13 +45,34 @@ function AccountPage() {
       if (res.ok) {
         const data = await res.json();
         updateUser(data.user);
+        showToast("Dane zostały zaktualizowane", "success");
       } else {
         const error = await res.json();
-        alert(error.error || "Błąd podczas aktualizacji danych");
+        showToast(error.error || "Błąd podczas aktualizacji danych", "error");
         throw new Error(error.error);
       }
     } catch (error) {
       console.error("Update failed:", error);
+      throw error;
+    }
+  };
+
+  const handlePasswordChange = async (oldPassword: string, newPassword: string) => {
+    try {
+      const res = await fetch("http://localhost:3001/api/user/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ oldPassword, newPassword }),
+        credentials: "include",
+      });
+      if (res.ok) {
+        showToast("Hasło zostało zmienione", "success");
+      } else {
+        const error = await res.json();
+        throw new Error(error.error || "Błąd podczas zmiany hasła");
+      }
+    } catch (error: any) {
+      console.error("Password change failed:", error);
       throw error;
     }
   };
@@ -60,24 +83,23 @@ function AccountPage() {
       value: user.username,
       field: "username",
       editable: true,
+      onValidate: (val: string) => val.length < 3 ? "Nazwa użytkownika musi mieć min. 3 znaki" : undefined
     },
     { label: "Adres E-mail", value: user.email, field: "email", editable: true },
     {
       label: "Numer Telefonu",
-      value: user.phone || "Brak podanego numeru",
+      value: user.phone || "",
       field: "phone",
       editable: true,
-    },
-    {
-      label: "Hasło",
-      value: "********",
-      field: "password",
-      editable: true,
-      type: "password" as const,
+      onValidate: (val: string) => {
+        const phoneRegex = /^[0-9]{9}$/;
+        if (!phoneRegex.test(val)) return "Numer telefonu musi składać się z dokładnie 9 cyfr";
+        return undefined;
+      }
     },
     {
       label: "Typ konta",
-      value: user.role === "admin" ? "Administrator" : "Użytkownik",
+      value: user.role === "ADMIN" ? "Administrator" : "Użytkownik",
       editable: false,
     },
   ];
@@ -92,7 +114,7 @@ function AccountPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          {user.role === "admin" && (
+          {user.role.toUpperCase() === "ADMIN" && (
             <Button
               style="outline"
               onClick={() => navigate({ to: "/konto/admin" })}
@@ -135,7 +157,7 @@ function AccountPage() {
                 label={data.label}
                 value={data.value}
                 editable={data.editable}
-                type={data.type}
+                onValidate={(data as any).onValidate}
                 onSave={
                   data.field
                     ? (newValue) => handleUpdate(data.field!, newValue)
@@ -143,6 +165,7 @@ function AccountPage() {
                 }
               />
             ))}
+            <PasswordChangeSection onSave={handlePasswordChange} />
           </div>
         </div>
 

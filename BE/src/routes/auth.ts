@@ -61,13 +61,17 @@ router.post("/login", async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(401).json({ error: "Invalid username or password" });
+      return res
+        .status(401)
+        .json({ error: "Nieprawidłowa nazwa użytkownika lub hasło" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid username or password" });
+      return res
+        .status(401)
+        .json({ error: "Nieprawidłowa nazwa użytkownika lub hasło" });
     }
 
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, {

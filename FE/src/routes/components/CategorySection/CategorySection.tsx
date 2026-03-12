@@ -1,15 +1,21 @@
-import { CategoryHeading } from './CategoryHeading';
-import { ProductCard } from '@/routes/components/ProductCard';
+import { CategoryHeading } from "./CategoryHeading";
+import { ProductCard } from "@/routes/components/ProductCard";
 
-export function CategorySection({ title, books }: { title: string, books: any[] }) {
+export function CategorySection({
+  title,
+  books,
+}: {
+  title: string;
+  books: any[];
+}) {
   return (
     <section>
       <CategoryHeading>{title}</CategoryHeading>
-      <div className='flex flex-wrap justify-center gap-x-6 gap-y-12 py-4 w-full md:max-w-4/5 mx-auto'>
+      <div className="flex flex-wrap justify-center gap-x-6 gap-y-12 py-4 w-full md:max-w-4/5 mx-auto">
         {books.map((book: any) => (
           <ProductCard key={book.id} data={book} />
         ))}
       </div>
     </section>
-  )
+  );
 }

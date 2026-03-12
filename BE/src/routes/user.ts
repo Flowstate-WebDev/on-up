@@ -130,5 +130,59 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+router.get("/all", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+    const currentUser = await prisma.user.findUnique({ where: { id: userId } });
+    if (!currentUser || currentUser.role !== "ADMIN") {
+      return res.status(403).json({ error: "Forbidden: Admins only" });
+    }
+
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.json(users);
+  } catch (error) {
+    console.error("[User] Error fetching all users:", error);
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
+
+router.put("/:id/role", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const adminId = (req as any).user.userId;
+    const adminUser = await prisma.user.findUnique({ where: { id: adminId } });
+    if (!adminUser || adminUser.role !== "ADMIN") {
+      return res.status(403).json({ error: "Forbidden: Admins only" });
+    }
+
+    const targetUserId = req.params.id;
+    const { role } = req.body;
+
+    if (!role || !["USER", "ADMIN"].includes(role)) {
+      return res.status(400).json({ error: "Invalid role specified" });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: targetUserId },
+      data: { role },
+      select: { id: true, username: true, email: true, role: true },
+    });
+
+    res.json({ message: "User role updated", user: updatedUser });
+  } catch (error) {
+    console.error("[User] Error updating user role:", error);
+    res.status(500).json({ error: "Failed to update user role" });
+  }
+});
+
 export default router;
 

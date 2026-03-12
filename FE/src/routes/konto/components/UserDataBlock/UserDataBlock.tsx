@@ -1,4 +1,6 @@
 import { useState, type ReactNode } from "react";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 interface UserDataBlockProps {
   label: string;
@@ -40,56 +42,61 @@ export const UserDataBlock = ({
   };
 
   return (
-    <div className="group relative bg-bg-primary/50 hover:bg-bg-primary border border-border-secondary/60 p-4 rounded-2xl transition-all duration-300">
-      <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+    <div className="group flex flex-col sm:flex-row sm:items-center justify-between py-5 border-b border-border-secondary last:border-0 gap-4">
+      <div className="flex-1">
+        <span className="block text-sm font-medium text-text-tertiary mb-1">
           {label}
         </span>
-        {editable && !isEditing && (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="text-[10px] font-bold uppercase tracking-widest text-primary-500 hover:text-primary-600 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
-          >
-            Zmień
-          </button>
-        )}
-      </div>
-
-      <div className="flex justify-between items-center gap-4">
+        
         {isEditing ? (
-          <div className="flex-1 flex gap-2">
-            <input
+          <div className="flex flex-col sm:flex-row gap-3 mt-2">
+            <Input
               type={type}
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
-              className="flex-1 bg-bg-secondary border border-border-secondary rounded-lg px-3 py-1 text-sm text-text-primary focus:outline-none focus:border-primary-500"
+              className="w-full sm:max-w-xs"
               autoFocus
               disabled={isLoading}
             />
-            <div className="flex gap-2">
-              <button
+            <div className="flex items-center gap-2">
+              <Button
+                style="default"
                 onClick={handleSave}
                 disabled={isLoading}
-                className="text-[10px] font-bold uppercase tracking-widest text-green-500 hover:text-green-600 disabled:opacity-50 cursor-pointer"
               >
                 {isLoading ? "..." : "Zapisz"}
-              </button>
-              <button
+              </Button>
+              <Button
+                style="outline"
                 onClick={handleCancel}
                 disabled={isLoading}
-                className="text-[10px] font-bold uppercase tracking-widest text-red-500 hover:text-red-600 disabled:opacity-50 cursor-pointer"
               >
                 Anuluj
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
-          <p className="text-text-primary font-semibold text-[15px]">
-            {type === "password" ? "••••••••" : value}
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-text-primary text-base font-semibold">
+              {type === "password" ? "••••••••" : value}
+            </p>
+          </div>
         )}
-        {children}
+      </div>
+      
+      <div className="flex items-center gap-3">
+         {editable && !isEditing && (
+            <Button
+              style="outline"
+              onClick={() => setIsEditing(true)}
+              className="py-1 px-3 text-sm"
+            >
+              Zmień
+            </Button>
+          )}
+          {children}
       </div>
     </div>
   );
-};
+};
+

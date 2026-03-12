@@ -5,3 +5,15 @@
 - darmowa wysyłka od iluśtam zł - UNDER WORK
 - ukryć nr telefonu i adres ze stopki, nr telefonu przenieść do zakładki w politykach DONE Z TEGO CO WIDZIALEM
 - pobawić się w układ na głównej stronie
+
+- stopka do ogarnięcia, nwm co tam dać tbh
+- na mobilce strzałki z kategorii książek się dziwnie skalują
+- zakładka nauczyciel jest pusta, nwm co tam dać lol
+- dla login/register przydało by sie lekkie odświerzenie
+- zmiana hasła w panelu powinna być bardziej rozbudowana (stare hasło, nowe hasło, powtórz nowe hasło)
+- usuwanie książek nie działa (z tego co pamiętam)
+- wyjebać akcje z zamówień na admin panelu
+- wyświetlanie kont nie działa w adminie
+- konta użytkowników nie mają imienia i nazwiska (najwyżej w billingu)
+- ogarnąć wyświetlanie opisu dla danego produktu
+- ewentualnie zmienić wyświetlanie kategorii na głównej stronie w karuzelę

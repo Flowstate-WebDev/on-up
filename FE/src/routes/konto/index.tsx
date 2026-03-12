@@ -1,8 +1,9 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/context/AuthContext";
 import { Heading } from "@/components/ui/Heading";
-import { UserDataBlock } from "./components/UserDataBlock/UserDataBlock";
-import { OrderHistory } from "./components/OrderHistory/OrderHistory";
+import { UserDataBlock } from "./components/UserDataBlock";
+import { OrderHistory } from "./components/OrderHistory";
+import { Button } from "@/components/ui/Button";
 
 export const Route = createFileRoute("/konto/")({
   beforeLoad: ({ context }) => {
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/konto/")({
 });
 
 function AccountPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
 
   if (!user) {
@@ -31,51 +32,124 @@ function AccountPage() {
     });
   };
 
+  const handleUpdate = async (field: string, value: string) => {
+    try {
+      const res = await fetch("http://localhost:3001/api/user/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [field]: value }),
+        credentials: "include",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        updateUser(data.user);
+      } else {
+        const error = await res.json();
+        alert(error.error || "Błąd podczas aktualizacji danych");
+        throw new Error(error.error);
+      }
+    } catch (error) {
+      console.error("Update failed:", error);
+      throw error;
+    }
+  };
+
   const userData = [
-    { label: "Nazwa użytkownika", value: user.username },
-    { label: "Adres E-mail", value: user.email },
-    { label: "Numer Telefonu", value: user.phone || "Nie podano" },
+    {
+      label: "Nazwa użytkownika",
+      value: user.username,
+      field: "username",
+      editable: true,
+    },
+    { label: "Adres E-mail", value: user.email, field: "email", editable: true },
+    {
+      label: "Numer Telefonu",
+      value: user.phone || "Brak podanego numeru",
+      field: "phone",
+      editable: true,
+    },
+    {
+      label: "Hasło",
+      value: "********",
+      field: "password",
+      editable: true,
+      type: "password" as const,
+    },
     {
       label: "Typ konta",
       value: user.role === "admin" ? "Administrator" : "Użytkownik",
+      editable: false,
     },
   ];
 
   return (
-    <section className="w-full xl:w-5/6 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 py-8 px-4">
-      <div className="space-y-4">
-        <Heading size="xl">Dzień dobry, {user.username}!</Heading>
-        <p className="text-text-tertiary -mt-4 mb-8">
-          Zarządzaj swoim kontem i danymi
-        </p>
-
-        {userData.map((data) => (
-          <UserDataBlock
-            key={data.label}
-            label={data.label}
-            value={data.value}
-          />
-        ))}
-
-        {user.role === "admin" && (
-          <button
-            onClick={() => navigate({ to: "/konto/admin" })}
-            className="mt-4 w-full bg-primary-500/10 hover:bg-primary-500/20 text-primary-500 font-semibold py-3 rounded-xl border border-primary-500/20 transition-all duration-200 cursor-pointer text-center"
+    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 space-y-10">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border-secondary pb-6">
+        <div>
+          <Heading size="xl">Dzień dobry, {user.username}!</Heading>
+          <p className="text-text-tertiary">
+            Zarządzaj swoim kontem i danymi
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          {user.role === "admin" && (
+            <Button
+              style="outline"
+              onClick={() => navigate({ to: "/konto/admin" })}
+            >
+              Panel administracyjny
+            </Button>
+          )}
+          <Button
+            style="default"
+            onClick={handleLogout}
+            className="flex items-center gap-2"
           >
-            Panel administracyjny
-          </button>
-        )}
+            Wyloguj się
+            <svg
+              className="w-4 h-4 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+          </Button>
+        </div>
+      </div>
 
-        <button
-          onClick={handleLogout}
-          className="mt-4 w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 font-semibold py-3 rounded-xl border border-red-500/20 transition-all duration-200 cursor-pointer text-center"
-        >
-          Wyloguj się
-        </button>
-      </div>
-      <div className="pl-0 lg:pl-12">
-        <OrderHistory />
-      </div>
-    </section>
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="lg:col-span-12 xl:col-span-5 bg-bg-secondary rounded-2xl p-6 lg:p-8 border border-border-secondary shadow-sm">
+          <h2 className="text-2xl font-semibold text-text-primary mb-6">
+            Twoje Dane
+          </h2>
+          <div className="flex flex-col">
+            {userData.map((data) => (
+              <UserDataBlock
+                key={data.label}
+                label={data.label}
+                value={data.value}
+                editable={data.editable}
+                type={data.type}
+                onSave={
+                  data.field
+                    ? (newValue) => handleUpdate(data.field!, newValue)
+                    : undefined
+                }
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="lg:col-span-12 xl:col-span-7 bg-bg-secondary rounded-2xl p-6 lg:p-8 border border-border-secondary shadow-sm min-h-full">
+          <OrderHistory />
+        </div>
+      </section>
+    </div>
   );
 }

@@ -4,6 +4,7 @@ import { Heading } from "@/components/ui/Heading";
 import { TabNav } from "./components/AdminPanel/TabNav";
 import { ProductManagement } from "./components/AdminPanel/ProductManagement";
 import { OrderManagement } from "./components/AdminPanel/OrderManagement";
+import { AccountManagement } from "./components/AdminPanel/AccountManagement";
 
 export const Route = createFileRoute("/konto/admin")({
   component: AdminPanel,
@@ -43,16 +44,7 @@ function AdminPanel() {
         </Activity>
 
         <Activity mode={activeTab === "accounts" ? "visible" : "hidden"}>
-          <div className="animate-in fade-in zoom-in-95 duration-300">
-            <h2 className="text-2xl font-semibold text-text-primary mb-6">
-              Zarządzanie Kontami
-            </h2>
-            <div className="bg-bg-primary rounded-2xl p-8 text-center border border-border-secondary border-dashed">
-              <p className="text-text-tertiary">
-                Lista użytkowników pojawi się tutaj
-              </p>
-            </div>
-          </div>
+          <AccountManagement />
         </Activity>
       </div>
     </div>

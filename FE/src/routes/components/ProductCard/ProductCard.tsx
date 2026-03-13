@@ -11,7 +11,7 @@ export const ProductCard = ({ data }: ProductCardProps) => {
     <Link
       to="/sklep/$productId"
       params={{ productId: data.slug }}
-      className="w-[55%] sm:w-[45%] md:w-1/3 lg:w-1/4 xl:w-1/6 shadow-md rounded-lg overflow-clip flex flex-col bg-bg-secondary hover:shadow-lg transition-shadow"
+      className="w-[65%] sm:w-[45%] md:w-1/3 lg:w-1/4 xl:w-1/6 shadow-md rounded-lg overflow-clip flex flex-col bg-bg-secondary hover:shadow-lg transition-shadow"
     >
       <div className="aspect-4/5 relative shrink-0">
         <img

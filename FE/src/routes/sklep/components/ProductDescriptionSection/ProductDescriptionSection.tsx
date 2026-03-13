@@ -4,9 +4,9 @@ type Props = {
 
 export function ProductDescriptionSection({ description }: Props) {
   return (
-    <div className="py-16 mx-auto w-full text-center max-w-2/4">
+    <div className="py-16 mx-auto max-w-4xl px-4 text-center">
       <h1 className="text-2xl font-bold mb-4">Opis</h1>
-      <p>{description}</p>
+      <p className="leading-relaxed text-text-secondary">{description}</p>
     </div>
   );
 }

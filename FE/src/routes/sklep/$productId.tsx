@@ -25,7 +25,7 @@ function ProductPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center gap-y-10 md:flex-row md:justify-center-safe md:gap-x-42">
+      <div className="flex flex-col items-center gap-y-10 md:flex-row md:justify-center md:gap-x-12 lg:gap-x-24 px-4 md:px-8">
         <ProductImageGalery imageUrl={product.imageUrl} />
         <ProductDetailsSection product={product} />
       </div>

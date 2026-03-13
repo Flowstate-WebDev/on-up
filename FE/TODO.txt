@@ -1,4 +1,3 @@
-- dodać rok wydania dla podręczników
 - stopka do ogarnięcia, nwm co tam dać tbh
 - konta użytkowników nie mają imienia i nazwiska (najwyżej w billingu)
 - ewentualnie zmienić wyświetlanie kategorii na głównej stronie w karuzelę

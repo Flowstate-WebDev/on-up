@@ -1,7 +1,7 @@
 type Props = {
-  icon: string
-  text: string
-}
+  icon: string;
+  text: string;
+};
 
 export const ContactBlock = ({ icon, text }: Props) => {
   return (
@@ -11,7 +11,7 @@ export const ContactBlock = ({ icon, text }: Props) => {
         src={icon}
         alt=""
       />
-      <p>{text}</p>
+      <p className="text-sm">{text}</p>
     </div>
-  )
-}
+  );
+};

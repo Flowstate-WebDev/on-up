@@ -88,6 +88,16 @@ export function ProductRowEdit({
             />
           </div>
           <div className="space-y-1">
+            <AdminLabel>Rok wydania</AdminLabel>
+            <Input
+              type="number"
+              name="releaseYear"
+              value={formData.releaseYear}
+              onChange={onChange}
+              placeholder="np. 2024"
+            />
+          </div>
+          <div className="space-y-1">
             <AdminLabel>Plik obrazu (np. Photo.webp)</AdminLabel>
             <Input
               name="imageUrl"

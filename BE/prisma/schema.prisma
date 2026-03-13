@@ -41,6 +41,7 @@ model Book {
   price          Decimal             @db.Decimal(10, 2)
   imageUrl       String?
   stock          Int                 @default(0)
+  releaseYear    Int?
   professions    BookProfession[]
   qualifications BookQualification[]
   orderItems     OrderItem[]

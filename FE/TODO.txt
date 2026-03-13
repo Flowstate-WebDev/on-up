@@ -1,6 +1,5 @@
 - dodać rok wydania dla podręczników
 - stopka do ogarnięcia, nwm co tam dać tbh
-- zakładka nauczyciel jest pusta, nwm co tam dać lol
 - konta użytkowników nie mają imienia i nazwiska (najwyżej w billingu)
 - ewentualnie zmienić wyświetlanie kategorii na głównej stronie w karuzelę
 - flip book

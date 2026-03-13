@@ -6,6 +6,7 @@ export type Product = {
   price: number,
   imageUrl: string,
   stock: number,
+  releaseYear?: number,
   professions: { profession: { name: string } }[],
   qualifications: { qualification: { code: string } }[],
 }
@@ -19,6 +20,7 @@ export const products: Product[] = [
     price: 43.0,
     imageUrl: "ObslugaMagazynow.webp",
     stock: 10,
+    releaseYear: 2024,
     professions: [
       {
         profession: {
@@ -52,6 +54,7 @@ export const products: Product[] = [
     price: 42.00,
     imageUrl: "EksploatacjaSrodkow.webp",
     stock: 7,
+    releaseYear: 2023,
     professions: [
       {
         profession: {
@@ -95,6 +98,7 @@ export const products: Product[] = [
     price: 35.00,
     imageUrl: "OrganizacjaTransportu.webp",
     stock: 3,
+    releaseYear: 2024,
     professions: [
       {
         profession: {
@@ -117,6 +121,7 @@ export const products: Product[] = [
     price: 44.00,
     imageUrl: "RepetytoriumTesty.webp",
     stock: 12,
+    releaseYear: 2022,
     professions: [
       {
         profession: {

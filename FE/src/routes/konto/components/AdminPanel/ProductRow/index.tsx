@@ -37,6 +37,7 @@ export function ProductRow({
     stock: product?.stock || 0,
     imageUrl: product?.imageUrl || '',
     description: product?.description || '',
+    releaseYear: product?.releaseYear || '',
     professionIds: product?.professions?.map((p: any) => p.professionId) || [],
     qualificationIds: product?.qualifications?.map((q: any) => q.qualificationId) || [],
   });
@@ -48,6 +49,7 @@ export function ProductRow({
       stock: product.stock,
       imageUrl: product.imageUrl,
       description: product.description || '',
+      releaseYear: product.releaseYear || '',
       professionIds: product.professions?.map((p: any) => p.professionId) || [],
       qualificationIds: product.qualifications?.map((q: any) => q.qualificationId) || [],
     });
@@ -74,6 +76,7 @@ export function ProductRow({
       stock: Number(formData.stock) || 0,
       imageUrl: formData.imageUrl,
       description: formData.description,
+      releaseYear: formData.releaseYear !== '' ? Number(formData.releaseYear) : null,
       professionIds: formData.professionIds,
       qualificationIds: formData.qualificationIds,
     };

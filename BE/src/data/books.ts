@@ -7,6 +7,7 @@ interface BookData {
   price: number;
   imageUrl?: string;
   stock: number;
+  releaseYear?: number;
   professionIds?: string[];
   qualificationIds?: string[];
 }

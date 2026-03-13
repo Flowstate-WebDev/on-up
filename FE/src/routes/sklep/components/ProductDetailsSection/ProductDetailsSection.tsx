@@ -1,5 +1,6 @@
 import { ProductQualifsList } from './ProductQualifsList'
 import { ProductPrice } from './ProductPrice'
+import { ProductReleaseYear } from './ProductReleaseYear'
 import AddToCartForm from './AddToCartForm'
 import { Heading } from '@/components/ui/Heading'
 import { useCart } from '@/context/CartContext'
@@ -12,7 +13,7 @@ import type { ProductDetailsSectionProps } from './ProductDetailsSection.types'
 export const ProductDetailsSection = ({ product }: ProductDetailsSectionProps) => {
   const { addToCart } = useCart();
   const { showToast } = useToast();
-  const { professions, title, qualifications, price, stock } = product;
+  const { professions, title, qualifications, price, stock, releaseYear } = product;
 
   const handleAddToCart = (quantity: number) => {
     for (let i = 0; i < quantity; i++) {
@@ -25,6 +26,7 @@ export const ProductDetailsSection = ({ product }: ProductDetailsSectionProps) =
     <div className='content-center md:max-w-1/3'>
       <h2 className='font-semibold text-text-secondary'>{professions.map(p => p.profession.name).join(', ')}</h2>
       <Heading size='xl'>{title}</Heading>
+      <ProductReleaseYear releaseYear={releaseYear} />
       <ProductQualifsList qualifications={qualifications} />
       <ProductPrice price={price} />
       {stock > 0 ? (

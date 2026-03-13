@@ -64,6 +64,11 @@ export function ProductRowDisplay({
             <p className="text-[10px] font-bold text-text-tertiary uppercase">
               Stan: {product.stock}
             </p>
+            {product.releaseYear && (
+              <p className="text-[10px] font-bold text-text-tertiary uppercase">
+                Rok: {product.releaseYear}
+              </p>
+            )}
           </div>
         </div>
 

@@ -2,3 +2,5 @@
 - ewentualnie zmienić wyświetlanie kategorii na głównej stronie w karuzelę
 - flip book
 - po zmianie permisji buguje sie wyswietlana rola uzytkownika
+
+- sprawdzić jak zachowują się zamówienia po zmianie danych użytkownika (np czy email się zmienia)

@@ -17,6 +17,7 @@ router.get("/me", authMiddleware, async (req: Request, res: Response) => {
         email: true,
         phone: true,
         role: true,
+        billingAddress: true,
       },
     });
 
@@ -68,11 +69,12 @@ router.get("/orders", authMiddleware, async (req: Request, res: Response) => {
 router.put("/update", authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.userId;
-    const { username, email, phone, password } = req.body;
+    const { username, email, phone, password, firstname, lastname, city, postalCode, street, building, apartment } = req.body;
 
     // Check if the user exists
     const user = await prisma.user.findUnique({
       where: { id: userId as string },
+      include: { billingAddress: true },
     });
 
     if (!user) {
@@ -103,6 +105,33 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
       updateData.password = await bcrypt.hash(password, SALT_ROUNDS);
     }
 
+    const addressProvided = firstname !== undefined || lastname !== undefined || city !== undefined || postalCode !== undefined || street !== undefined || building !== undefined || apartment !== undefined;
+
+    if (addressProvided) {
+      updateData.billingAddress = {
+        upsert: {
+          create: {
+            firstname: firstname || "",
+            lastname: lastname || "",
+            city: city || "",
+            postalCode: postalCode || "",
+            street: street || "",
+            building: building || "",
+            apartment: apartment || null,
+          },
+          update: {
+            ...(firstname !== undefined && { firstname }),
+            ...(lastname !== undefined && { lastname }),
+            ...(city !== undefined && { city }),
+            ...(postalCode !== undefined && { postalCode }),
+            ...(street !== undefined && { street }),
+            ...(building !== undefined && { building }),
+            ...(apartment !== undefined && { apartment }),
+          }
+        }
+      };
+    }
+
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({ error: "No data to update" });
     }
@@ -116,6 +145,7 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
         email: true,
         phone: true,
         role: true,
+        billingAddress: true,
       },
     });
 
@@ -181,6 +211,7 @@ router.get("/all", authMiddleware, async (req: Request, res: Response) => {
         role: true,
         phone: true,
         createdAt: true,
+        billingAddress: true,
       },
       orderBy: { createdAt: "desc" },
     });

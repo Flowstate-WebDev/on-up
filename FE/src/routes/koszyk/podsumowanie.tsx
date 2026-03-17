@@ -23,13 +23,13 @@ function PodsumowaniePage() {
   const [formData, setFormData] = useState({
     email: user?.email || "",
     phone: user?.phone || "",
-    firstName: "",
-    lastName: "",
-    city: "",
-    postalCode: "",
-    street: "",
-    building: "",
-    apartment: "",
+    firstName: user?.billingAddress?.firstname || "",
+    lastName: user?.billingAddress?.lastname || "",
+    city: user?.billingAddress?.city || "",
+    postalCode: user?.billingAddress?.postalCode || "",
+    street: user?.billingAddress?.street || "",
+    building: user?.billingAddress?.building || "",
+    apartment: user?.billingAddress?.apartment || "",
   });
 
   // Pre-fill form when user state changes
@@ -37,8 +37,15 @@ function PodsumowaniePage() {
     if (user) {
       setFormData((prev) => ({
         ...prev,
-        email: user.email,
-        phone: user.phone,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+        firstName: user.billingAddress?.firstname || prev.firstName,
+        lastName: user.billingAddress?.lastname || prev.lastName,
+        city: user.billingAddress?.city || prev.city,
+        postalCode: user.billingAddress?.postalCode || prev.postalCode,
+        street: user.billingAddress?.street || prev.street,
+        building: user.billingAddress?.building || prev.building,
+        apartment: user.billingAddress?.apartment || prev.apartment,
       }));
     }
   }, [user]);

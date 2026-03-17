@@ -104,6 +104,16 @@ function AccountPage() {
     },
   ];
 
+  const billingData = [
+    { label: "Imię", value: user.billingAddress?.firstname || "", field: "firstname", editable: true },
+    { label: "Nazwisko", value: user.billingAddress?.lastname || "", field: "lastname", editable: true },
+    { label: "Miasto", value: user.billingAddress?.city || "", field: "city", editable: true },
+    { label: "Kod pocztowy", value: user.billingAddress?.postalCode || "", field: "postalCode", editable: true },
+    { label: "Ulica", value: user.billingAddress?.street || "", field: "street", editable: true },
+    { label: "Nr budynku", value: user.billingAddress?.building || "", field: "building", editable: true },
+    { label: "Nr lokalu", value: user.billingAddress?.apartment || "", field: "apartment", editable: true },
+  ];
+
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8 space-y-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border-secondary pb-6">
@@ -166,6 +176,23 @@ function AccountPage() {
               />
             ))}
             <PasswordChangeSection onSave={handlePasswordChange} />
+
+            <h2 className="text-2xl font-semibold text-text-primary mt-12 mb-6 border-t border-border-secondary pt-8">
+              Adres rozliczeniowy
+            </h2>
+            {billingData.map((data) => (
+              <UserDataBlock
+                key={data.label}
+                label={data.label}
+                value={data.value}
+                editable={data.editable}
+                onSave={
+                  data.field
+                    ? (newValue) => handleUpdate(data.field!, newValue)
+                    : undefined
+                }
+              />
+            ))}
           </div>
         </div>
 

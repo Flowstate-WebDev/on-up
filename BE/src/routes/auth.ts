@@ -9,7 +9,7 @@ const router = Router();
 // POSTs
 router.post("/register", async (req: Request, res: Response) => {
   try {
-    const { username, password, email, phone } = req.body;
+    const { username, password, email, phone, firstName, lastName, city, postalCode, street, building, apartment } = req.body;
 
     if (!username || !password || !email || !phone) {
       return res.status(400).json({ error: "All fields are required" });
@@ -29,13 +29,29 @@ router.post("/register", async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
+    const createData: any = {
+      username: username,
+      password: hashedPassword,
+      email: email,
+      phone: phone,
+    };
+
+    if (firstName && lastName && city && postalCode && street && building) {
+      createData.billingAddress = {
+        create: {
+          firstname: firstName,
+          lastname: lastName,
+          city: city,
+          postalCode: postalCode,
+          street: street,
+          building: building,
+          apartment: apartment || null,
+        }
+      };
+    }
+
     const user = await prisma.user.create({
-      data: {
-        username: username,
-        password: hashedPassword,
-        email: email,
-        phone: phone,
-      },
+      data: createData,
     });
 
     res

@@ -6,12 +6,23 @@ import React, {
   type ReactNode,
 } from "react";
 
+interface BillingAddress {
+  firstname: string;
+  lastname: string;
+  city: string;
+  postalCode: string;
+  street: string;
+  building: string;
+  apartment?: string | null;
+}
+
 interface User {
   id: string;
   username: string;
   email: string;
   phone: string;
   role: string;
+  billingAddress?: BillingAddress | null;
 }
 
 export interface AuthContextType {

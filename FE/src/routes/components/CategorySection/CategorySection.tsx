@@ -1,5 +1,6 @@
 import { CategoryHeading } from "./CategoryHeading";
 import { ProductCard } from "@/routes/components/ProductCard";
+import { ProductCarousel } from "@/routes/components/ProductCarousel";
 
 export function CategorySection({
   title,
@@ -9,12 +10,19 @@ export function CategorySection({
   books: any[];
 }) {
   return (
-    <section>
+    <section className="overflow-hidden">
       <CategoryHeading>{title}</CategoryHeading>
-      <div className="flex flex-wrap justify-center gap-x-6 gap-y-12 py-4 w-full md:max-w-4/5 mx-auto">
-        {books.map((book: any) => (
-          <ProductCard key={book.id} data={book} />
-        ))}
+      <div className="w-full">
+        <ProductCarousel>
+          {books.map((book: any) => (
+            <div
+              key={book.id}
+              className="shrink-0 w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5"
+            >
+              <ProductCard data={book} />
+            </div>
+          ))}
+        </ProductCarousel>
       </div>
     </section>
   );

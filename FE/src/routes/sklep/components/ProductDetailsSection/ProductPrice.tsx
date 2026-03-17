@@ -6,7 +6,7 @@ export function ProductPrice({ price }: Props) {
   const numericPrice = typeof price === "string" ? parseFloat(price) : price;
 
   return (
-    <p className="text-lg md:text-2xl text-left">
+    <p className="text-lg md:text-xl text-left">
       <span className="font-semibold">{numericPrice.toFixed(2)}</span>
       {" PLN"}
     </p>

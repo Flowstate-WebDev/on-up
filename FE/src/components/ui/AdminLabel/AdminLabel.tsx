@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface AdminLabelProps {
   children: ReactNode;
@@ -8,7 +8,7 @@ interface AdminLabelProps {
 
 export function AdminLabel({ children, htmlFor, className = "" }: AdminLabelProps) {
   return (
-    <label 
+    <label
       htmlFor={htmlFor}
       className={`block text-[10px] font-bold text-text-tertiary uppercase tracking-wider mb-1 ${className}`}
     >

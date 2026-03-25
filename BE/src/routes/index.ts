@@ -20,6 +20,7 @@ export async function setupRoutes() {
     .filter(
       (file) =>
         (file.endsWith(".ts") || file.endsWith(".js")) &&
+        !file.endsWith(".d.ts") && // Prevents crash on compiled typing files
         file !== "index.ts" &&
         file !== "index.js",
     );

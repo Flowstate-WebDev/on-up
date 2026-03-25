@@ -9,6 +9,7 @@ export const CORS_CONFIG = {
     origin: [
         "http://localhost:5173",
         "http://localhost:3001",
+        "https://on-up.onrender.com",
         ...(process.env.CORS_ORIGIN ? [process.env.CORS_ORIGIN] : [])
     ],
     optionsSuccessStatus: 200,

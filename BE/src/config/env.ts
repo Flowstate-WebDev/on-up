@@ -6,7 +6,11 @@ export const SALT_ROUNDS = 10;
 export const NODE_ENV = process.env.NODE_ENV || "development";
 
 export const CORS_CONFIG = {
-    origin: ["http://localhost:5173", "http://localhost:3001"],
+    origin: [
+        "http://localhost:5173",
+        "http://localhost:3001",
+        ...(process.env.CORS_ORIGIN ? [process.env.CORS_ORIGIN] : [])
+    ],
     optionsSuccessStatus: 200,
     credentials: true,
 };

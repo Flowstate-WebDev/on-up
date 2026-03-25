@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heading } from "@/components/ui/Heading";
 import { useEffect } from "react";
 
+import { API_BASE_URL } from "@/api/apiClient";
+
 export const Route = createFileRoute("/koszyk/blad")({
   component: ErrorPage,
 });
@@ -17,7 +19,7 @@ function ErrorPage() {
     const orderNumber = searchParams.get("externalId");
 
     if (orderNumber) {
-      fetch("http://localhost:3001/api/payment/cancel", {
+      fetch(`${API_BASE_URL}/payment/cancel`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orderNumber }),

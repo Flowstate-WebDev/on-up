@@ -11,6 +11,8 @@ interface Account {
   createdAt: string;
 }
 
+import { API_BASE_URL } from "@/api/apiClient";
+
 export function AccountManagement() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +26,7 @@ export function AccountManagement() {
 
   const fetchAccounts = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/user/all", {
+      const response = await fetch(`${API_BASE_URL}/user/all`, {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to fetch accounts");
@@ -49,9 +51,7 @@ export function AccountManagement() {
 
   const saveRole = async (accountId: string) => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/user/${accountId}/role`,
-        {
+      const response = await fetch(`${API_BASE_URL}/user/${accountId}/role`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ role: editRole }),

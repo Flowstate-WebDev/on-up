@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/Input";
 import { PriceSummary } from "./components/PriceSummary";
 
+import { API_BASE_URL } from "@/api/apiClient";
+
 export const Route = createFileRoute("/koszyk/podsumowanie")({
   component: PodsumowaniePage,
 });
@@ -72,7 +74,7 @@ function PodsumowaniePage() {
     setIsProcessing(true);
 
     try {
-      const response = await fetch("http://localhost:3001/api/payment/create", {
+      const response = await fetch(`${API_BASE_URL}/payment/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

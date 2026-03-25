@@ -1,5 +1,6 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/context/AuthContext";
+import { apiClient } from "@/api/apiClient";
 import { Heading } from "@/components/ui/Heading";
 import { UserDataBlock, PasswordChangeSection } from "./components/UserDataBlock";
 import { OrderHistory } from "./components/OrderHistory";
@@ -36,41 +37,28 @@ function AccountPage() {
 
   const handleUpdate = async (field: string, value: string) => {
     try {
-      const res = await fetch("http://localhost:3001/api/user/update", {
+      const data = await apiClient("/user/update", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [field]: value }),
         credentials: "include",
       });
-      if (res.ok) {
-        const data = await res.json();
-        updateUser(data.user);
-        showToast("Dane zostały zaktualizowane", "success");
-      } else {
-        const error = await res.json();
-        showToast(error.error || "Błąd podczas aktualizacji danych", "error");
-        throw new Error(error.error);
-      }
-    } catch (error) {
+      updateUser(data.user);
+      showToast("Dane zostały zaktualizowane", "success");
+    } catch (error: any) {
       console.error("Update failed:", error);
+      showToast(error.message || "Błąd podczas aktualizacji danych", "error");
       throw error;
     }
   };
 
   const handlePasswordChange = async (oldPassword: string, newPassword: string) => {
     try {
-      const res = await fetch("http://localhost:3001/api/user/change-password", {
+      await apiClient("/user/change-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ oldPassword, newPassword }),
         credentials: "include",
       });
-      if (res.ok) {
-        showToast("Hasło zostało zmienione", "success");
-      } else {
-        const error = await res.json();
-        throw new Error(error.error || "Błąd podczas zmiany hasła");
-      }
+      showToast("Hasło zostało zmienione", "success");
     } catch (error: any) {
       console.error("Password change failed:", error);
       throw error;
@@ -79,11 +67,23 @@ function AccountPage() {
 
   const userData = [
     {
+      label: "Imię",
+      value: user.firstname || "",
+      field: "firstname",
+      editable: true,
+    },
+    {
+      label: "Nazwisko",
+      value: user.lastname || "",
+      field: "lastname",
+      editable: true,
+    },
+    {
       label: "Nazwa użytkownika",
-      value: user.username,
+      value: user.username || "",
       field: "username",
       editable: true,
-      onValidate: (val: string) => val.length < 3 ? "Nazwa użytkownika musi mieć min. 3 znaki" : undefined
+      onValidate: (val: string) => val.length > 0 && val.length < 3 ? "Nazwa użytkownika musi mieć min. 3 znaki" : undefined
     },
     { label: "Adres E-mail", value: user.email, field: "email", editable: true },
     {
@@ -91,7 +91,9 @@ function AccountPage() {
       value: user.phone || "",
       field: "phone",
       editable: true,
+      autoComplete: "tel",
       onValidate: (val: string) => {
+        if (!val) return undefined;
         const phoneRegex = /^[0-9]{9}$/;
         if (!phoneRegex.test(val)) return "Numer telefonu musi składać się z dokładnie 9 cyfr";
         return undefined;
@@ -105,11 +107,11 @@ function AccountPage() {
   ];
 
   const billingData = [
-    { label: "Imię", value: user.billingAddress?.firstname || "", field: "firstname", editable: true },
-    { label: "Nazwisko", value: user.billingAddress?.lastname || "", field: "lastname", editable: true },
-    { label: "Miasto", value: user.billingAddress?.city || "", field: "city", editable: true },
-    { label: "Kod pocztowy", value: user.billingAddress?.postalCode || "", field: "postalCode", editable: true },
-    { label: "Ulica", value: user.billingAddress?.street || "", field: "street", editable: true },
+    { label: "Imię", value: user.billingAddress?.firstname || "", field: "firstname", editable: true, autoComplete: "given-name" },
+    { label: "Nazwisko", value: user.billingAddress?.lastname || "", field: "lastname", editable: true, autoComplete: "family-name" },
+    { label: "Miasto", value: user.billingAddress?.city || "", field: "city", editable: true, autoComplete: "address-level2" },
+    { label: "Kod pocztowy", value: user.billingAddress?.postalCode || "", field: "postalCode", editable: true, autoComplete: "postal-code" },
+    { label: "Ulica", value: user.billingAddress?.street || "", field: "street", editable: true, autoComplete: "address-line1" },
     { label: "Nr budynku", value: user.billingAddress?.building || "", field: "building", editable: true },
     { label: "Nr lokalu", value: user.billingAddress?.apartment || "", field: "apartment", editable: true },
   ];
@@ -167,6 +169,8 @@ function AccountPage() {
                 label={data.label}
                 value={data.value}
                 editable={data.editable}
+                name={data.field}
+                autoComplete={(data as any).autoComplete}
                 onValidate={(data as any).onValidate}
                 onSave={
                   data.field
@@ -186,6 +190,8 @@ function AccountPage() {
                 label={data.label}
                 value={data.value}
                 editable={data.editable}
+                name={data.field}
+                autoComplete={data.autoComplete}
                 onSave={
                   data.field
                     ? (newValue) => handleUpdate(data.field!, newValue)

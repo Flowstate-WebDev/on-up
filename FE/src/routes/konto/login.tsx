@@ -13,14 +13,15 @@ import { inputStyle } from "@/components/ui/Input/Input.variants";
 import { useAuth } from "@/context/AuthContext";
 import type { Login } from "./login.types";
 
+import { AuthLayout } from "./components/Auth/AuthLayout";
+import { apiClient } from "@/api/apiClient";
+
 const loginFormOpts = formOptions({
   defaultValues: {
-    username: "",
+    email: "",
     password: "",
   } as Login,
 });
-
-import { AuthLayout } from "./components/Auth/AuthLayout";
 
 export const Route = createFileRoute("/konto/login")({
   beforeLoad: ({ context }) => {
@@ -40,21 +41,11 @@ function LoginPage() {
 
   const mutation = useMutation({
     mutationFn: async (value: Login) => {
-      const res = await fetch("http://localhost:3001/api/login", {
+      const data = await apiClient("/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(value),
         credentials: "include",
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Błąd połączenia z serwerem");
-      }
-
       return data;
     },
     onSuccess: (data) => {
@@ -87,18 +78,21 @@ function LoginPage() {
       >
         <div className="space-y-4">
           <form.Field
-            name="username"
+            name="email"
             validators={{
               onSubmit: ({ value }) =>
-                value.length < 3
-                  ? "Nazwa użytkownika powinna mieć ponad 3 znaki"
+                !value.includes("@") || !value.includes(".")
+                  ? "Nieprawidłowy adres e-mail"
                   : undefined,
             }}
             children={(field) => (
               <div className="space-y-1">
                 <input
-                  type="text"
-                  placeholder="Nazwa użytkownika"
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="E-mail"
+                  autoComplete="email"
                   onChange={(e) => field.handleChange(e.target.value)}
                   className={`w-full ${field.state.meta.errors.length > 0 ? "border-red-500 bg-red-50" : ""} ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
                 />
@@ -122,8 +116,11 @@ function LoginPage() {
             children={(field) => (
               <div className="space-y-1">
                 <input
+                  id="password"
+                  name="password"
                   type="password"
                   placeholder="Hasło"
+                  autoComplete="current-password"
                   onChange={(e) => field.handleChange(e.target.value)}
                   className={`w-full ${field.state.meta.errors.length > 0 ? "border-red-500 bg-red-50" : ""} ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
                 />

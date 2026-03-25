@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import { getBooks, createBook, updateBook, deleteBook } from "../data/books.js";
 import { authMiddleware } from "../middleware/auth.js";
+import { adminMiddleware } from "../middleware/admin.js";
 
 const router = Router();
 
@@ -29,7 +30,7 @@ router.get("/:slug", async (req: Request, res: Response) => {
 });
 
 // POSTs
-router.post("/", authMiddleware, async (req: Request, res: Response) => {
+router.post("/", authMiddleware, adminMiddleware, async (req: Request, res: Response) => {
   try {
     console.log(
       "\x1b[93m%s\x1b[0m",
@@ -45,7 +46,7 @@ router.post("/", authMiddleware, async (req: Request, res: Response) => {
 });
 
 // PUTs
-router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
+router.put("/:id", authMiddleware, adminMiddleware, async (req: Request, res: Response) => {
   try {
     const book = await updateBook(req.params.id as string, req.body);
     res.json(book);
@@ -56,7 +57,7 @@ router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
 });
 
 // DELETEs
-router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
+router.delete("/:id", authMiddleware, adminMiddleware, async (req: Request, res: Response) => {
   try {
     await deleteBook(req.params.id as string);
     res.json({ message: "Book deleted successfully" });

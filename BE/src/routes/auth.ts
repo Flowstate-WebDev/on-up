@@ -9,46 +9,37 @@ const router = Router();
 // POSTs
 router.post("/register", async (req: Request, res: Response) => {
   try {
-    const { username, password, email, phone, firstName, lastName, city, postalCode, street, building, apartment } = req.body;
+    const { password, email } = req.body;
 
-    if (!username || !password || !email || !phone) {
-      return res.status(400).json({ error: "All fields are required" });
+    if (!password || !email) {
+      return res.status(400).json({ error: "Email i hasło są wymagane" });
+    }
+
+    if (!email.includes("@")) {
+      return res.status(400).json({ error: "Podaj poprawny adres email" });
+    }
+
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ error: "Hasło musi mieć co najmniej 8 znaków, w tym 1 cyfrę i znak specjalny" });
     }
 
     const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [{ username: username }, { email: email }],
-      },
+      where: { email: email },
     });
 
     if (existingUser) {
       return res
         .status(400)
-        .json({ error: "User with this username or email already exists" });
+        .json({ error: "Konto z tym adresem email już istnieje" });
     }
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
     const createData: any = {
-      username: username,
       password: hashedPassword,
       email: email,
-      phone: phone,
     };
-
-    if (firstName && lastName && city && postalCode && street && building) {
-      createData.billingAddress = {
-        create: {
-          firstname: firstName,
-          lastname: lastName,
-          city: city,
-          postalCode: postalCode,
-          street: street,
-          building: building,
-          apartment: apartment || null,
-        }
-      };
-    }
 
     const user = await prisma.user.create({
       data: createData,
@@ -65,15 +56,15 @@ router.post("/register", async (req: Request, res: Response) => {
 
 router.post("/login", async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
-    if (!username || !password) {
+    const { email, password } = req.body;
+    if (!email || !password) {
       return res
         .status(400)
-        .json({ error: "Username and password are required" });
+        .json({ error: "Email i hasło są wymagane" });
     }
 
     const user = await prisma.user.findUnique({
-      where: { username: username },
+      where: { email: email },
     });
 
     if (!user) {

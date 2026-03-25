@@ -27,8 +27,9 @@ export const PasswordChangeSection = ({ onSave }: PasswordChangeSectionProps) =>
       return;
     }
 
-    if (newPassword.length < 6) {
-      setError("Nowe hasło musi mieć co najmniej 6 znaków");
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      setError("Nowe hasło musi mieć co najmniej 8 znaków, 1 cyfrę i znak specjalny");
       return;
     }
 
@@ -82,22 +83,31 @@ export const PasswordChangeSection = ({ onSave }: PasswordChangeSectionProps) =>
         <div className="mt-4 space-y-4 max-w-md">
           <div className="space-y-2">
             <Input
+              id="oldPassword"
+              name="oldPassword"
               type="password"
               placeholder="Stare hasło"
+              autoComplete="current-password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
               disabled={isLoading}
             />
             <Input
+              id="newPassword"
+              name="newPassword"
               type="password"
               placeholder="Nowe hasło"
+              autoComplete="new-password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               disabled={isLoading}
             />
             <Input
+              id="repeatPassword"
+              name="repeatPassword"
               type="password"
               placeholder="Powtórz nowe hasło"
+              autoComplete="new-password"
               value={repeatPassword}
               onChange={(e) => setRepeatPassword(e.target.value)}
               disabled={isLoading}

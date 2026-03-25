@@ -5,6 +5,7 @@ import React, {
   useState,
   type ReactNode,
 } from "react";
+import { apiClient } from "../api/apiClient";
 
 interface BillingAddress {
   firstname: string;
@@ -18,10 +19,12 @@ interface BillingAddress {
 
 interface User {
   id: string;
-  username: string;
   email: string;
-  phone: string;
   role: string;
+  username?: string | null;
+  phone?: string | null;
+  firstname?: string | null;
+  lastname?: string | null;
   billingAddress?: BillingAddress | null;
 }
 
@@ -43,13 +46,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const checkUser = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/user/me", {
+      const userData = await apiClient("/user/me", {
         credentials: "include",
       });
-      if (res.ok) {
-        const userData = await res.json();
-        setUser(userData);
-      }
+      setUser(userData);
     } catch (error) {
       console.error("\x1b[91m%s\x1b[0m", "[User] Auth check failed:", error);
     } finally {
@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const logout = async () => {
     try {
-      await fetch("http://localhost:3001/api/logout", {
+      await apiClient("/logout", {
         method: "POST",
         credentials: "include",
       });

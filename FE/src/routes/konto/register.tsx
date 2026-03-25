@@ -6,21 +6,13 @@ import { inputStyle } from "@/components/ui/Input/Input.variants";
 import { AuthLayout } from "./components/Auth/AuthLayout";
 import { useToast } from "@/context/ToastContext";
 import type { Register } from "./register.types";
+import { apiClient } from "@/api/apiClient";
 
 const registerFormOpts = formOptions({
   defaultValues: {
-    username: "",
+    email: "",
     password: "",
     repeatPassword: "",
-    email: "",
-    phone: "",
-    firstName: "",
-    lastName: "",
-    city: "",
-    postalCode: "",
-    street: "",
-    building: "",
-    apartment: "",
   } as Register,
 });
 
@@ -37,20 +29,10 @@ function RegisterPage() {
 
   const mutation = useMutation({
     mutationFn: async (value: Register) => {
-      const response = await fetch("http://localhost:3001/api/register", {
+      const data = await apiClient("/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(value),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Coś poszło nie tak");
-      }
-
       return data;
     },
     onSuccess: () => {
@@ -83,31 +65,6 @@ function RegisterPage() {
         className="mt-8 space-y-4"
       >
         <form.Field
-          name="username"
-          validators={{
-            onSubmit: ({ value }) =>
-              value.length < 3
-                ? "Nazwa użytkownika powinna mieć ponad 3 znaki"
-                : undefined,
-          }}
-          children={(field) => (
-            <div className="space-y-1">
-              <input
-                type="text"
-                placeholder="Nazwa użytkownika"
-                onChange={(e) => field.handleChange(e.target.value)}
-                className={`w-full ${field.state.meta.errors.length > 0 ? "border-red-500 bg-red-50" : ""} ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-              />
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-red-500 text-xs mt-1 px-1">
-                  {field.state.meta.errors.join(", ")}
-                </p>
-              )}
-            </div>
-          )}
-        />
-
-        <form.Field
           name="email"
           validators={{
             onSubmit: ({ value }) =>
@@ -118,34 +75,11 @@ function RegisterPage() {
           children={(field) => (
             <div className="space-y-1">
               <input
+                id="email"
+                name="email"
                 type="email"
                 placeholder="E-mail"
-                onChange={(e) => field.handleChange(e.target.value)}
-                className={`w-full ${field.state.meta.errors.length > 0 ? "border-red-500 bg-red-50" : ""} ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-              />
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-red-500 text-xs mt-1 px-1">
-                  {field.state.meta.errors.join(", ")}
-                </p>
-              )}
-            </div>
-          )}
-        />
-
-        <form.Field
-          name="phone"
-          validators={{
-            onSubmit: ({ value }) =>
-              value.length !== 9
-                ? "Nieprawidłowy numer telefonu (9 cyfr)"
-                : undefined,
-          }}
-          children={(field) => (
-            <div className="space-y-1">
-              <input
-                type="tel"
-                placeholder="Telefon"
-                maxLength={9}
+                autoComplete="email"
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={`w-full ${field.state.meta.errors.length > 0 ? "border-red-500 bg-red-50" : ""} ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
               />
@@ -161,16 +95,21 @@ function RegisterPage() {
         <form.Field
           name="password"
           validators={{
-            onSubmit: ({ value }) =>
-              value.length < 6
-                ? "Hasło powinno mieć ponad 6 znaków"
-                : undefined,
+            onSubmit: ({ value }) => {
+              const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
+              return !passwordRegex.test(value)
+                ? "Hasło musi mieć co najmniej 8 znaków, 1 cyfrę i znak specjalny"
+                : undefined;
+            }
           }}
           children={(field) => (
             <div className="space-y-1">
               <input
+                id="password"
+                name="password"
                 type="password"
                 placeholder="Hasło"
+                autoComplete="new-password"
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={`w-full ${field.state.meta.errors.length > 0 ? "border-red-500 bg-red-50" : ""} ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
               />
@@ -194,8 +133,11 @@ function RegisterPage() {
           children={(field) => (
             <div className="space-y-1">
               <input
+                id="repeatPassword"
+                name="repeatPassword"
                 type="password"
                 placeholder="Powtórz hasło"
+                autoComplete="new-password"
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={`w-full ${field.state.meta.errors.length > 0 ? "border-red-500 bg-red-50" : ""} ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
               />
@@ -208,118 +150,7 @@ function RegisterPage() {
           )}
         />
 
-        <div className="pt-4 mt-2 border-t border-border-secondary">
-          <h3 className="text-lg font-bold text-text-primary mb-4">Adres rozliczeniowy (opcjonalne)</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <form.Field
-              name="firstName"
-              children={(field) => (
-                <div className="space-y-1">
-                <input
-                  type="text"
-                  placeholder="Imię (opcjonalnie)"
-                  value={field.state.value || ""}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-                />
-              </div>
-            )}
-          />
 
-          <form.Field
-            name="lastName"
-            children={(field) => (
-              <div className="space-y-1">
-                <input
-                  type="text"
-                  placeholder="Nazwisko (opcjonalnie)"
-                  value={field.state.value || ""}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-                />
-              </div>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
-            <form.Field
-              name="street"
-              children={(field) => (
-                <div className="space-y-1">
-                  <input
-                    type="text"
-                    placeholder="Ulica (opcjonalnie)"
-                    value={field.state.value || ""}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    className={`w-full ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-                  />
-                </div>
-              )}
-            />
-          </div>
-          <form.Field
-            name="building"
-            children={(field) => (
-              <div className="space-y-1">
-                <input
-                  type="text"
-                  placeholder="Nr domu"
-                  value={field.state.value || ""}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-                />
-              </div>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <form.Field
-            name="apartment"
-            children={(field) => (
-              <div className="space-y-1">
-                <input
-                  type="text"
-                  placeholder="Nr lokalu"
-                  value={field.state.value || ""}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-                />
-              </div>
-            )}
-          />
-          <form.Field
-            name="postalCode"
-            children={(field) => (
-              <div className="space-y-1">
-                <input
-                  type="text"
-                  placeholder="Kod pocztowy"
-                  value={field.state.value || ""}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-                />
-              </div>
-            )}
-          />
-          <form.Field
-            name="city"
-            children={(field) => (
-              <div className="space-y-1">
-                <input
-                  type="text"
-                  placeholder="Miasto"
-                  value={field.state.value || ""}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className={`w-full ${inputStyle({ style: "default" })} transition-all focus:ring-2 focus:ring-primary/20`}
-                />
-              </div>
-            )}
-          />
-        </div>
-        </div>
 
         <div className="mt-8 space-y-4">
           <Button

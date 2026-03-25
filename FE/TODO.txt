@@ -1,5 +1,4 @@
 - konta użytkowników nie mają imienia i nazwiska (najwyżej w billingu)
-- ewentualnie zmienić wyświetlanie kategorii na głównej stronie w karuzelę
 - flip book
 - po zmianie permisji buguje sie wyswietlana rola uzytkownika
 

@@ -45,11 +45,7 @@ router.post("/create", async (req: Request, res: Response) => {
       }
     }
 
-    // Jeśli nie mamy userId, możemy spróbować znaleźć użytkownika po emailu
-    if (!userId) {
-      const existingUser = await prisma.user.findUnique({ where: { email } });
-      if (existingUser) userId = existingUser.id;
-    }
+    // Jeśli nie mamy userId, traktujemy jako gościa (IDOR FIX - nie próbujemy przypisywać konta po emailu)
 
     if (userId) {
       console.log(
@@ -92,11 +88,15 @@ router.post("/create", async (req: Request, res: Response) => {
         const price = Number(book.price);
         calculatedTotal += price * itemRequest.quantity;
 
-        // Odejmowanie stanu magazynowego (Rezerwacja)
-        await tx.book.update({
-          where: { id: book.id },
+        // Odejmowanie stanu magazynowego (Rezerwacja - Atomic Check)
+        const updated = await tx.book.updateMany({
+          where: { id: book.id, stock: { gte: itemRequest.quantity } },
           data: { stock: { decrement: itemRequest.quantity } },
         });
+
+        if (updated.count === 0) {
+           throw new Error(`Produkt "${book.title}" został wyprzedany w trakcie dodawania do koszyka.`);
+        }
 
         orderItemsData.push({
           bookId: book.id,

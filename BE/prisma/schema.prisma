@@ -11,8 +11,10 @@ model User {
   id             String          @id @default(cuid())
   email          String          @unique
   password       String
-  username       String          @unique(map: "User_name_key")
-  phone          String          @unique
+  username       String?         @unique(map: "User_name_key")
+  phone          String?         @unique
+  firstname      String?
+  lastname       String?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   role           String          @default("USER")

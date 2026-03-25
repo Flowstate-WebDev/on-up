@@ -16,6 +16,8 @@ router.get("/me", authMiddleware, async (req: Request, res: Response) => {
         username: true,
         email: true,
         phone: true,
+        firstname: true,
+        lastname: true,
         role: true,
         billingAddress: true,
       },
@@ -69,7 +71,7 @@ router.get("/orders", authMiddleware, async (req: Request, res: Response) => {
 router.put("/update", authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.userId;
-    const { username, email, phone, password, firstname, lastname, city, postalCode, street, building, apartment } = req.body;
+    const { username, email, phone, firstname, lastname, city, postalCode, street, building, apartment } = req.body;
 
     // Check if the user exists
     const user = await prisma.user.findUnique({
@@ -83,36 +85,41 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
 
     const updateData: any = {};
 
-    if (username && username !== user.username) {
-      const existing = await prisma.user.findUnique({ where: { username: username as string } });
-      if (existing) return res.status(400).json({ error: "Ta nazwa użytkownika jest już zajęta" });
-      updateData.username = username;
+    if (username !== undefined && username !== user.username) {
+      if (username) {
+        const existing = await prisma.user.findUnique({ where: { username: username as string } });
+        if (existing) return res.status(400).json({ error: "Ta nazwa użytkownika jest już zajęta" });
+      }
+      updateData.username = username || null;
     }
 
-    if (email && email !== user.email) {
-      const existing = await prisma.user.findUnique({ where: { email: email as string } });
-      if (existing) return res.status(400).json({ error: "Ten adres e-mail jest już zajęty" });
-      updateData.email = email;
+    if (email !== undefined && email !== user.email) {
+      if (email) {
+        const existing = await prisma.user.findUnique({ where: { email: email as string } });
+        if (existing) return res.status(400).json({ error: "Ten adres e-mail jest już zajęty" });
+        updateData.email = email;
+      }
     }
 
-    if (phone && phone !== user.phone) {
-      const existing = await prisma.user.findUnique({ where: { phone: phone as string } });
-      if (existing) return res.status(400).json({ error: "Ten numer telefonu jest już zajęty" });
-      updateData.phone = phone;
+    if (phone !== undefined && phone !== user.phone) {
+      if (phone) {
+        const existing = await prisma.user.findUnique({ where: { phone: phone as string } });
+        if (existing) return res.status(400).json({ error: "Ten numer telefonu jest już zajęty" });
+      }
+      updateData.phone = phone || null;
     }
 
-    if (password) {
-      updateData.password = await bcrypt.hash(password, SALT_ROUNDS);
-    }
+    if (firstname !== undefined) updateData.firstname = firstname || null;
+    if (lastname !== undefined) updateData.lastname = lastname || null;
 
-    const addressProvided = firstname !== undefined || lastname !== undefined || city !== undefined || postalCode !== undefined || street !== undefined || building !== undefined || apartment !== undefined;
+    const addressProvided = city !== undefined || postalCode !== undefined || street !== undefined || building !== undefined || apartment !== undefined;
 
     if (addressProvided) {
       updateData.billingAddress = {
         upsert: {
           create: {
-            firstname: firstname || "",
-            lastname: lastname || "",
+            firstname: firstname || user.firstname || "",
+            lastname: lastname || user.lastname || "",
             city: city || "",
             postalCode: postalCode || "",
             street: street || "",
@@ -144,6 +151,8 @@ router.put("/update", authMiddleware, async (req: Request, res: Response) => {
         username: true,
         email: true,
         phone: true,
+        firstname: true,
+        lastname: true,
         role: true,
         billingAddress: true,
       },
@@ -180,6 +189,11 @@ router.post("/change-password", authMiddleware, async (req: Request, res: Respon
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: "Stare hasło jest nieprawidłowe" });
+    }
+
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({ error: "Nowe hasło musi mieć co najmniej 8 znaków, w tym 1 cyfrę i znak specjalny" });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);

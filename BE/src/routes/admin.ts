@@ -4,17 +4,7 @@ import { authMiddleware } from "../middleware/auth.js";
 
 const router = Router();
 
-// Middleware to check if user is an admin
-const adminMiddleware = async (req: Request, res: Response, next: any) => {
-  const userId = (req as any).user?.userId;
-  if (!userId) return res.status(401).json({ error: "Unauthorized" });
-
-  const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user || user.role !== "admin") {
-    return res.status(403).json({ error: "Access denied. Admins only." });
-  }
-  next();
-};
+import { adminMiddleware } from "../middleware/admin.js";
 
 // Test route to check if admin is mounted
 router.get("/", (req, res) => {

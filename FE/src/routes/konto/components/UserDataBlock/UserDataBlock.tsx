@@ -10,6 +10,8 @@ interface UserDataBlockProps {
   type?: "text" | "password";
   onSave?: (newValue: string) => Promise<void>;
   onValidate?: (value: string) => string | undefined;
+  name?: string;
+  autoComplete?: string;
 }
 
 export const UserDataBlock = ({
@@ -20,6 +22,8 @@ export const UserDataBlock = ({
   type = "text",
   onSave,
   onValidate,
+  name,
+  autoComplete,
 }: UserDataBlockProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
@@ -66,8 +70,11 @@ export const UserDataBlock = ({
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <div className="flex flex-col gap-1 w-full sm:max-w-xs">
               <Input
+                id={name}
+                name={name}
                 type={type}
                 value={tempValue}
+                autoComplete={autoComplete}
                 onChange={(e) => {
                   setTempValue(e.target.value);
                   if (error) setError(undefined);

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { getAssetPath } from "@/utils/paths";
+// import { getAssetPath } from "@/utils/paths";
 
 import { Tag } from "@/components/ui/Tag";
 import { ProductPrice } from "@/routes/sklep/components/ProductDetailsSection/ProductPrice";
@@ -15,7 +15,7 @@ export const ProductCard = ({ data }: ProductCardProps) => {
     >
       <div className="relative aspect-4/5 w-full shrink-0">
         <img
-          src={getAssetPath(`/images/books/${data.imageUrl}`)}
+          src={data.imageUrl}
           alt={`Podręcznik ${data.title}`}
           className="object-cover w-full h-full"
         />

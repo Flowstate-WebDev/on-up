@@ -60,7 +60,7 @@ router.post("/create", async (req: Request, res: Response) => {
     }
 
     // TRANSAKCJA: Sprawdzenie dostępności -> Obliczenie Ceny -> Rezerwacja Towaru (Odejmowanie) -> Utworzenie Zamówienia
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       let calculatedTotal = 0;
       const orderItemsData = [];
 
@@ -292,7 +292,7 @@ router.post("/cancel", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Order cannot be cancelled" });
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       // 1. Zmień status
       await tx.order.update({
         where: { id: order.id },
@@ -404,7 +404,7 @@ router.post("/notifications", async (req: Request, res: Response) => {
           `[Payment] Restoring stock for refused order ${externalId}`,
         );
         await prisma.$transaction(
-          currentOrder.items.map((item) =>
+          currentOrder.items.map((item: any) =>
             prisma.book.update({
               where: { id: item.bookId },
               data: { stock: { increment: item.quantity } },

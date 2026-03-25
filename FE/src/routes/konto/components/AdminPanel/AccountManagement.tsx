@@ -52,11 +52,11 @@ export function AccountManagement() {
   const saveRole = async (accountId: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/user/${accountId}/role`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: editRole }),
-          credentials: "include",
-        },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: editRole }),
+        credentials: "include",
+      },
       );
 
       if (!response.ok) throw new Error("Failed to update role");
@@ -100,8 +100,8 @@ export function AccountManagement() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-bg-secondary border-b border-border-secondary text-text-secondary text-sm">
-                <th className="p-4 font-medium min-w-[150px]">Użytkownik</th>
-                <th className="p-4 font-medium min-w-[200px]">Email</th>
+                <th className="p-4 font-medium min-w-37.5">Użytkownik</th>
+                <th className="p-4 font-medium min-w-50">Email</th>
                 <th className="p-4 font-medium">Telefon</th>
                 <th className="p-4 font-medium">Typ konta</th>
                 <th className="p-4 font-medium text-right">Akcje</th>
@@ -157,11 +157,10 @@ export function AccountManagement() {
                       </select>
                     ) : (
                       <span
-                        className={`inline-flex items-center text-[10px] font-bold tracking-widest uppercase ${
-                          account.role.toUpperCase() === "ADMIN"
+                        className={`inline-flex items-center text-[10px] font-bold tracking-widest uppercase ${account.role.toUpperCase() === "ADMIN"
                             ? "text-purple-600 px-3 py-1"
                             : "text-text-tertiary"
-                        }`}
+                          }`}
                       >
                         {account.role.toUpperCase() === "ADMIN"
                           ? "ADMIN"

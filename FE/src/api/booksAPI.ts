@@ -27,6 +27,23 @@ export const deleteBook = async (id: string) => {
   });
 }
 
+export const uploadBookImage = async (file: File): Promise<{ url: string }> => {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
+  const res = await fetch(`${API_BASE}/upload`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'include',
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Image upload failed');
+  }
+  return res.json();
+};
+
 export const fetchProfessions = async () => {
   return apiClient('/professions');
 }

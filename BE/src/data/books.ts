@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import cloudinary from "../lib/cloudinary.js";
 
 interface BookData {
   title: string;
@@ -126,6 +127,36 @@ export async function updateBook(id: string | number, data: Partial<BookData>) {
 export async function deleteBook(id: string | number) {
   try {
     const stringId = String(id);
+
+    // Fetch the book first to get its imageUrl for Cloudinary cleanup
+    const book = await prisma.book.findUnique({ where: { id: stringId } });
+
+    // If the image is hosted on Cloudinary, delete it
+    if (book?.imageUrl && book.imageUrl.includes("res.cloudinary.com")) {
+      try {
+        // Extract public_id from the URL: everything after "/upload/" (strip version + extension)
+        const uploadIndex = book.imageUrl.indexOf("/upload/");
+        if (uploadIndex !== -1) {
+          let publicId = book.imageUrl.slice(uploadIndex + 8); // after "/upload/"
+          // Remove version segment (v12345678/) if present
+          publicId = publicId.replace(/^v\d+\//, "");
+          // Remove file extension
+          publicId = publicId.replace(/\.[^/.]+$/, "");
+          await cloudinary.uploader.destroy(publicId);
+          console.log(
+            "\x1b[92m%s\x1b[0m",
+            `[Cloudinary] Deleted image: ${publicId}`,
+          );
+        }
+      } catch (cloudErr) {
+        // Log but don't block the book deletion if Cloudinary fails
+        console.error(
+          "\x1b[91m%s\x1b[0m",
+          "[Cloudinary] Failed to delete image:",
+          cloudErr,
+        );
+      }
+    }
 
     return await prisma.book.delete({
       where: { id: stringId },

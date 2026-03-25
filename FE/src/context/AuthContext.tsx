@@ -50,8 +50,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         credentials: "include",
       });
       setUser(userData);
-    } catch (error) {
-      console.error("\x1b[91m%s\x1b[0m", "[User] Auth check failed:", error);
+    } catch (error: any) {
+      if (error?.message !== "Unauthorized" && error?.message !== "Invalid token") {
+        console.error("\x1b[91m%s\x1b[0m", "[User] Auth check failed:", error);
+      }
     } finally {
       setIsLoading(false);
     }

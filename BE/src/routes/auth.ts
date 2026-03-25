@@ -1,10 +1,18 @@
-import { Router, type Request, type Response } from "express";
+import { Router, type Request, type Response, type CookieOptions } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 import { JWT_SECRET, SALT_ROUNDS, NODE_ENV } from "../config/env.js";
 
 const router = Router();
+
+const isProduction = NODE_ENV === "production";
+const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  maxAge: 60 * 60 * 1000,
+};
 
 // POSTs
 router.post("/register", async (req: Request, res: Response) => {
@@ -86,12 +94,7 @@ router.post("/login", async (req: Request, res: Response) => {
     });
 
     res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 1000,
-      })
+      .cookie("token", token, cookieOptions)
       .json({
         message: "Login successful",
         user: {
@@ -110,11 +113,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
 router.post("/logout", (req: Request, res: Response) => {
   res
-    .clearCookie("token", {
-      httpOnly: true,
-      secure: NODE_ENV === "production",
-      sameSite: "lax",
-    })
+    .clearCookie("token", cookieOptions)
     .json({ message: "Logged out successfully" });
 });
 

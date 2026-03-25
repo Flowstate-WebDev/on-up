@@ -5,6 +5,7 @@ import { CORS_CONFIG } from "./config/env.js";
 import { setupRoutes } from "./routes/index.js";
 
 const app = express();
+app.set("trust proxy", 1);
 
 // Global Middleware
 app.use(cors(CORS_CONFIG));
